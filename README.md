@@ -1,5 +1,5 @@
-# powershell
+# Powershell-Repo
 
-Various Powershell scripts for day-to-day IT Support. 
+Various Powershell scripts for day-to-day tasks.
 
 Not necessarily compatible with all envs - install RSAT for module import errors..
