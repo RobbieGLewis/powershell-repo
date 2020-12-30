@@ -2,4 +2,4 @@
 
 Various Powershell scripts for day-to-day IT Support. 
 
-Not necessarily compatible with all envs. Install RSAT if module import errors.
+Not necessarily compatible with all envs - install RSAT for module import errors..
