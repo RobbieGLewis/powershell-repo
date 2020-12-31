@@ -17,11 +17,15 @@ $SearchUser = Read-Host -Prompt 'Search user'
         Write-Host 'Multiple users were found.' -ForegroundColor Red -BackgroundColor Yellow
         Write-Host 'Please select a user:' -ForegroundColor Red -BackgroundColor Yellow
         for($i = 0; $i -lt $Users.count; $i++){
-            Write-Host "$($i): $($Users[$i].SamAccountName) | $($Users[$i].Name)"
+            Write-Host "$($i): $($Users[$i].SamAccountName) | $($Users[$i].Name) | $($Users[$i].EmployeeID)"
         }
         $selection = Read-Host -Prompt 'Select user (0, 1, 2 etc.)'
         $ResultUser = $Users[$selection]
     }
+
+Write-Host - ' '
+$CurrentEmployeeNo = Get-ADUser $ResultUser -Properties employeeid | Select-Object employeeID
+Write-Host - 'Current employee number:' $CurrentEmployeeNo
 
 $EID = Read-Host -Prompt 'New employee number:'
     if ($EID) { 
@@ -32,3 +36,5 @@ $EID = Read-Host -Prompt 'New employee number:'
     }
 
 Set-ADUser $ResultUser -EmployeeID $EID
+
+#
