@@ -1,5 +1,5 @@
 ﻿#   James Wylde 2019
-#   ferus-wylde@github
+#   github.com/jameswylde
 
 # Modules
 Import-Module ActiveDirectory
