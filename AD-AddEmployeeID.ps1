@@ -1,7 +1,7 @@
-#   James Wylde 2019
+#   James Wylde 2020
 #   github.com/jameswylde
 
-# Modules
+#   Modules
 Import-Module ActiveDirectory
 
 Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
@@ -36,5 +36,3 @@ $EID = Read-Host -Prompt 'New employee number:'
     }
 
 Set-ADUser $ResultUser -EmployeeID $EID
-
-#
