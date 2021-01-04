@@ -1,7 +1,7 @@
 #   James Wylde 2019
 #   github.com/jameswylde
 
-# Modules
+#   Modules
 Import-Module ActiveDirectory
 
 $SearchUser = Read-Host -Prompt 'Search user'
