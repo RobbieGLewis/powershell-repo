@@ -3,4 +3,7 @@
 
 # Modules
 
-Get-ChildItem c:\temp\*.txt -Recurse | Select-String -Pattern Liverpool
+Get-ChildItem c:\temp\*.txt -Recurse | Select-String -Pattern WHATYOULOOKINGFOR
+
+rsop 
+pa exec
