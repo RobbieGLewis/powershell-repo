@@ -69,4 +69,5 @@ $mainForm.ShowDialog()
 
 #   Service-Status from TUI script
 #   Speed test: "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
+#   Signal str: (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
 #   Diagnostics button ^
