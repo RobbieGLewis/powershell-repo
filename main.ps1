@@ -1,19 +1,22 @@
 <#
-.SYNOPSIS
-   DirectAccess one-click resolver with GUI for end-user resolution / troubleshooting.
-.AUTHOR
+SYNOPSIS:
+   DirectAccess resolver with GUI for end-user resolution / troubleshooting.
+AUTHOR:
    James Wylde
-.VERSION
+VERSION:
    1.0
-.FUNCTIONALITY
-   DirectAccess resolver with GUI. Stop / Start associated services [iphlpsvc & NcaSvc] > IPV6 release and forced reboot > Connection diagnosis.
+FUNCTIONALITY:
+   DirectAccess resolver with GUI. Stop / Start associated services [iphlpsvc & NcaSvc] > IPV6 release and forced reboot > Connection diagnosis > Recommended actions
 #>
 
+#----------------------------------------------------------------------------------------#
 
 #   Lost and Found
 $newLine = "`r`n"
 
+#----------------------------------------------------------------------------------------#
 
+#   Winform import
 [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 
 $mainForm = New-Object System.Windows.Forms.Form
@@ -22,6 +25,7 @@ $daResolver = New-Object System.Windows.Forms.Button
 $daReboot = New-Object System.Windows.Forms.Button
 $daDiagnostics = New-Object System.Windows.Forms.Button
 
+#----------------------------------------------------------------------------------------#
 
 #   Textbox OUT
 $textBox.Location = '15,10'
@@ -29,6 +33,8 @@ $textBox.AutoSize = $false
 $textBox.Size = '450,200'
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
+
+#----------------------------------------------------------------------------------------#
 
 #   Button (M) DirectAccess Service Stop & Start
 $daResolver.Text = 'Resolver'
@@ -55,6 +61,8 @@ $daResolver.Add_Click({
 
     $textBox.appendText("DirectAccess is now RUNNING. You can now close this application.")
 })
+
+#----------------------------------------------------------------------------------------#
 
 #   Button (R) iphlpsvc & NcaSvc Service Stop & Start, IPV6 release and forced reboot
 $daReboot.Size = '140,23'
@@ -99,6 +107,8 @@ $daReboot.Add_Click({
     Restart-Computer -Force
 })
 
+#----------------------------------------------------------------------------------------#
+
 #   Button (L) Run 10mb download speedtest and WIFI signal strength
 $daDiagnostics.Text = 'Diagnostics'
 $daDiagnostics.Size = '140,23'
@@ -123,6 +133,7 @@ $daDiagnostics.Add_Click({
 
 })
 
+#----------------------------------------------------------------------------------------#
 
 $mainForm.Text = 'Direct Access Resolver'
 $mainForm.Size = "485,280"
@@ -137,5 +148,7 @@ $mainForm.Controls.Add($daDiagnostics)
 
 $mainForm.ShowDialog()
 
+#----------------------------------------------------------------------------------------#
 
 #   Snippets
+#   Speedtest: "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
