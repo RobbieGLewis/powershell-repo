@@ -11,6 +11,12 @@ FUNCTIONALITY:
 
 #----------------------------------------------------------------------------------------#
 
+#  Execution policy
+
+##################Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+
+#----------------------------------------------------------------------------------------#
+
 #   Lost and Found
 
 $newLine = "`r`n"
@@ -36,6 +42,17 @@ $textBox.AutoSize = $false
 $textBox.Size = '450,200'
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
+$textBox.Text = Write-Output "For DirectAccess issues, please select from the following options:"
+$textBox.appendText($newLine)
+$textBox.appendText($newLine)
+$textBox.appendText($newLine)
+$textBox.appendText("Select 'Resolver' to attempt a quick-fix. ")
+$textBox.appendText($newLine)
+$textBox.appendText($newLine)
+$textBox.appendText("Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
+$textBox.appendText($newLine)
+$textBox.appendText($newLine)
+$textBox.appendText("Select Diagnostics' to attempt to troubleshoot wider issues.")
 
 #----------------------------------------------------------------------------------------#
 
@@ -98,15 +115,21 @@ $daReboot.Add_Click({
 
     $textBox.appendText( "Your machine will SHUTDOWN in 60 seconds. Please save all work.")
     $textBox.appendText($newLine)
+    $textBox.appendText($newLine)
     Start-Sleep -Seconds 30
 
     $textBox.appendText( "Your machine will SHUTDOWN in 30 seconds. Please save all work.")
+    $textBox.appendText($newLine)
     $textBox.appendText($newLine)
     Start-Sleep -Seconds 15
 
     $textBox.appendText( "Your machine will SHUTDOWN in 15 seconds. Please save all work.")
     $textBox.appendText($newLine)
-    Start-Sleep -Seconds 15
+    $textBox.appendText($newLine)
+    Start-Sleep -Seconds 14
+
+    $textBox.appendText( "Shutting down.")
+    $textBox.appendText($newLine)
 
 
     Restart-Computer -Force
