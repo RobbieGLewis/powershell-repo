@@ -28,7 +28,7 @@ $newLine = "`r`n"
 [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 
 $mainForm = New-Object System.Windows.Forms.Form
-$textBox = New-Object System.Windows.Forms.TextBox
+$textBox = New-Object System.Windows.Forms.RichTextBox
 $daResolver = New-Object System.Windows.Forms.Button
 $daReboot = New-Object System.Windows.Forms.Button
 $daDiagnostics = New-Object System.Windows.Forms.Button
@@ -42,6 +42,7 @@ $textBox.AutoSize = $false
 $textBox.Size = '450,200'
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
+#$textBox.ForeColor = [Drawing.Color]::Red
 $textBox.Text = Write-Output "For DirectAccess issues, please select from the following options:"
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
@@ -77,7 +78,7 @@ $daResolver.Add_Click({
     Start-Service NcaSvc
 
     
-    Start-Sleep -Seconds 25
+    Start-Sleep -Seconds 35
     Clear-Host
 
     $textBox.appendText("DirectAccess is now RUNNING. You can now close this application.")
@@ -96,6 +97,7 @@ $daReboot.Add_Click({
 
     $textBox.Text = Write-Output "DirectAccess is now restarting and IPV6 being released..."
     $textBox.appendText($newLine)
+    $textBox.appendText($newLine)
 
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
@@ -113,6 +115,7 @@ $daReboot.Add_Click({
     Start-Sleep -Seconds 25
     Clear-Host
 
+    $textBox.ForeColor = [Drawing.Color]::Red
     $textBox.appendText( "Your machine will SHUTDOWN in 60 seconds. Please save all work.")
     $textBox.appendText($newLine)
     $textBox.appendText($newLine)
