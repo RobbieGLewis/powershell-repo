@@ -11,14 +11,15 @@ $daDiagnostics = New-Object System.Windows.Forms.Button
 
 
 #   GUI Textbox Out
-$textBox.Location = '20,10'
-$textBox.Size = '450,350'
+$textBox.Location = '15,10'
+$textBox.AutoSize = $false 
+$textBox.Size = '450,200'
 $textBox.ReadOnly = $true
 
 #   Button (L) DirectAccess Service Stop & Start
 $daResolver.Text = 'Resolver'
 $daResolver.Size = '140,23'
-$daResolver.Location = '175,220'
+$daResolver.Location = '170,220'
 $daResolver.Add_Click({
     
     Stop-Service iphlpsvc -Force
@@ -38,19 +39,19 @@ $daResolver.Add_Click({
 
 #   Button (R) DirectAccess Service Stop & Start, IPV6 release and reboot
 $daReboot.Size = '140,23'
-$daReboot.Location = '330,220'
+$daReboot.Location = '325,220'
 $daReboot.text = 'Resolver + Reboot'
 $daReboot.Add_Click({
 
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
 
-    Start-Sleep -Seconds 3
+    Start-Sleep -Seconds 1
 
     Start-Service iphlpsvc
     Start-Service NcaSvc
 
-    Start-Sleep -Seconds 3
+    Start-Sleep -Seconds 1
 
     ipconfig.exe /release6
     ipconfig.exe /renew
@@ -60,13 +61,14 @@ $daReboot.Add_Click({
     Clear-Host
 
     $textBox.Text = Write-Output "Your machine will SHUTDOWN in 60 seconds. Please save all work."
+    Start-Sleep -Seconds 70
     Stop-Computer -Force
 })
 
 
 $daDiagnostics.Text = 'Diagnostics'
 $daDiagnostics.Size = '140,23'
-$daDiagnostics.Location = '20,220'
+$daDiagnostics.Location = '15,220'
 $daDiagnostics.Add_Click({
 
 })
@@ -76,7 +78,8 @@ $daDiagnostics.Add_Click({
 #   $mainForm.CancelButton = $cancelButton
 
 $mainForm.Text = 'Direct Access Resolver'
-$mainForm.Size = "505,300" 
+$mainForm.Size = "485,280"
+$mainForm.FormBorderStyle = 'FixedDialog'   
 
 
 $mainForm.Controls.Add($textBox)
