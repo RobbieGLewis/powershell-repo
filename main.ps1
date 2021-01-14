@@ -1,3 +1,18 @@
+<#
+.SYNOPSIS
+   DirectAccess one-click resolver with GUI for end-user resolution / troubleshooting.
+.AUTHOR
+   James Wylde
+.VERSION
+   1.0
+.FUNCTIONALITY
+   DirectAccess resolver with GUI. Stop / Start associated services [iphlpsvc & NcaSvc] > IPV6 release and forced reboot > Connection diagnosis.
+#>
+
+
+#   Lost and Found
+$newLine = "`r`n"
+
 
 [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 
@@ -7,21 +22,25 @@ $daResolver = New-Object System.Windows.Forms.Button
 $daReboot = New-Object System.Windows.Forms.Button
 $daDiagnostics = New-Object System.Windows.Forms.Button
 
-# Functions
 
-
-#   GUI Textbox Out
+#   Textbox OUT
 $textBox.Location = '15,10'
 $textBox.AutoSize = $false 
 $textBox.Size = '450,200'
 $textBox.ReadOnly = $true
+$textBox.Multiline = $true
 
-#   Button (L) DirectAccess Service Stop & Start
+#   Button (M) DirectAccess Service Stop & Start
 $daResolver.Text = 'Resolver'
 $daResolver.Size = '140,23'
 $daResolver.Location = '170,220'
 $daResolver.Add_Click({
+
+    Clear-Host
     
+    $textBox.Text = Write-Output "DirectAccess is now restarting..."
+    $textBox.appendText($newLine)
+
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
 
@@ -30,18 +49,23 @@ $daResolver.Add_Click({
     Start-Service iphlpsvc
     Start-Service NcaSvc
 
-    $textBox.Text = Write-Output "DirectAccess is now restarting..."
+    
     Start-Sleep -Seconds 25
     Clear-Host
 
-    $textBox.Text = Write-Output "DirectAccess is now RUNNING. You can now close this application."
+    $textBox.appendText("DirectAccess is now RUNNING. You can now close this application.")
 })
 
-#   Button (R) DirectAccess Service Stop & Start, IPV6 release and reboot
+#   Button (R) iphlpsvc & NcaSvc Service Stop & Start, IPV6 release and forced reboot
 $daReboot.Size = '140,23'
 $daReboot.Location = '325,220'
 $daReboot.text = 'Resolver + Reboot'
 $daReboot.Add_Click({
+
+    Clear-Host
+
+    $textBox.Text = Write-Output "DirectAccess is now restarting and IPV6 being released..."
+    $textBox.appendText($newLine)
 
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
@@ -56,26 +80,49 @@ $daReboot.Add_Click({
     ipconfig.exe /release6
     ipconfig.exe /renew
 
-    $textBox.Text = Write-Output "DirectAccess is now restarting and IPV6 being released..."
     Start-Sleep -Seconds 25
     Clear-Host
 
-    $textBox.Text = Write-Output "Your machine will SHUTDOWN in 60 seconds. Please save all work."
-    Start-Sleep -Seconds 70
-    Stop-Computer -Force
+    $textBox.appendText( "Your machine will SHUTDOWN in 60 seconds. Please save all work.")
+    $textBox.appendText($newLine)
+    Start-Sleep -Seconds 30
+
+    $textBox.appendText( "Your machine will SHUTDOWN in 30 seconds. Please save all work.")
+    $textBox.appendText($newLine)
+    Start-Sleep -Seconds 15
+
+    $textBox.appendText( "Your machine will SHUTDOWN in 15 seconds. Please save all work.")
+    $textBox.appendText($newLine)
+    Start-Sleep -Seconds 15
+
+
+    Restart-Computer -Force
 })
 
-
+#   Button (L) Run 10mb download speedtest and WIFI signal strength
 $daDiagnostics.Text = 'Diagnostics'
 $daDiagnostics.Size = '140,23'
 $daDiagnostics.Location = '15,220'
 $daDiagnostics.Add_Click({
 
+    Clear-Host
+
+    $textBox.Text = Write-Output "Running diagnostics..."
+    $textBox.appendText($newLine)
+    $textBox.appendText($newLine)
+
+    $speedTest = "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
+    $signalTest = (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
+
+     $textBox.appendText( "Internet download speed: $speedTest" )
+     $textBox.appendText($newLine)
+     $textBox.appendText( "WIFI signal strength: $signalTest" )
+     $textBox.appendText($newLine)
+     $textBox.appendText($newLine)
+     $textBox.appendText( "For optimal DirectAccess performance, we recommend a download speed of 10Mbit/s or higher and a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these." )
+
 })
 
-#   Unrequired I/O 
-#   $mainForm.AcceptButton = $okButton
-#   $mainForm.CancelButton = $cancelButton
 
 $mainForm.Text = 'Direct Access Resolver'
 $mainForm.Size = "485,280"
@@ -91,9 +138,4 @@ $mainForm.Controls.Add($daDiagnostics)
 $mainForm.ShowDialog()
 
 
-#   For implementing
-
-#   Service-Status from TUI script
-#   Speed test: "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
-#   Signal str: (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
-#   Diagnostics button ^
+#   Snippets
