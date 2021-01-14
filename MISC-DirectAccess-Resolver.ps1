@@ -12,11 +12,13 @@ FUNCTIONALITY:
 #----------------------------------------------------------------------------------------#
 
 #   Lost and Found
+
 $newLine = "`r`n"
 
 #----------------------------------------------------------------------------------------#
 
-#   Winform import
+#   WinForms import
+
 [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 
 $mainForm = New-Object System.Windows.Forms.Form
@@ -28,6 +30,7 @@ $daDiagnostics = New-Object System.Windows.Forms.Button
 #----------------------------------------------------------------------------------------#
 
 #   Textbox OUT
+
 $textBox.Location = '15,10'
 $textBox.AutoSize = $false 
 $textBox.Size = '450,200'
@@ -37,6 +40,7 @@ $textBox.Multiline = $true
 #----------------------------------------------------------------------------------------#
 
 #   Button (M) DirectAccess Service Stop & Start
+
 $daResolver.Text = 'Resolver'
 $daResolver.Size = '140,23'
 $daResolver.Location = '170,220'
@@ -65,6 +69,7 @@ $daResolver.Add_Click({
 #----------------------------------------------------------------------------------------#
 
 #   Button (R) iphlpsvc & NcaSvc Service Stop & Start, IPV6 release and forced reboot
+
 $daReboot.Size = '140,23'
 $daReboot.Location = '325,220'
 $daReboot.text = 'Resolver + Reboot'
@@ -110,6 +115,7 @@ $daReboot.Add_Click({
 #----------------------------------------------------------------------------------------#
 
 #   Button (L) Run 10mb download speedtest and WIFI signal strength
+
 $daDiagnostics.Text = 'Diagnostics'
 $daDiagnostics.Size = '140,23'
 $daDiagnostics.Location = '15,220'
@@ -135,6 +141,8 @@ $daDiagnostics.Add_Click({
 
 #----------------------------------------------------------------------------------------#
 
+#   Main form
+
 $mainForm.Text = 'Direct Access Resolver'
 $mainForm.Size = "485,280"
 $mainForm.FormBorderStyle = 'FixedDialog'   
@@ -146,6 +154,9 @@ $mainForm.Controls.Add($daReboot)
 $mainForm.Controls.Add($daDiagnostics)
 
 
+#----------------------------------------------------------------------------------------#
+
+#   GUI OUT
 $mainForm.ShowDialog()
 
 #----------------------------------------------------------------------------------------#
