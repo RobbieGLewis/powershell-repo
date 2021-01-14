@@ -189,3 +189,9 @@ $mainForm.ShowDialog()
 
 #   Snippets
 #   Speedtest: "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
+
+#----------------------------------------------------------------------------------------#
+
+#  TBD
+#  Dynamic service updates
+#  Dynamic variable colouring
