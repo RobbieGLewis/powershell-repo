@@ -11,9 +11,9 @@ FUNCTIONALITY:
 
 #----------------------------------------------------------------------------------------#
 
-#  Execution policy
+#  Execution policy - TBC
 
-##################Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+#Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
 
 #----------------------------------------------------------------------------------------#
 
@@ -21,9 +21,27 @@ FUNCTIONALITY:
 
 $newLine = "`r`n"
 
+<#
+
+function serviceCheck{
+   param($ipParam)
+   $ipService = Get-Service -Name iphlpsvc
+   if ($ipService.Status -eq "Running"){
+      Write-Host "DynamicAccess is RUNNING."
+   }
+   if ($ipService.Status -eq "Stopped"){
+      Write-Host "DyanmicAccess is NOT running. Please try again"
+   }
+}
+
+serviceCheck
+
+$serviceResult = & serviceCheck @$ipParam
+#>
+
 #----------------------------------------------------------------------------------------#
 
-#   WinForms import
+#   GUI objects
 
 [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 
@@ -39,7 +57,7 @@ $daDiagnostics = New-Object System.Windows.Forms.Button
 
 $textBox.Location = '15,10'
 $textBox.AutoSize = $false 
-$textBox.Size = '450,200'
+$textBox.Size = '450,140'
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
 #$textBox.ForeColor = [Drawing.Color]::Red
@@ -47,13 +65,13 @@ $textBox.Text = Write-Output "For DirectAccess issues, please select from the fo
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
-$textBox.appendText("Select 'Resolver' to attempt a quick-fix. ")
+$textBox.appendText("•  Select 'Resolver' to attempt a quick-fix. ")
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
-$textBox.appendText("Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
+$textBox.appendText("•  Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
-$textBox.appendText("Select Diagnostics' to attempt to troubleshoot wider issues.")
+$textBox.appendText("•  Select Diagnostics' to attempt to troubleshoot wider issues.")
 
 #----------------------------------------------------------------------------------------#
 
@@ -61,27 +79,34 @@ $textBox.appendText("Select Diagnostics' to attempt to troubleshoot wider issues
 
 $daResolver.Text = 'Resolver'
 $daResolver.Size = '140,23'
-$daResolver.Location = '170,220'
+$daResolver.Font = "Microsoft Sans Serif, 8.25pt, style=Bold"
+$daResolver.Location = '170,160'
 $daResolver.Add_Click({
 
     Clear-Host
+    Clear-Host
+    Clear-Host
+    Clear-Host
     
     $textBox.Text = Write-Output "DirectAccess is now restarting..."
+    $textBox.appendText($newLine)
     $textBox.appendText($newLine)
 
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
 
-    Start-Sleep -Seconds 1
+    Start-Sleep -Seconds 0.5
 
     Start-Service iphlpsvc
     Start-Service NcaSvc
 
     
-    Start-Sleep -Seconds 35
+    Start-Sleep -Seconds 30
     Clear-Host
 
-    $textBox.appendText("DirectAccess is now RUNNING. You can now close this application.")
+    $textBox.appendText("Direct access is RUNNING. You can now close this application.")
+
+
 })
 
 #----------------------------------------------------------------------------------------#
@@ -89,10 +114,14 @@ $daResolver.Add_Click({
 #   Button (R) iphlpsvc & NcaSvc Service Stop & Start, IPV6 release and forced reboot
 
 $daReboot.Size = '140,23'
-$daReboot.Location = '325,220'
+$daReboot.Location = '325,160'
 $daReboot.text = 'Resolver + Reboot'
+$daReboot.Font = "Microsoft Sans Serif, 8.25pt, style=Bold"
 $daReboot.Add_Click({
 
+    Clear-Host
+    Clear-Host
+    Clear-Host
     Clear-Host
 
     $textBox.Text = Write-Output "DirectAccess is now restarting and IPV6 being released..."
@@ -110,6 +139,9 @@ $daReboot.Add_Click({
     Start-Sleep -Seconds 1
 
     ipconfig.exe /release6
+
+    Start-Sleep -Seconds 2
+
     ipconfig.exe /renew
 
     Start-Sleep -Seconds 25
@@ -144,9 +176,13 @@ $daReboot.Add_Click({
 
 $daDiagnostics.Text = 'Diagnostics'
 $daDiagnostics.Size = '140,23'
-$daDiagnostics.Location = '15,220'
+$daDiagnostics.Font = "Microsoft Sans Serif, 8.25pt, style=Bold"
+$daDiagnostics.Location = '15,160'
 $daDiagnostics.Add_Click({
 
+    Clear-Host
+    Clear-Host
+    Clear-Host
     Clear-Host
 
     $textBox.Text = Write-Output "Running diagnostics..."
@@ -161,7 +197,7 @@ $daDiagnostics.Add_Click({
      $textBox.appendText( "WIFI signal strength: $signalTest" )
      $textBox.appendText($newLine)
      $textBox.appendText($newLine)
-     $textBox.appendText( "For optimal DirectAccess performance, we recommend a download speed of 10Mbit/s or higher and a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these." )
+     $textBox.appendText( "For optimal DirectAccess performance, we recommend a download speed of 10Mbit/s or higher and a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these should you not meet the minimum scores." )
 
 })
 
@@ -170,14 +206,14 @@ $daDiagnostics.Add_Click({
 #   Main form
 
 $mainForm.Text = 'Direct Access Resolver'
-$mainForm.Size = "485,280"
+$mainForm.Size = "485,220"
 $mainForm.FormBorderStyle = 'FixedDialog'   
 
 
 $mainForm.Controls.Add($textBox)
 $mainForm.Controls.Add($daResolver)
 $mainForm.Controls.Add($daReboot)
-$mainForm.Controls.Add($daDiagnostics)
+$mainForm.Controls.Add($daDiagnostics)  
 
 
 #----------------------------------------------------------------------------------------#
