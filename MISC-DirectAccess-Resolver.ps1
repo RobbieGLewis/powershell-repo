@@ -21,6 +21,8 @@ FUNCTIONALITY:
 
 $newLine = "`r`n"
 
+$service = Get-Service -Name iphlpsvc
+
 <#
 
 function serviceCheck{
@@ -61,8 +63,8 @@ $textBox.Size = '450,140'
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
 #$textBox.ForeColor = [Drawing.Color]::Red
-$textBox.Text = Write-Output "For DirectAccess issues, please select from the following options:"
-$textBox.appendText($newLine)
+$textBox.Text = Write-Output "Please select from the following options:"
+$textBox.Font = "Microsoft Sans Serif, 9pt"
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
 $textBox.appendText("•  Select 'Resolver' to attempt a quick-fix. ")
@@ -71,7 +73,7 @@ $textBox.appendText($newLine)
 $textBox.appendText("•  Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
-$textBox.appendText("•  Select Diagnostics' to attempt to troubleshoot wider issues.")
+$textBox.appendText("•  Select 'Diagnostics' to attempt to troubleshoot wider issues.")
 
 #----------------------------------------------------------------------------------------#
 
@@ -79,7 +81,7 @@ $textBox.appendText("•  Select Diagnostics' to attempt to troubleshoot wider i
 
 $daResolver.Text = 'Resolver'
 $daResolver.Size = '140,23'
-$daResolver.Font = "Microsoft Sans Serif, 8.25pt, style=Bold"
+$daResolver.Font = "Microsoft Sans Serif, 9pt"
 $daResolver.Location = '170,160'
 $daResolver.Add_Click({
 
@@ -103,8 +105,8 @@ $daResolver.Add_Click({
     
     Start-Sleep -Seconds 30
     Clear-Host
-
-    $textBox.appendText("Direct access is RUNNING. You can now close this application.")
+   
+    $textBox.appendText("DirectAccess is $($service.Status)")
 
 
 })
@@ -116,7 +118,7 @@ $daResolver.Add_Click({
 $daReboot.Size = '140,23'
 $daReboot.Location = '325,160'
 $daReboot.text = 'Resolver + Reboot'
-$daReboot.Font = "Microsoft Sans Serif, 8.25pt, style=Bold"
+$daReboot.Font = "Microsoft Sans Serif, 9pt"
 $daReboot.Add_Click({
 
     Clear-Host
@@ -163,9 +165,8 @@ $daReboot.Add_Click({
     $textBox.appendText($newLine)
     Start-Sleep -Seconds 14
 
-    $textBox.appendText( "Shutting down.")
+    $textBox.appendText( "Shutting down...")
     $textBox.appendText($newLine)
-
 
     Restart-Computer -Force
 })
@@ -176,7 +177,7 @@ $daReboot.Add_Click({
 
 $daDiagnostics.Text = 'Diagnostics'
 $daDiagnostics.Size = '140,23'
-$daDiagnostics.Font = "Microsoft Sans Serif, 8.25pt, style=Bold"
+$daDiagnostics.Font = "Microsoft Sans Serif, 9pt"
 $daDiagnostics.Location = '15,160'
 $daDiagnostics.Add_Click({
 
@@ -205,9 +206,10 @@ $daDiagnostics.Add_Click({
 
 #   Main form
 
-$mainForm.Text = 'Direct Access Resolver'
+$mainForm.Text = 'SK - DirectAccess Resolver'
 $mainForm.Size = "485,220"
-$mainForm.FormBorderStyle = 'FixedDialog'   
+$mainForm.FormBorderStyle = 'FixedDialog'  
+$mainForm.Font = "Microsoft Sans Serif, 9pt" 
 
 
 $mainForm.Controls.Add($textBox)
@@ -224,10 +226,8 @@ $mainForm.ShowDialog()
 #----------------------------------------------------------------------------------------#
 
 #   Snippets
-#   Speedtest: "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
+#   Str: (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
 
 #----------------------------------------------------------------------------------------#
 
 #  TBD
-#  Dynamic service updates
-#  Dynamic variable colouring
