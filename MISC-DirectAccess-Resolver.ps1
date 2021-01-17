@@ -4,14 +4,14 @@ SYNOPSIS:
 AUTHOR:
    James Wylde
 VERSION:
-   1.0
+   0.1
 FUNCTIONALITY:
    DirectAccess resolver with GUI. Stop / Start associated services [iphlpsvc & NcaSvc] > IPV6 release and forced reboot > Connection diagnosis > Recommended actions
 #>
 
 #----------------------------------------------------------------------------------------#
 
-#  Execution policy - TBC
+#  Execution policy
 
 #Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
 
@@ -63,7 +63,7 @@ $textBox.Size = '450,140'
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
 #$textBox.ForeColor = [Drawing.Color]::Red
-$textBox.Text = Write-Output "Please select from the following options:"
+$textBox.Text = Write-Output "For DirectAccess issues, please select from the following options:"
 $textBox.Font = "Microsoft Sans Serif, 9pt"
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
@@ -73,7 +73,7 @@ $textBox.appendText($newLine)
 $textBox.appendText("•  Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
 $textBox.appendText($newLine)
 $textBox.appendText($newLine)
-$textBox.appendText("•  Select 'Diagnostics' to attempt to troubleshoot wider issues.")
+$textBox.appendText("•  Select Diagnostics' to attempt to troubleshoot wider issues.")
 
 #----------------------------------------------------------------------------------------#
 
@@ -84,11 +84,6 @@ $daResolver.Size = '140,23'
 $daResolver.Font = "Microsoft Sans Serif, 9pt"
 $daResolver.Location = '170,160'
 $daResolver.Add_Click({
-
-    Clear-Host
-    Clear-Host
-    Clear-Host
-    Clear-Host
     
     $textBox.Text = Write-Output "DirectAccess is now restarting..."
     $textBox.appendText($newLine)
@@ -106,7 +101,10 @@ $daResolver.Add_Click({
     Start-Sleep -Seconds 30
     Clear-Host
    
-    $textBox.appendText("DirectAccess is $($service.Status)")
+    
+    
+    $textBox.appendText("DynamicAccess is now $($service.Status). You can now close this application.")
+
 
 
 })
@@ -121,10 +119,7 @@ $daReboot.text = 'Resolver + Reboot'
 $daReboot.Font = "Microsoft Sans Serif, 9pt"
 $daReboot.Add_Click({
 
-    Clear-Host
-    Clear-Host
-    Clear-Host
-    Clear-Host
+# Clear-Host
 
     $textBox.Text = Write-Output "DirectAccess is now restarting and IPV6 being released..."
     $textBox.appendText($newLine)
@@ -168,6 +163,7 @@ $daReboot.Add_Click({
     $textBox.appendText( "Shutting down...")
     $textBox.appendText($newLine)
 
+
     Restart-Computer -Force
 })
 
@@ -180,11 +176,6 @@ $daDiagnostics.Size = '140,23'
 $daDiagnostics.Font = "Microsoft Sans Serif, 9pt"
 $daDiagnostics.Location = '15,160'
 $daDiagnostics.Add_Click({
-
-    Clear-Host
-    Clear-Host
-    Clear-Host
-    Clear-Host
 
     $textBox.Text = Write-Output "Running diagnostics..."
     $textBox.appendText($newLine)
@@ -226,8 +217,10 @@ $mainForm.ShowDialog()
 #----------------------------------------------------------------------------------------#
 
 #   Snippets
-#   Str: (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
+#   Speedtest: "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
 
 #----------------------------------------------------------------------------------------#
 
 #  TBD
+#  Dynamic service updates
+#  Dynamic variable colouring
