@@ -8,7 +8,7 @@ ForEach ($user in $users) {
     $flag = $null
     $flag = get-aduser -Identity $user.name
  
-    If ($flag -ne $null) {
+    If ($null -ne $flag) {
         
         Write-host "Disabling User: $($user.Name)" -ForegroundColor Green
         set-aduser -Enabled:$False -Identity $user.Name -Confirm:$false
