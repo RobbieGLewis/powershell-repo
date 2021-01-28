@@ -12,8 +12,12 @@ FUNCTIONALITY:
 #----------------------------------------------------------------------------------------#
 
 #  Execution policy
+#  Notes - Currently overidden by GPO defining execution policy (presumably on unsigned scripts / without publisher).
+#  Can self-sign script, add to root > export and push out attached to localised GPO.
 
-#Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+# Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
 
 #----------------------------------------------------------------------------------------#
 
@@ -23,23 +27,8 @@ $newLine = "`r`n"
 
 $service = Get-Service -Name iphlpsvc
 
-<#
+$passCheck = net user $env:USERNAME /domain | find "Password expires"
 
-function serviceCheck{
-   param($ipParam)
-   $ipService = Get-Service -Name iphlpsvc
-   if ($ipService.Status -eq "Running"){
-      Write-Host "DynamicAccess is RUNNING."
-   }
-   if ($ipService.Status -eq "Stopped"){
-      Write-Host "DyanmicAccess is NOT running. Please try again"
-   }
-}
-
-serviceCheck
-
-$serviceResult = & serviceCheck @$ipParam
-#>
 
 #----------------------------------------------------------------------------------------#
 
@@ -49,31 +38,46 @@ $serviceResult = & serviceCheck @$ipParam
 
 $mainForm = New-Object System.Windows.Forms.Form
 $textBox = New-Object System.Windows.Forms.RichTextBox
+$textBox2 = New-Object System.Windows.Forms.RichTextBox
 $daResolver = New-Object System.Windows.Forms.Button
 $daReboot = New-Object System.Windows.Forms.Button
 $daDiagnostics = New-Object System.Windows.Forms.Button
 
 #----------------------------------------------------------------------------------------#
 
-#   Textbox OUT
+#   Textbox OUT top
 
 $textBox.Location = '15,10'
 $textBox.AutoSize = $false 
-$textBox.Size = '450,140'
+$textBox.Size = '450,23'
+$textBox.BackColor = [Drawing.Color]::White
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
-#$textBox.ForeColor = [Drawing.Color]::Red
-$textBox.Text = Write-Output "For DirectAccess issues, please select from the following options:"
+$textBox.ForeColor = [Drawing.Color]::Green
+$textBox.Text = Write-Output " DirectAccess is currently $($service.Status)."
 $textBox.Font = "Microsoft Sans Serif, 9pt"
-$textBox.appendText($newLine)
-$textBox.appendText($newLine)
-$textBox.appendText("•  Select 'Resolver' to attempt a quick-fix. ")
-$textBox.appendText($newLine)
-$textBox.appendText($newLine)
-$textBox.appendText("•  Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
-$textBox.appendText($newLine)
-$textBox.appendText($newLine)
-$textBox.appendText("•  Select Diagnostics' to attempt to troubleshoot wider issues.")
+
+#----------------------------------------------------------------------------------------#
+
+
+#   Textbox OUT bootm
+
+$textBox2.Location = '15,40'
+$textBox2.AutoSize = $false 
+$textBox2.Size = '450,110'
+$textBox2.BackColor = [Drawing.Color]::White
+$textBox2.ReadOnly = $true
+$textBox2.Multiline = $true
+#$textBox.ForeColor = [Drawing.Color]::Red
+$textBox2.Text = Write-Output "> Select 'Resolver' to attempt a quick-fix."
+$textBox2.Font = "Microsoft Sans Serif, 9pt"
+$textBox2.appendText($newLine)
+$textBox2.appendText($newLine)
+$textBox2.appendText(">  Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
+$textBox2.appendText($newLine)
+$textBox2.appendText($newLine)
+$textBox2.appendText(">  Select 'Diagnostics' to attempt to troubleshoot wider issues.")
+
 
 #----------------------------------------------------------------------------------------#
 
@@ -84,10 +88,16 @@ $daResolver.Size = '140,23'
 $daResolver.Font = "Microsoft Sans Serif, 9pt"
 $daResolver.Location = '170,160'
 $daResolver.Add_Click({
+ 
+
+    $textBox2.Text = Write-Output "$newline"
+
+    Start-Sleep -Seconds 0.5
     
     $textBox.Text = Write-Output "DirectAccess is now restarting..."
-    $textBox.appendText($newLine)
-    $textBox.appendText($newLine)
+
+    Start-Sleep -Seconds 0.5
+
 
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
@@ -100,10 +110,12 @@ $daResolver.Add_Click({
     
     Start-Sleep -Seconds 30
     Clear-Host
+
+    $textBox.Text = Write-Output "DirectAccess has finished restarting..."
    
     
     
-    $textBox.appendText("DynamicAccess is now $($service.Status). You can now close this application.")
+    $textBox2.Text = Write-Output "DirectAccess is now $($service.Status). You can now close this application."
 
 
 
@@ -119,11 +131,14 @@ $daReboot.text = 'Resolver + Reboot'
 $daReboot.Font = "Microsoft Sans Serif, 9pt"
 $daReboot.Add_Click({
 
-# Clear-Host
-
     $textBox.Text = Write-Output "DirectAccess is now restarting and IPV6 being released..."
-    $textBox.appendText($newLine)
-    $textBox.appendText($newLine)
+
+    Start-Sleep -Seconds 0.75
+
+    $textBox2.Text = Write-Output  "$newline"
+
+    Start-Sleep -Seconds 0.75
+
 
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
@@ -144,24 +159,25 @@ $daReboot.Add_Click({
     Start-Sleep -Seconds 25
     Clear-Host
 
-    $textBox.ForeColor = [Drawing.Color]::Red
-    $textBox.appendText( "Your machine will SHUTDOWN in 60 seconds. Please save all work.")
-    $textBox.appendText($newLine)
+    $textBox.Text = Write-Output "Preparing to shut down..."
+
+    $textBox2.ForeColor = [Drawing.Color]::Red
+    $textBox2.Text = Write-Output "Your machine will SHUTDOWN in 60 seconds. Please save all work."
+    $textBox2.appendText($newLine)
     $textBox.appendText($newLine)
     Start-Sleep -Seconds 30
 
-    $textBox.appendText( "Your machine will SHUTDOWN in 30 seconds. Please save all work.")
-    $textBox.appendText($newLine)
-    $textBox.appendText($newLine)
+    $textBox2.appendText( "Your machine will SHUTDOWN in 30 seconds. Please save all work.")
+    $textBox2.appendText($newLine)
+    $textBox2.appendText($newLine)
     Start-Sleep -Seconds 15
 
-    $textBox.appendText( "Your machine will SHUTDOWN in 15 seconds. Please save all work.")
-    $textBox.appendText($newLine)
-    $textBox.appendText($newLine)
+    $textBox2.appendText( "Your machine will SHUTDOWN in 15 seconds. Please save all work.")
+    $textBox2.appendText($newLine)
+    $textBox2.appendText($newLine)
     Start-Sleep -Seconds 14
 
-    $textBox.appendText( "Shutting down...")
-    $textBox.appendText($newLine)
+    $textBox2.appendText( "Shutting down...")
 
 
     Restart-Computer -Force
@@ -178,18 +194,29 @@ $daDiagnostics.Location = '15,160'
 $daDiagnostics.Add_Click({
 
     $textBox.Text = Write-Output "Running diagnostics..."
-    $textBox.appendText($newLine)
-    $textBox.appendText($newLine)
+
+    Start-Sleep -Seconds 0.75
+
+    $textBox2.Text = Write-Output  "$newline"
+
+    Start-Sleep -Seconds 0.75
+
 
     $speedTest = "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
     $signalTest = (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
 
-     $textBox.appendText( "Internet download speed: $speedTest" )
-     $textBox.appendText($newLine)
-     $textBox.appendText( "WIFI signal strength: $signalTest" )
-     $textBox.appendText($newLine)
-     $textBox.appendText($newLine)
-     $textBox.appendText( "For optimal DirectAccess performance, we recommend a download speed of 10Mbit/s or higher and a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these should you not meet the minimum scores." )
+    $textBox.Text = Write-Output "Diagnostics results:"
+
+     $textBox2.Text = Write-Output  "$passCheck "
+     $textBox2.appendText($newLine)
+     $textBox2.appendText("Internet download speed:    $speedTest")
+     $textBox2.appendText($newLine)
+     $textBox2.appendText( "WIFI signal strength:    $signalTest" )
+     $textBox2.appendText($newLine)
+     $textBox2.appendText($newLine)
+     $textBox2.appendText( "For optimal DirectAccess performance, we recommend a download speed of 10Mbit/s or higher and a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these should you not meet the minimum scores." )
+
+
 
 })
 
@@ -197,13 +224,14 @@ $daDiagnostics.Add_Click({
 
 #   Main form
 
-$mainForm.Text = 'SK - DirectAccess Resolver'
+$mainForm.Text = 'SK - DirectAccess Hotfix'
 $mainForm.Size = "485,220"
 $mainForm.FormBorderStyle = 'FixedDialog'  
 $mainForm.Font = "Microsoft Sans Serif, 9pt" 
 
 
 $mainForm.Controls.Add($textBox)
+$mainForm.Controls.Add($textBox2)
 $mainForm.Controls.Add($daResolver)
 $mainForm.Controls.Add($daReboot)
 $mainForm.Controls.Add($daDiagnostics)  
@@ -212,15 +240,12 @@ $mainForm.Controls.Add($daDiagnostics)
 #----------------------------------------------------------------------------------------#
 
 #   GUI OUT
-$mainForm.ShowDialog()
 
-#----------------------------------------------------------------------------------------#
+#$mainForm.ShowDialog()
 
-#   Snippets
-#   Speedtest: "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
+[system.windows.forms.application]::run($mainform)
 
 #----------------------------------------------------------------------------------------#
 
 #  TBD
-#  Dynamic service updates
-#  Dynamic variable colouring
+
