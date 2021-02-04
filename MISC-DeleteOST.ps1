@@ -12,7 +12,7 @@ Invoke-Command -ComputerName PC01 -Scriptblock {
 
 Stop-Process -Name outlook -Force
 
-Move-Item -Path "%LOCALAPPDATA%\Microsoft\Outlook*.*" -Destination '%UserProfile%\Documents' -Force
+Move-Item -Path "$env:User\AppData\Local\Microsoft\Outlook*.*" -Destination '%UserProfile%\Documents' -Force
 
 Remove-Item -Path "%LOCALAPPDATA%\Microsoft\Outlook*.*"
 
