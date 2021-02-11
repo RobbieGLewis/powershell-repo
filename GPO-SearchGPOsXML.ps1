@@ -17,10 +17,8 @@ $DomainName = $env:USERDNSDOMAIN
 
 #   Search
 
-$string = Read-Host -Prompt "String" 
+$string = Read-Host -Prompt "Search: " 
 
-
- 
 #----------------------------------------------------------------------------------------#
 
 #   GPOs in Domain
