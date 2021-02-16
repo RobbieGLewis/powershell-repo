@@ -21,11 +21,13 @@ function Show-Menu
      )
      Clear-Host
      Write-Host "`n `r "
-     Write-Host "*************** $Title ***************"
-     Write-Host "1 - Check uptime."
-     Write-Host "2 - Check CPU and MEMORY usage."
-     Write-Host "3 - Close all applications." 
-     Write-Host "4 - Reboot server." 
+     Write-Host "*** $Title ***"
+     Write-Host "`n `r "
+     Write-Host "1 - Ping machine."
+     Write-Host "2 - Get uptime."
+     Write-Host "3 - Check CPU and MEMORY usage."
+     Write-Host "4 - Kill all titled applications." 
+     Write-Host "5 - Reboot machine." 
      Write-Host "`n `r "
      Write-Host "Q - Quit."
      Write-Host "`n `r "
@@ -35,15 +37,15 @@ function Show-Menu
 #   Functions
 
 
-#Function function0 {Test-Connection -TargetName $serverName -IPv4}
+Function function1 {ping $serverName}
 
-Function function1 {(Get-Date) - (Get-CimInstance Win32_OperatingSystem -ComputerName $serverName).LastBootupTime | Format-Table -AutoSize}
+Function function2 {(Get-Date) - (Get-CimInstance Win32_OperatingSystem -ComputerName $serverName).LastBootupTime | Format-Table -AutoSize}
 
-Function function2 {ps | sort -des cpu | Select-Object -f 15 | Format-Table -Autosize; sleep 1}
+Function function3 {ps | sort -des cpu | Select-Object -f 15 | Format-Table -Autosize; sleep 1}
 
-Function function3 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | stop-process}
+Function function4 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | stop-process}
 
-Function function4 {
+Function function5 {
     $confirmation = Write-Host "Are you sure you want to reboot" $serverName" ?  [Y/N] " -ForegroundColor White -BackgroundColor Red -nonewline; Read-Host
 while($confirmation -ne "y")
 {
@@ -67,15 +69,18 @@ do
            '1' {
                 Clear-Host
                 function1
-           } '2' {
+            } '2' {
                 Clear-Host
-                function2
+                function2    
            } '3' {
                 Clear-Host
                 function3
-            } '4' {
-                Clear-Host 
+           } '4' {
+                Clear-Host
                 function4
+            } '5' {
+                Clear-Host 
+                function5
            } 'q' {
                 return
            }
