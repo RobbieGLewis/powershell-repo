@@ -20,18 +20,22 @@ function Show-Menu
            [string]$Title = $serverName
      )
      Clear-Host
+     Write-Host "`n `r "
      Write-Host "*************** $Title ***************"
-
      Write-Host "1 - Check uptime."
      Write-Host "2 - Check CPU and MEMORY usage."
-     Write-Host "3 - Close all applications."
-     Write-Host "4 - Reboot server."
-
+     Write-Host "3 - Close all applications." 
+     Write-Host "4 - Reboot server." 
+     Write-Host "`n `r "
      Write-Host "Q - Quit."
+     Write-Host "`n `r "
 }
 
 #----------------------------------------------------------------------------------------#
 #   Functions
+
+
+#Function function0 {Test-Connection -TargetName $serverName -IPv4}
 
 Function function1 {(Get-Date) - (Get-CimInstance Win32_OperatingSystem -ComputerName $serverName).LastBootupTime | Format-Table -AutoSize}
 
@@ -40,13 +44,13 @@ Function function2 {ps | sort -des cpu | Select-Object -f 15 | Format-Table -Aut
 Function function3 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | stop-process}
 
 Function function4 {
-    $confirmation = Read-Host "Are you sure you want to reboot" $serverName" ? [ Y / N ]"
+    $confirmation = Write-Host "Are you sure you want to reboot" $serverName" ?  [Y/N] " -ForegroundColor White -BackgroundColor Red -nonewline; Read-Host
 while($confirmation -ne "y")
 {
-    if ($confirmation -eq 'n') {exit}
-    $confirmation = Read-Host "Ready? [ Y / N ]"
+    if ($confirmation -eq 'n') {return}
+    $confirmation = Write-Host "Reboot? [Y/N]" -ForegroundColor White -BackgroundColor Red -nonewline; Read-Host
 }
-    Write-Host = "Rebooting" $serverName "in 15 seconds."
+    Write-Host = "Rebooting" $serverName "in 15 seconds." -ForegroundColor White -BackgroundColor Green
     Start-Sleep 15 -Seconds 
     Restart-Computer -ComputerName $serverName -Force}
 
@@ -70,7 +74,7 @@ do
                 Clear-Host
                 function3
             } '4' {
-                Clear-Host
+                Clear-Host 
                 function4
            } 'q' {
                 return
