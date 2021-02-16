@@ -1,4 +1,18 @@
-$serverName = Read-Host -Prompt "Server Bouncer: "
+#   James Wylde 2020
+#   github.com/jameswylde
+
+#----------------------------------------------------------------------------------------#
+#   Modules
+
+Clear-Host
+
+#----------------------------------------------------------------------------------------#
+#   Vars
+Write-Host "`n `r "
+$serverName = Read-Host -Prompt "Machine"
+
+#----------------------------------------------------------------------------------------#
+#   Menu bulk
 
 function Show-Menu
 {
@@ -6,7 +20,7 @@ function Show-Menu
            [string]$Title = $serverName
      )
      Clear-Host
-     Write-Host "================ $Title ================"
+     Write-Host "*************** $Title ***************"
 
      Write-Host "1 - Check uptime."
      Write-Host "2 - Check CPU and MEMORY usage."
@@ -16,16 +30,30 @@ function Show-Menu
      Write-Host "Q - Quit."
 }
 
-#Functions go here
+#----------------------------------------------------------------------------------------#
+#   Functions
 
 Function function1 {(Get-Date) - (Get-CimInstance Win32_OperatingSystem -ComputerName $serverName).LastBootupTime | Format-Table -AutoSize}
+
 Function function2 {ps | sort -des cpu | Select-Object -f 15 | Format-Table -Autosize; sleep 1}
+
 Function function3 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | stop-process}
+
 Function function4 {
-    Read-Host -Prompt "ARE YOU SURE YOU WANT TO REBOOT $servername ?"
+    $confirmation = Read-Host "Are you sure you want to reboot" $serverName" ? [ Y / N ]"
+while($confirmation -ne "y")
+{
+    if ($confirmation -eq 'n') {exit}
+    $confirmation = Read-Host "Ready? [ Y / N ]"
+}
+    Write-Host = "Rebooting" $serverName "in 15 seconds."
+    Start-Sleep 15 -Seconds 
     Restart-Computer -ComputerName $serverName -Force}
 
-#Main menu loop
+
+#----------------------------------------------------------------------------------------#
+#   Menu loop
+
 do
 {
      Show-Menu
@@ -54,25 +82,12 @@ until ($input -eq 'q')
 
 
 
-#(Get-Date) - (Get-CimInstance Win32_OperatingSystem -ComputerName $serverName).LastBootupTime | Format-Table -AutoSize
-
-#ps | sort -des cpu | Select-Object -f 15 | Format-Table -Autosize; sleep 1
 
 
 
+#----------------------------------------------------------------------------------------#
+#   Scraps
 
 
-
-#       Scraps
-
-#   Peformance
-#Get-Counter '\Memory\Available MBytes'
-#Get-Counter '\Processor(_Total)\% Processor Time'
-#Get-WmiObject Win32_Processor | Select-Object LoadPercentage | Format-List
-# Processor utilization
-#$Processor = (Get-WmiObject -ComputerName DC01 -Class win32_processor -ErrorAction Stop | Measure-Object -Property LoadPercentage -Average | Select-Object Average).Average
-#Write-Host = $Processor
-# Memory utilization
-#$ComputerMemory = Get-WmiObject -ComputerName $Server -Class win32_operatingsystem -ErrorAction Stop
-#$Memory = ((($ComputerMemory.TotalVisibleMemorySize - $ComputerMemory.FreePhysicalMemory)*100)/ $ComputerMemory.TotalVisibleMemorySize)
-#While(10) {ps | sort -des cpu | Select-Object -f 15 | ft -a; sleep 1; Clear-Host}
+#----------------------------------------------------------------------------------------#
+#   TBD
