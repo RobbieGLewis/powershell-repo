@@ -53,7 +53,7 @@ while($confirmation -ne "y")
     $confirmation = Write-Host "Reboot? [Y/N]" -ForegroundColor White -BackgroundColor Red -nonewline; Read-Host
 }
     Write-Host = "Rebooting" $serverName "in 15 seconds." -ForegroundColor White -BackgroundColor Green
-    Start-Sleep 15 -Seconds 
+    Start-Sleep -Seconds 15
     Restart-Computer -ComputerName $serverName -Force}
 
 
