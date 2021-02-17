@@ -41,9 +41,9 @@ Function function1 {ping $serverName}
 
 Function function2 {(Get-Date) - (Get-CimInstance Win32_OperatingSystem -ComputerName $serverName).LastBootupTime | Format-Table -AutoSize}
 
-Function function3 {ps | sort -des cpu | Select-Object -f 15 | Format-Table -Autosize; sleep 1}
+Function function3 {Get-Process | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; sleep 1}
 
-Function function4 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | stop-process}
+Function function4 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
 
 Function function5 {
     $confirmation = Write-Host "Are you sure you want to reboot" $serverName" ?  [Y/N] " -ForegroundColor White -BackgroundColor Red -nonewline; Read-Host
@@ -88,8 +88,6 @@ do
      pause
 }
 until ($input -eq 'q')
-
-
 
 
 
