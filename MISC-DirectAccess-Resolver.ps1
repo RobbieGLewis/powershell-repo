@@ -201,7 +201,7 @@ $daDiagnostics.Add_Click({
 
     Start-Sleep -Seconds 0.75
 
-
+# $wc = New-Object net.webclient; "{0:N2} Mbit/sec" -f ((100/(Measure-Command {$wc.Downloadfile('http://east.testmy.net/dl-100MB',"c:\speedtest.test")}).TotalSeconds)*8); del c:\speedtest.test
     $speedTest = "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
     $signalTest = (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
 
