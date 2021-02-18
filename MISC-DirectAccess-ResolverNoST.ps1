@@ -96,32 +96,38 @@ $daResolver.Add_Click({
 
     $textBox2.Text = Write-Output "$newline"
 
-    Start-Sleep -Seconds 0.5
+    Start-Sleep -Seconds 1.5
     
     $textBox.Text = Write-Output "DirectAccess is now restarting..."
 
-    Start-Sleep -Seconds 0.5
+    Start-Sleep -Seconds 1.5
 
 
     Stop-Service iphlpsvc -Force
     Stop-Service NcaSvc
 
-    Start-Sleep -Seconds 0.5
+    Start-Sleep -Seconds 1.5
 
     Start-Service iphlpsvc
     Start-Service NcaSvc
 
     
-    Start-Sleep -Seconds 30
+    Start-Sleep -Seconds 45
     Clear-Host
 
     $textBox.Text = Write-Output "DirectAccess has finished restarting..."
    
-    
-    
-    $textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."
+############################################################
+
+#  BROKEN
+
+   if ($service -eq 'Stopped') {$textBox2.Text = Write-Output "DirectAccess is not running. Please run again or try 'Resolver + Restart'."}
+   else {$textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."}
 
 
+ #   $textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."
+
+############################################################
 
 })
 
