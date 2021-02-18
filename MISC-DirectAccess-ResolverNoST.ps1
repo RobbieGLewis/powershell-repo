@@ -211,10 +211,10 @@ $daDiagnostics.Add_Click({
      $textBox2.appendText($newLine)
 #     $textBox2.appendText("Internet download speed:    $speedTest")
 #     $textBox2.appendText($newLine)
-     $textBox2.appendText( "WIFI signal strength:    $signalTest" )
+     $textBox2.appendText( "WIFI signal strength:        $signalTest" )
      $textBox2.appendText($newLine)
      $textBox2.appendText($newLine)
-     $textBox2.appendText( "For optimal DirectAccess performance, we recommend a download speed of 10Mbit/s or higher and a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these should you not meet the minimum scores." )
+     $textBox2.appendText( "For optimal DirectAccess performance a a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these should you not meet the minimum scores." )
 
 
 
