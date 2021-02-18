@@ -209,7 +209,6 @@ $daDiagnostics.Add_Click({
 	$speedTest = "{0:N2} Mbit/sec" -f ((10/(Measure-Command {$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest http://speed.transip.nl/10mb.bin -Proxy $proxy -ProxyUseDefaultCredentials -UseBasicParsing|Out-Null}).TotalSeconds)*8)
 
 
-
     $signalTest = (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
 
     $textBox.Text = Write-Output "Diagnostics results..."
