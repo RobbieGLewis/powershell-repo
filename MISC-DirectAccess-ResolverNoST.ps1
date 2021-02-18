@@ -29,6 +29,8 @@ $proxy = ([System.Net.WebRequest]::GetSystemWebproxy()).GetProxy($dest)
 
 $service = Get-Service -Name iphlpsvc
 
+$serviceStatus = $service.Status
+
 $passCheck = net user $env:USERNAME /domain | find "Password expires"
 
 
@@ -56,7 +58,7 @@ $textBox.BackColor = [Drawing.Color]::White
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
 $textBox.ForeColor = [Drawing.Color]::Blue
-$textBox.Text = Write-Output " DirectAccess is currently $($service.Status)."
+$textBox.Text = Write-Output " DirectAccess is currently $("$serviceStatus".ToUpper() )."
 $textBox.Font = "Microsoft Sans Serif, 9pt"
 
 #----------------------------------------------------------------------------------------#
@@ -117,7 +119,7 @@ $daResolver.Add_Click({
    
     
     
-    $textBox2.Text = Write-Output "DirectAccess is now $($service.Status). You can now close this application."
+    $textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."
 
 
 
@@ -156,7 +158,7 @@ $daReboot.Add_Click({
 
     Start-Sleep -Seconds 2
 
-    ipconfig.exe /renew
+    ipconfig.exe /renew6
 
     Start-Sleep -Seconds 25
     Clear-Host
