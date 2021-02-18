@@ -12,10 +12,8 @@ FUNCTIONALITY:
 #----------------------------------------------------------------------------------------#
 
 #  Execution policy
-#  Notes - Currently overidden by GPO defining execution policy (presumably on unsigned scripts / without publisher).
-#  Can self-sign script, add to root > export and push out attached to localised GPO.
 
-#Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+# Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
 # Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 
@@ -24,6 +22,10 @@ FUNCTIONALITY:
 #   Lost and Found
 
 $newLine = "`r`n"
+
+$dest = "http://speed.transip.nl/10mb.bin"
+
+$proxy = ([System.Net.WebRequest]::GetSystemWebproxy()).GetProxy($dest)
 
 $service = Get-Service -Name iphlpsvc
 
@@ -53,7 +55,7 @@ $textBox.Size = '450,23'
 $textBox.BackColor = [Drawing.Color]::White
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
-$textBox.ForeColor = [Drawing.Color]::Green
+$textBox.ForeColor = [Drawing.Color]::Blue
 $textBox.Text = Write-Output " DirectAccess is currently $($service.Status)."
 $textBox.Font = "Microsoft Sans Serif, 9pt"
 
@@ -131,7 +133,7 @@ $daReboot.text = 'Resolver + Reboot'
 $daReboot.Font = "Microsoft Sans Serif, 9pt"
 $daReboot.Add_Click({
 
-    $textBox.Text = Write-Output "DirectAccess is now restarting and IPV6 being released..."
+    $textBox.Text = Write-Output "DirectAccess services are now restarting and IPV6 being released..."
 
     Start-Sleep -Seconds 0.75
 
@@ -195,26 +197,29 @@ $daDiagnostics.Add_Click({
 
     $textBox.Text = Write-Output "Running diagnostics..."
 
-    Start-Sleep -Seconds 0.75
+    Start-Sleep -Seconds 1.50
 
     $textBox2.Text = Write-Output  "$newline"
 
-    Start-Sleep -Seconds 0.75
+    Start-Sleep -Seconds 1.50
 
 # 	$wc = New-Object net.webclient; "{0:N2} Mbit/sec" -f ((10/(Measure-Command {$wc.Downloadfile('http://speed.transip.nl/10mb.bin',"c:\speedtest.test")}).TotalSeconds)*8); del c:\speedtest.test
-#   $speedTest = "{0:N2} Mbit/sec" -f ((10/(Measure-Command {Invoke-WebRequest 'http://speed.transip.nl/10mb.bin' -UseBasicParsing|Out-Null}).TotalSeconds)*8)
+	$speedTest = "{0:N2} Mbit/sec" -f ((10/(Measure-Command {$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest http://speed.transip.nl/10mb.bin -Proxy $proxy -ProxyUseDefaultCredentials -UseBasicParsing|Out-Null}).TotalSeconds)*8)
+
+
+
     $signalTest = (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
 
-    $textBox.Text = Write-Output "Diagnostics results:"
+    $textBox.Text = Write-Output "Diagnostics results..."
 
      $textBox2.Text = Write-Output  "$passCheck "
      $textBox2.appendText($newLine)
-#     $textBox2.appendText("Internet download speed:    $speedTest")
-#     $textBox2.appendText($newLine)
-     $textBox2.appendText( "WIFI signal strength:        $signalTest" )
+     $textBox2.appendText("Internet speed:                  $speedTest")
+     $textBox2.appendText($newLine)
+     $textBox2.appendText( "WIFI signal strength:         $signalTest" )
      $textBox2.appendText($newLine)
      $textBox2.appendText($newLine)
-     $textBox2.appendText( "For optimal DirectAccess performance a a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these should you not meet the minimum scores." )
+     $textBox2.appendText( "For optimal DirectAccess performance we recommend a speed result of 10MB+ and a WIFI signal strength of 80% or higher. Please consider environmental factors to improve these should you not meet the minimum scores." )
 
 
 
