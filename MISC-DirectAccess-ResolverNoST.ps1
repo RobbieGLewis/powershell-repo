@@ -75,7 +75,7 @@ $textBox2.Text = Write-Output "> Select 'Resolver' to attempt a quick-fix."
 $textBox2.Font = "Microsoft Sans Serif, 9pt"
 $textBox2.appendText($newLine)
 $textBox2.appendText($newLine)
-$textBox2.appendText(">  Select 'Resolver + Reboot' to attempt a  more thorough fix involving a machine restart. ")
+$textBox2.appendText(">  Select 'Resolver + Reboot' to attempt a more thorough fix involving a machine restart. ")
 $textBox2.appendText($newLine)
 $textBox2.appendText($newLine)
 $textBox2.appendText(">  Select 'Diagnostics' to attempt to troubleshoot wider issues.")
