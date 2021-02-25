@@ -64,7 +64,7 @@ $textBox.Font = "Microsoft Sans Serif, 9pt"
 #----------------------------------------------------------------------------------------#
 
 
-#   Textbox OUT bootm
+#   Textbox OUT bot
 
 $textBox2.Location = '15,40'
 $textBox2.AutoSize = $false 
