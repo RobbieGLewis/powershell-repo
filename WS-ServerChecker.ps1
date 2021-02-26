@@ -43,7 +43,7 @@ Function function2 {(Get-Date -ComputerName $serverName) - (Get-CimInstance Win3
 
 Function function3 {Get-Process | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1}
 
-Function function4 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+Function function4 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process} 
 
 Function function5 {
     $confirmation = Write-Host "Are you sure you want to reboot" $serverName" ?  [Y/N] " -ForegroundColor White -BackgroundColor Red -nonewline; Read-Host

@@ -19,7 +19,7 @@ FUNCTIONALITY:
 
 #----------------------------------------------------------------------------------------#
 
-#   Lost and Found
+#   Lost and Found Vars
 
 $newLine = "`r`n"
 
