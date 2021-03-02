@@ -1,7 +1,8 @@
 ﻿#   James Wylde 2020
 #   github.com/jameswylde
 
-# Modules
+#----------------------------------------------------------------------------------------#
+#   Modules
 Import-Module ActiveDirectory
 
 # If Excel is not present, change file extension to either .XML or .TXT

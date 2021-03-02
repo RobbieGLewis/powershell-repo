@@ -1,6 +1,7 @@
-#   James Wylde 2019
+#   James Wylde 2020
 #   github.com/jameswylde
 
-# Modules
+#----------------------------------------------------------------------------------------#
+#   Modules
 
 Invoke-Command -ComputerName 'DC01' -ScriptBlock { Get-ComputerInfo -Property *BIOS* }

@@ -1,7 +1,8 @@
-#   James Wylde 2019
+#   James Wylde 2020
 #   github.com/jameswylde
 
-# Modules
+#----------------------------------------------------------------------------------------#
+#   Modules
 
 
 Select-String -path "C:\temp\*.txt" -Pattern "wyldelab" -Context 0 | Select-Object -Last 1

@@ -1,7 +1,8 @@
 ﻿#   James Wylde 2020
 #   github.com/jameswylde
 
-# Modules
+#----------------------------------------------------------------------------------------#
+#   Modules
 Import-Module ActiveDirectory
 
 #Write-Host "Red on white text." -ForegroundColor red -BackgroundColor white

@@ -1,7 +1,8 @@
-#   James Wylde 2019
+#   James Wylde 2020
 #   github.com/jameswylde
 
-# Modules
+#----------------------------------------------------------------------------------------#
+#   Modules
 
 Get-ChildItem c:\temp\*.txt -Recurse | Select-String -Pattern WHATYOULOOKINGFOR
 

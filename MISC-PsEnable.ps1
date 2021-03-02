@@ -1,3 +1,9 @@
+#   James Wylde 2020
+#   github.com/jameswylde
+
+#----------------------------------------------------------------------------------------#
+#   Modules
+
 #   Standard
 Enable-PSRemoting -Force
 Start-Service winrm

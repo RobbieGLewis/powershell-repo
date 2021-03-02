@@ -1,7 +1,8 @@
+#   James Wylde 2020
+#   github.com/jameswylde
 
 #----------------------------------------------------------------------------------------#
-
-#   Imports
+#   Modules
 
 Import-Module GroupPolicy 
 
