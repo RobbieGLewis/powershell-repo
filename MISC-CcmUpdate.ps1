@@ -4,9 +4,10 @@
 #----------------------------------------------------------------------------------------#
 #   Modules
 
-$Path = Get-ChildItem -Path C:\Windows\CCMCache -Recurse -Filter setup1.exe
+$Path = Get-ChildItem -Path C:\Windows\CCMCache -Recurse -Filter setup.exe
 
-ForEach ( $Installer in ( Get-ChildItem -Path $Path.DirectoryName -Filter *.exe) ) {
+ForEach ( $Installer in $Path) {
 
-Start-Process -Wait -FilePath setup1.exe -ArgumentList "/i $($Installer.FullName)"
+    Start-Process -Wait -FilePath $Installer.FullName -ArgumentList " $($Installer.FullName) /q -Wait -NoNewWindow" 
+
 }
