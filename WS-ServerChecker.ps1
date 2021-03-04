@@ -11,6 +11,10 @@ Clear-Host
 Write-Host "`n `r "
 $serverName = Read-Host -Prompt "Machine"
 
+$wmi_uptime = Get-WmiObject Win32_OperatingSystem -computer $serverName
+[System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) – $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
+
+
 #----------------------------------------------------------------------------------------#
 #   Menu bulk
 
@@ -39,11 +43,12 @@ function Show-Menu
 
 Function function1 {ping $serverName}
 
-Function function2 {(Get-Date -ComputerName $serverName) - (Get-CimInstance Win32_OperatingSystem -ComputerName $serverName).LastBootupTime | Format-Table -AutoSize}
+Function function2 {$wmi_uptime = Get-WmiObject Win32_OperatingSystem -computer $serverName
+     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) – $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)}
 
-Function function3 {Get-Process | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1}
+Function function3 {Get-Process -ComputerName $serverName | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1}
 
-Function function4 {Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+Function function4 {Get-Process  -ComputerName $serverName | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
 
 Function function5 {
     $confirmation = Write-Host "Are you sure you want to reboot" $serverName" ?  [Y/N] " -ForegroundColor White -BackgroundColor Red -nonewline; Read-Host
