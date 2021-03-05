@@ -68,8 +68,8 @@ while($confirmation -ne "y")
 do
 {
      Show-Menu
-     $input = ($host.UI.RawUI.ReadKey('NoEcho,IncludeKeyUp')).character
-     switch ($input)
+     $keyPress = ($host.UI.RawUI.ReadKey('NoEcho,IncludeKeyUp')).character
+     switch ($keyPress)
      {
            '1' {
                 Clear-Host
@@ -92,7 +92,7 @@ do
      }
      pause
 }
-until ($input -eq 'q')
+until ($keyPress -eq 'q')
 
 
 
