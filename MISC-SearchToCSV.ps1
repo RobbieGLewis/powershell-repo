@@ -18,13 +18,18 @@ Write-Host = "Results are located C:\Temp\export.csv" -ForegroundColor Red -Back
 #----------------------------------------------------------------------------------------#
 #   Remote
 
+Clear-Host
+
 Invoke-Command -ComputerName PC01 -ScriptBlock {
 
-    $var = Read-Host = "Search term"
-    
-    Get-ChildItem -Path C:\ -Include $var -File -Recurse -ErrorAction SilentlyContinue} | Export-CSV -Path C:\Temp\export.csv
+$var = Read-Host = "Search"
+
+Get-ChildItem -Path C:\ -Include $var -File -Recurse -ErrorAction SilentlyContinue}
+
+Get-ChildItem -Path C:\ -Include $var -File -Recurse -ErrorAction SilentlyContinue | Export-CSV -Path C:\Temp\export.csv | Out-File -FilePath C:\Temp\export.txt
+
+#Get-ChildItem -Path C:\ -Include $var -File -Recurse -ErrorAction SilentlyContinue | Out-File -FilePath C:\Temp\export.txt
 
 Write-Host = "`r`n"
 
-Write-Host = "Results are located C:\Temp\export.csv" -ForegroundColor Red -BackgroundColor Green
-    
+Write-Host = "Results are located C:\Temp\export.csv" -ForegroundColor Green -BackgroundColor White
