@@ -11,6 +11,7 @@ Import-Module GroupPolicy
 #   VARS
 
 Start-Transcript -Path "C:\temp\transcript0.txt" -Force
+Start-Transcript -Path "C:\temp\transcript0.txt" -Append
 $DomainName = $env:USERDNSDOMAIN 
 
 #$FileOut = 'C:\Temp\Exports\GPOsearch.csv'
