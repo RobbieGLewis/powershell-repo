@@ -40,3 +40,8 @@ Invoke-CimMethod @MethodArgs
 #   Enable c$
 
 psexec.exe \\PC01 reg.exe ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system" /v "LocalAccountTokenFilterPolicy" /t REG_DWORD /d 1 /f
+
+#----------------------------------------------------------------------------------------#
+#   Firewall exception
+
+Invoke-Command -ComputerName PC01 -ScriptBlock { Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Profile Private }
