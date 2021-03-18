@@ -33,6 +33,9 @@ $serviceStatus = $service.Status
 
 $passCheck = net user $env:USERNAME /domain | find "Password expires"
 
+$dateIs = Get-Date -f "dd/MM/yyyy, hh:MM:ss"
+
+
 
 #----------------------------------------------------------------------------------------#
 
@@ -43,23 +46,40 @@ $passCheck = net user $env:USERNAME /domain | find "Password expires"
 $mainForm = New-Object System.Windows.Forms.Form
 $textBox = New-Object System.Windows.Forms.RichTextBox
 $textBox2 = New-Object System.Windows.Forms.RichTextBox
+$textBox3 = New-Object System.Windows.Forms.RichTextBox
 $daResolver = New-Object System.Windows.Forms.Button
 $daReboot = New-Object System.Windows.Forms.Button
 $daDiagnostics = New-Object System.Windows.Forms.Button
 
 #----------------------------------------------------------------------------------------#
 
-#   Textbox OUT top
+#   Textbox OUT left
 
 $textBox.Location = '15,10'
 $textBox.AutoSize = $false 
-$textBox.Size = '450,23'
+$textBox.Size = '310,23'
 $textBox.BackColor = [Drawing.Color]::White
 $textBox.ReadOnly = $true
 $textBox.Multiline = $true
 $textBox.ForeColor = [Drawing.Color]::Blue
 $textBox.Text = Write-Output " DirectAccess is currently $("$serviceStatus".ToUpper() )."
 $textBox.Font = "Microsoft Sans Serif, 9pt"
+
+#----------------------------------------------------------------------------------------#
+
+#   Textbox OUT right
+
+$textBox3.Location = '330,10'
+$textBox3.AutoSize = $false 
+$textBox3.Size = '135,23'
+$textBox3.BackColor = [Drawing.Color]::White
+$textBox3.ReadOnly = $true
+$textBox3.Multiline = $true
+$textBox3.ForeColor = [Drawing.Color]::Black
+$textBox3.Text = Write-Output "  $dateIs"
+$textBox3.Font = "Microsoft Sans Serif, 9pt"
+#$textBox3.TextAlign = [HorizontaltAlignment]::MiddleRight
+
 
 #----------------------------------------------------------------------------------------#
 
@@ -95,6 +115,7 @@ $daResolver.Add_Click({
  
 
     $textBox2.Text = Write-Output "$newline"
+    $textBox3.Text = Get-Date -f "  dd/MM/yyyy, hh:MM:ss"
 
     Start-Sleep -Seconds 1.5
     
@@ -119,13 +140,12 @@ $daResolver.Add_Click({
    
 ############################################################
 
-#  BROKEN
 
-   if ($service -eq 'Stopped') {$textBox2.Text = Write-Output "DirectAccess is not running. Please run again or try 'Resolver + Restart'."}
-   else {$textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."}
+  # if ($serviceStatus -eq 'Stopped') {$textBox2.Text = Write-Output "DirectAccess is not running. Please run again or try 'Resolver + Restart'."}
+  # else {$textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."}
 
-
- #   $textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."
+   if ($serviceStatus -eq 'Running') {$textBox2.Text = Write-Output "DirectAccess is now $("$serviceStatus".ToUpper() ). You can now close this application."}
+   else {$textBox2.Text = Write-Output "DirectAccess is not running - please try the 'Resolver + Reboot' option."}
 
 ############################################################
 
@@ -146,6 +166,7 @@ $daReboot.Add_Click({
     Start-Sleep -Seconds 0.75
 
     $textBox2.Text = Write-Output  "$newline"
+    $textBox3.Text = Get-Date -f "  dd/MM/yyyy, hh:MM:ss"
 
     Start-Sleep -Seconds 0.75
 
@@ -207,7 +228,9 @@ $daDiagnostics.Add_Click({
 
     Start-Sleep -Seconds 1.50
 
+
     $textBox2.Text = Write-Output  "$newline"
+
 
     Start-Sleep -Seconds 1.50
 
@@ -218,6 +241,7 @@ $daDiagnostics.Add_Click({
     $signalTest = (netsh wlan show interfaces) -Match '^\s+Signal' -Replace '^\s+Signal\s+:\s+',''
 
     $textBox.Text = Write-Output "Diagnostics results..."
+    $textBox3.Text = Get-Date -f "  dd/MM/yyyy, hh:MM:ss"
 
      $textBox2.Text = Write-Output  "$passCheck "
      $textBox2.appendText($newLine)
@@ -244,6 +268,7 @@ $mainForm.Font = "Microsoft Sans Serif, 9pt"
 
 $mainForm.Controls.Add($textBox)
 $mainForm.Controls.Add($textBox2)
+$mainForm.Controls.Add($textBox3)
 $mainForm.Controls.Add($daResolver)
 $mainForm.Controls.Add($daReboot)
 $mainForm.Controls.Add($daDiagnostics)  
