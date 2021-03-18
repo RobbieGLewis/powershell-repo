@@ -1,0 +1,17 @@
+#   James Wylde 2020
+#   github.com/jameswylde
+
+#----------------------------------------------------------------------------------------#
+#   Modules
+
+
+$user = "GROUP"
+$group = "NAME TO SEARCH FOR"
+$userGroup = Get-ADPrincipalGroupMembership -Identity $user | Select-Object -expand name | Where-Object ($_.name -like "*$group*")
+
+foreach ($userGroup in $UserGroups) {
+          $response = Read-Host ("remove user?")
+          if ($response -match "^y$") {
+               Remove-ADPrincipalGroupMembership -Identity $user -MemberOf $userGroup -WhatIf
+          }
+}
