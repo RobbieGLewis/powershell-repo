@@ -15,7 +15,7 @@ Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 #----------------------------------------------------------------------------------------#
 #   Psexec WINRM
 
-psexec.exe \\SERVER -s c:\windows\system32\winrm.cmd quickconfig -quiet
+psexec.exe \\PC01 -s c:\windows\system32\winrm.cmd quickconfig -quiet
 
 #----------------------------------------------------------------------------------------#
 #   WMI WINRM
