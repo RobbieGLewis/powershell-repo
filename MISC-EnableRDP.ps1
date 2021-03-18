@@ -34,3 +34,9 @@ $MethodArgs = @{
     }
 }
 Invoke-CimMethod @MethodArgs
+
+
+#----------------------------------------------------------------------------------------#
+#   Enable c$
+
+psexec.exe \\PC01 reg.exe ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system" /v "LocalAccountTokenFilterPolicy" /t REG_DWORD /d 1 /f
