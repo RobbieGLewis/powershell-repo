@@ -5,8 +5,19 @@
 #   Modules
 
 
-  Invoke-Command -Computername Machine -ArgumentList $arguments -Scriptblock {
+  Invoke-Command -Computername Uk-nor1-l28951 -ArgumentList $arguments -Scriptblock {
+
+    Stop-Process -Name Teams -Force
 
     reg.exe Add "HKLM\Software\Microsoft\Windows NT\Current Version\AppCompatFlags\Layers" /v "C:\Users\USER\AppData\Local\Microsoft\Teams\current\teams.exe" /T REG_SZ /d "WIN7RTM" /F
     
     }
+
+
+Invoke-Command -Computername Uk-nor1-l28951  -Scriptblock {
+
+Stop-Process -Name Teams -Force
+  
+reg.exe Add "HKLM\Software\Microsoft\Windows NT\Current Version\AppCompatFlags\Layers" /v "C:\ProgramData\TayloCl\Microsoft\Teams\Update.exe" /T REG_SZ /d "WIN7RTM" /F
+      
+}
