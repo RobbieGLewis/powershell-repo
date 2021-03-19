@@ -19,7 +19,7 @@ psexec.exe \\PC01 -s c:\windows\system32\winrm.cmd quickconfig -quiet
 
 REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
 netsh firewall set service type = remotedesktop mode = enable
-
+nable & netsh advfirewall firewall add rule name="Open Remote Desktop" protocol=TCP dir=in localport=3389 action=allow
 #----------------------------------------------------------------------------------------#
 #   WMI WINRM
 
@@ -48,6 +48,8 @@ psexec.exe \\PC01 reg.exe ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Po
 #   Firewall exception
 
 Invoke-Command -ComputerName PC01 -ScriptBlock { Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Profile Private }
+
+nable & netsh advfirewall firewall add rule name="Open Remote Desktop" protocol=TCP dir=in localport=3389 action=allow
 
 
 
