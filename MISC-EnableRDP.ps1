@@ -17,11 +17,14 @@ Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
 psexec.exe \\PC01 -s c:\windows\system32\winrm.cmd quickconfig -quiet
 
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+netsh firewall set service type = remotedesktop mode = enable
+
 #----------------------------------------------------------------------------------------#
 #   WMI WINRM
 
 $SessionArgs = @{
-    ComputerName  = 'ServerB'
+    ComputerName  = 'Uk-nor1-l28951'
     Credential    = Get-Credential
     SessionOption = New-CimSessionOption -Protocol Dcom
 }
@@ -45,3 +48,7 @@ psexec.exe \\PC01 reg.exe ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Po
 #   Firewall exception
 
 Invoke-Command -ComputerName PC01 -ScriptBlock { Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Profile Private }
+
+
+
+###
