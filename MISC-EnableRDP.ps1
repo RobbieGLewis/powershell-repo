@@ -52,3 +52,5 @@ Invoke-Command -ComputerName PC01 -ScriptBlock { Set-NetFirewallRule -DisplayGro
 
 
 ###
+netsh firewall set domainprofile
+netsh advfirewall monitor show consec verbose > c:\temp\output.txt
