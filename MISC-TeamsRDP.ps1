@@ -13,6 +13,6 @@ psexec.exe \\$clientName cmd /C "net start winrm & netsh firewall set service ty
 Write-Host = "`r`n"
 Write-Host = "Finished and closing..." -ForegroundColor Blue -BackgroundColor green
 
-Start-Sleep -Seconds 15
+Start-Sleep -Seconds 10
 
 #paexec.exe \\PC01 -s c:\windows\system32\winrm.cmd quickconfig -quiet
