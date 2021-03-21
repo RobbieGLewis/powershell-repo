@@ -64,7 +64,7 @@ Clear-Host
 $ErrorActionPreference = 'silentlycontinue'
 
 Write-Host "Enable RDP. Start Winrm. Create firewall exception. Apply Teams compatability regkeys."
-Write-Host = "`r`n"
+Write-Host "`r`n"
 
 $clientName = Read-Host 'Machine'
 $userName = Read-Host 'User' 
