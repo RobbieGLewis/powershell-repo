@@ -74,8 +74,8 @@ C:\temp\TeamsRDPfix\tools\paexec.exe \\$clientName cmd /C "net start winrm & net
 
 Get-Content -Path C:\temp\TeamsRDPfix\result.txt
 
-Write-Host = "`r`n"
-Write-Host = "Finished and closing - transcript located in \TeamsRDPfix\" -ForegroundColor Blue -BackgroundColor green
+Write-Host "`r`n"
+Write-Host "Finished and closing - transcript located in \TeamsRDPfix\" -ForegroundColor Blue -BackgroundColor green
 
 Set-Location C:\temp\TeamsRDPfix
 
