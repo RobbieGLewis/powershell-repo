@@ -59,6 +59,9 @@ Start-Sleep -Seconds 10
 #   For work domain   [ need to add /reg:64 switch to bypass reg being added to WOW6432NODE]   
 #cleanup
 
+### add teams kill
+
+#taskkill /s /FI "IMAGENAME eq TEAMS.EXE"
 
 Clear-Host
 
