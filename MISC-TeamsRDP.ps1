@@ -56,14 +56,15 @@ Start-Sleep -Seconds 10
 
 
 #----------------------------------------------------------------------------------------#
-#   For work domain   [ need to add /reg:64 switch to bypass reg being added to WOW6432NODE]   
+#   For work domain   [ need to add /reg:64 switch to bypass reg being added to WOW6432NODE]
+# cleanup alias  
 
 
 Clear-Host
 
 $ErrorActionPreference = 'silentlycontinue'
 
-Write-Host "Enable RDP. Start Winrm. Create firewall exception. Apply Teams compatability regkeys."
+Write-Host "Enable RDP. Start Winrm. Create firewall exception. Kill Teams and apply Teams compatability regkeys."
 Write-Host "`r`n"
 
 $clientName = Read-Host 'Machine'
