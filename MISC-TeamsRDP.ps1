@@ -56,6 +56,7 @@ Start-Sleep -Seconds 10
 
 
 #----------------------------------------------------------------------------------------#
+<<<<<<< HEAD
 #   For work domain   [ need to add /reg:64 switch to bypass reg being added to WOW6432NODE]   
 #   Using: netsh taskkill.exe reg.exe 
 
@@ -63,8 +64,8 @@ Clear-Host
 
 $ErrorActionPreference = 'silentlycontinue'
 
-Write-Host "Enable RDP. Start Winrm. Create firewall exception. Apply Teams compatability regkeys."
-Write-Host = "`r`n"
+Write-Host "Enable RDP. Start Winrm. Create firewall exception. Kill Teams and apply Teams compatability regkeys."
+Write-Host "`r`n"
 
 $clientName = Read-Host 'Machine'
 $userName = Read-Host 'User' 
@@ -73,8 +74,8 @@ C:\temp\TeamsRDPfix\tools\paexec.exe \\$clientName cmd /C "net start winrm & net
 
 Get-Content -Path C:\temp\TeamsRDPfix\result.txt
 
-Write-Host = "`r`n"
-Write-Host = "Finished and closing - transcript located in \TeamsRDPfix\" -ForegroundColor Blue -BackgroundColor green
+Write-Host "`r`n"
+Write-Host "Finished and closing - transcript located in \TeamsRDPfix\result.txt" -ForegroundColor Blue -BackgroundColor green
 
 Set-Location C:\temp\TeamsRDPfix
 
