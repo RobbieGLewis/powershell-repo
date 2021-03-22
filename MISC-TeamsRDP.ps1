@@ -56,7 +56,7 @@ Start-Sleep -Seconds 10
 
 
 #----------------------------------------------------------------------------------------#
-<<<<<<< HEAD
+
 #   For work domain   [ need to add /reg:64 switch to bypass reg being added to WOW6432NODE]   
 #   Using: netsh taskkill.exe reg.exe 
 
