@@ -4,3 +4,7 @@ do {
     Sleep 1
     $count--
 } while ($count -gt 0)
+
+
+
+netsh advfirewall monitor show consec verbose > c:\temp\output.txt
