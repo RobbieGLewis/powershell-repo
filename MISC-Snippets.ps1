@@ -161,3 +161,22 @@ foreach($computer in Get-Content -Path c:\temp\computers.txt){
         }
 
 }
+
+#############################################################
+
+
+cls
+
+Start-Transcript -Path "c:\temp\gpupdates.txt" -NoClobber
+#$testconnection = Test-Connection $computers
+foreach($computer in Get-Content -Path c:\temp\computers1.txt){
+    if(-not (Test-Connection $computer -Count 1 -Quiet)) {
+       "$computer is offline"
+    }
+    else {
+        C:\temp\temp\tools\paexec.exe \\$computer cmd /C "netsh advfirewall firewall add rule dir=in name ="WMI" program=%systemroot%\system32\svchost.exe service=winmgmt action = allow protocol=TCP localport=any & call netsh firewall set service RemoteAdmin enable & netsh firewall add portopening protocol=tcp port=135 name=DCOM_TCP135" | Out-File -FilePath C:\Temp\gpresult.txt -Append
+        }
+
+}
+
+# | Out-File -FilePath C:\Temp\gpresult.txt -Append
