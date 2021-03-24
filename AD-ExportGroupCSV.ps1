@@ -12,3 +12,6 @@ Import-Module ActiveDirectory
 
 
 Get-ADGroupMember "_UK DSS All Users" | ForEach-Object  {get-aduser $_ -properties emailaddress} | Select-Object Name, SamAccountName, EMailaddress | Export-Csv -path C:\temp\export2.csv
+
+
+Get-ADGroupMember "GBR-WS-DirectAccess" | Select-Object name | Export-Csv -path C:\temp\export2.csv
