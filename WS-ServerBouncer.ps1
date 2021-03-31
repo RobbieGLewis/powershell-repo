@@ -264,7 +264,8 @@ until ($keyPress -eq 'q')
 #     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) – $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
 
 #     Write-Host "CPU and MEM: DC01"
-#     Get-Process -ComputerName DC01 | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1
+#     Get-Process -ComputerName UK-LIV1-L023572 | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1
+# Get-Process | Sort-Object -des cpu | Select-Object -f 15 | where {($_.Name -notlike "Teams")} | Format-Table -Autosize; Start-Sleep 1
 
 
 #----------------------------------------------------------------------------------------##
