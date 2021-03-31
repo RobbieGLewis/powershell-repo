@@ -28,12 +28,12 @@ ForEach ( $Search in $Path) {
 
 ####
 
-$computerName = Read-Host "PC to intall 8x8 latest"
+$computerName = Read-Host "PC to install 8x8 latest"
 Invoke-Command -ComputerName $computerName -ScriptBlock {
 foreach ($_msi8x8 in 
 ($_msi8x8 = Get-ChildItem C:\windows\ccmcache -Recurse | Where-Object {$_.Name -eq "UKP_8x8_8x8VirtualOffice_x64_EN_7.1.5-1.msi"} |
 Where-Object {!$_psiscontainter} | Select-Object -ExpandProperty FullName))
 {
-        msiexec.exe /i $_msi8x8 /quiet
+       (Start-process msiexec.exe -ArgumentList "/i $_msi8x8 /quiet /norestart" -Wait -PassThru).ExitCode
 }
 }
