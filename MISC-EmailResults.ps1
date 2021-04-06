@@ -6,6 +6,8 @@
 
 Clear-Host
 
+Write-Host "Query 50 largest files on a remote machine."
+
 $clientName = Read-Host "Machine to query"
 $userName = Read-Host "User profile to query - C:\Users\"
 $recipientEmail = Read-Host "Recipient email address"
@@ -40,7 +42,7 @@ Send-MailMessage -From 'james.wylde@smurfitkappa.co.uk' -To $recipientEmail -Sub
 Write-Host "`r`n"
 Write-Host "*******************************************************************************" -ForegroundColor White -BackgroundColor Black
 Write-Host "Finished - Results are located c:\temp\"$filename -ForegroundColor White -BackgroundColor Black
-Write-Host "Sender will receive notification of successful sending via email." -ForegroundColor White -BackgroundColor Black
+Write-Host "Sender will receive notification of successful sending via email.              " -ForegroundColor White -BackgroundColor Black
 Write-Host "*******************************************************************************" -ForegroundColor White -BackgroundColor Black
 
 
