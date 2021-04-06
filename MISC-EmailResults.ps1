@@ -28,11 +28,9 @@ $htmlBody = "<html>
 <p><strong>Service Desk</strong></p>
 <p><em>UK IT</em></p>
 <p>&hellip;</p>
-<p><strong>&nbsp;</strong></p>
 <p><strong>Smurfit Kappa </strong>UK</p>
 <p><em>3<sup>rd</sup> Floor, Cunard Building, Water Street, Liverpool, L3 1SF </em></p>
 <p>&hellip;</p>
-<p>&nbsp;</p>
 <p>Service Desk:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +44 (0) 345 023 0400</p>
 <p>Out Of Hours:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+44 (0) 788 523 1562</p>
 <p>&nbsp;</p>
@@ -43,7 +41,7 @@ Send-MailMessage -From 'james.wylde@smurfitkappa.co.uk' -To $recipientEmail -Sub
 
 Write-Host "`r`n"
 Write-Host "*******************************************************************************" -ForegroundColor White -BackgroundColor Black
-Write-Host "Finished - Results are located c:\temp\"$filename -ForegroundColor White -BackgroundColor Black
+Write-Host "Finished - Results are located c:\temp\$filename" -ForegroundColor White -BackgroundColor Black
 Write-Host "Sender will receive notification of successful sending via email.              " -ForegroundColor White -BackgroundColor Black
 Write-Host "*******************************************************************************" -ForegroundColor White -BackgroundColor Black
 
