@@ -4,11 +4,9 @@
 #----------------------------------------------------------------------------------------#
 #   Modules
 
-#### CHANGE SENDER EMAIL ADDRESS TO BE DYNAMIC
-
 Clear-Host
 
-Write-Host "Query 50 largest files on remote machine - (Requires WinRM running on target machine)"
+Write-Host "Query remote machine for largest 100 files - (Requires WinRM running on target machine)"
 Write-Host "`r`n"
 
 $clientName = Read-Host "Machine to query"
@@ -20,7 +18,7 @@ Write-Host "`r`n"
 $senderEmail = Read-Host "Sender email address ('@smurfitkappa.co.uk' not required)"
 $fileName = "File Size Report-$userName-$(Get-Date -Format 'dd-MM-yyyy').csv"
 
-Invoke-Command -ComputerName $clientName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 50 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
+Invoke-Command -ComputerName $clientName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 100 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
 
 $htmlBody = "<html>
 <p>Hello, </p>
