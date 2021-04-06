@@ -24,7 +24,7 @@ $htmlBody = "<html>
 <p><em>Note - this email was performed automagically and the results may not be without error.</em></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p><strong>------------------------------</strong></p>
+<p><strong>_______________________________________________________________</strong></p>
 <p><strong>Service Desk</strong></p>
 <p><em>UK IT</em></p>
 <p>&hellip;</p>
