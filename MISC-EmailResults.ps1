@@ -6,7 +6,8 @@
 
 Clear-Host
 
-Write-Host "Query 50 largest files on a remote machine."
+Write-Host "Query 50 largest files on remote machine - (Requires WinRM running on target machine)"
+Write-Host "`r`n"
 
 $clientName = Read-Host "Machine to query"
 $userName = Read-Host "User profile to query - C:\Users\"
@@ -16,13 +17,14 @@ $fileName = "File Size Report-$userName-$(Get-Date -Format 'dd-MM-yyyy').csv"
 Invoke-Command -ComputerName $clientName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 25 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
 
 $htmlBody = "<html>
-<p>Hi <strong>$userName</strong></p>
+<p>Hello, </p>
 <p>Please find attached a report detailing the largest files on your <em>C:\</em> drive.</p>
 <p>Thanks</p>
 <p>UK IT</p>
 <p><em>Note - this email was performed automagically and the results may not be without error.</em></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+<p><strong>------------------------------</strong></p>
 <p><strong>Service Desk</strong></p>
 <p><em>UK IT</em></p>
 <p>&hellip;</p>
@@ -44,6 +46,7 @@ Write-Host "********************************************************************
 Write-Host "Finished - Results are located c:\temp\"$filename -ForegroundColor White -BackgroundColor Black
 Write-Host "Sender will receive notification of successful sending via email.              " -ForegroundColor White -BackgroundColor Black
 Write-Host "*******************************************************************************" -ForegroundColor White -BackgroundColor Black
+
 
 
 
