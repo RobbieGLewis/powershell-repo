@@ -33,4 +33,6 @@ End {}
  
 }
 
-Trigger-AppInstallation -ComputerName PC01 -AppName "NotepadPlusPlus_x64_7.9.3_ML" -Method Install
+#Trigger-AppInstallation -ComputerName PC01 -AppName "NotepadPlusPlus_x64_7.9.3_ML" -Method Install
+#Trigger-AppInstallation -ComputerName PC01 -AppName "Acrobat Reader DC_x64_2021.001.20142_ML" -Method Uninstall
+Trigger-AppInstallation -ComputerName uk-cor4-l022090 -AppName "8x8 Virtual Office_x64_7.1.5.1" -Method Install
