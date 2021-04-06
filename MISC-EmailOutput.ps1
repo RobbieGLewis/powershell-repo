@@ -38,10 +38,10 @@ $htmlBody = "<html>
 Send-MailMessage -From 'james.wylde@smurfitkappa.co.uk' -To $recipientEmail -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter your A2 credentials") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
 
 Write-Host "`r`n"
-Write-Host "*******************************************************************************" -ForegroundColor White -BackgroundColor Black
+Write-Host "**********************************************************************************" -ForegroundColor White -BackgroundColor Black
 Write-Host "Finished - Results are located c:\temp\$filename" -ForegroundColor White -BackgroundColor Black
-Write-Host "Sender will receive notification of successful sending via email.              " -ForegroundColor White -BackgroundColor Black
-Write-Host "*******************************************************************************" -ForegroundColor White -BackgroundColor Black
+Write-Host "Sender will receive notification of successful sending via email.                 " -ForegroundColor White -BackgroundColor Black
+Write-Host "**********************************************************************************" -ForegroundColor White -BackgroundColor Black
 
 
 
