@@ -4,14 +4,20 @@
 #----------------------------------------------------------------------------------------#
 #   Modules
 
+#### CHANGE SENDER EMAIL ADDRESS TO BE DYNAMIC
+
 Clear-Host
 
 Write-Host "Query 50 largest files on remote machine - (Requires WinRM running on target machine)"
 Write-Host "`r`n"
 
 $clientName = Read-Host "Machine to query"
+Write-Host "`r`n"
 $userName = Read-Host "User profile to query - C:\Users\"
-$recipientEmail = Read-Host "Recipient email address"
+Write-Host "`r`n"
+$recipientEmail = Read-Host "Recipient email address ('@smurfitkappa.co.uk' not required)"
+Write-Host "`r`n"
+$senderEmail = Read-Host "Sender email address ('@smurfitkappa.co.uk' not required)"
 $fileName = "File Size Report-$userName-$(Get-Date -Format 'dd-MM-yyyy').csv"
 
 Invoke-Command -ComputerName $clientName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 50 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
@@ -35,13 +41,13 @@ $htmlBody = "<html>
 </html>
 "
 
-Send-MailMessage -From 'james.wylde@smurfitkappa.co.uk' -To $recipientEmail -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter your A2 credentials") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
+Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter your A2 credentials") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
 
 Write-Host "`r`n"
-Write-Host "**********************************************************************************" -ForegroundColor White -BackgroundColor Black
+Write-Host "******************************************************************************" -ForegroundColor White -BackgroundColor Black
 Write-Host "Finished - Results are located c:\temp\$filename" -ForegroundColor White -BackgroundColor Black
-Write-Host "Sender will receive notification of successful sending via email.                 " -ForegroundColor White -BackgroundColor Black
-Write-Host "**********************************************************************************" -ForegroundColor White -BackgroundColor Black
+Write-Host "Sender will receive notification of successful sending via email.             " -ForegroundColor White -BackgroundColor Black
+Write-Host "******************************************************************************" -ForegroundColor White -BackgroundColor Black
 
 
 
