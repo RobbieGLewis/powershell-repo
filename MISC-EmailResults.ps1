@@ -14,7 +14,7 @@ $userName = Read-Host "User profile to query - C:\Users\"
 $recipientEmail = Read-Host "Recipient email address"
 $fileName = "File Size Report-$userName-$(Get-Date -Format 'dd-MM-yyyy').csv"
 
-Invoke-Command -ComputerName $clientName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 25 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
+Invoke-Command -ComputerName $clientName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 50 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
 
 $htmlBody = "<html>
 <p>Hello, </p>
