@@ -1,3 +1,10 @@
+cls
+
+$clientName = Read-Host "Machine name"
+$appName = Read-Host "Exact SCCM Package Name"
+$installSwitch = Read-Host "Install or Uninstall"
+
+
 Function Trigger-AppInstallation
 {
  
@@ -33,6 +40,9 @@ End {}
  
 }
 
-#Trigger-AppInstallation -ComputerName PC01 -AppName "NotepadPlusPlus_x64_7.9.3_ML" -Method Install
-Trigger-AppInstallation -ComputerName UK-LIV1-L29545 -AppName "Acrobat Reader DC_x64_2021.001.20142_ML" -Method install
-#Trigger-AppInstallation -ComputerName uk-cor4-l022090 -AppName "8x8 Virtual Office_x64_7.1.5.1" -Method Install
+
+Trigger-AppInstallation -ComputerName $clientName -AppName "$appName" -Method $installSwitch
+
+#Trigger-AppInstallation -ComputerName Uk-liv1-l27865 -AppName "NotepadPlusPlus_x64_7.9.3_ML" -Method Uninstall
+#Trigger-AppInstallation -ComputerName PC01 -AppName "Acrobat Reader DC_x64_2021.001.20142_ML" -Method Uninstall
+#Trigger-AppInstallation -ComputerName UK-TAN1-L018385 -AppName "Analysis for Office x64 2.4.3.69599" -Method Install
