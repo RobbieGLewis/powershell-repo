@@ -1,10 +1,12 @@
 
 
-
+winrm quickconfig
 
 netsh advfirewall monitor show consec verbose > c:\temp\output.txt
 netsh advfirewall monitor show currentprofile
 netsh advfirewall set allprofiles state off
+
+netsh winhttp reset proxy
 
 netsh firewall set opmode mode=DISABLE
 
