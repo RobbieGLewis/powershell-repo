@@ -3,6 +3,8 @@ cls
 $computerName = Read-Host "Machine"
 $taskName = Read-Host "Update"
 
+Get-Service -Name winrm -ComputerName $computername | Set-Service -Status Running
+
 
 $SoftwareDistributionPolicy = Get-WmiObject -Namespace "root\ccm\policy\machine\actualconfig" -Class "CCM_SoftwareDistribution" -ComputerName $computername | Where-Object { $_.PKG_Name -like $taskName } | Select-Object -Property PKG_Name, PKG_PackageID, ADV_AdvertisementID
 $ScheduleID = Get-WmiObject -Namespace "root\ccm\scheduler" -Class "CCM_Scheduler_History" -ComputerName $computerName | Where-Object { $_.ScheduleID -like "*$($SoftwareDistributionPolicy.PKG_PackageID)*" } | Select-Object -ExpandProperty ScheduleID
