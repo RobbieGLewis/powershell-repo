@@ -21,7 +21,7 @@ FUNCTIONALITY:
 
 #   Lost and Found Vars
 
-$newLine = "`r`n"
+$newLine = Write-Host "`r`n"
 
 $dest = "http://speed.transip.nl/10mb.bin"
 
