@@ -30,6 +30,7 @@ foreach($computer in Get-Content -Path c:\temp\computers(sweep2).txt){
 #Loop
 
 Get-ADGroupMember "GBR-WS-DirectAccess" | Where-Object {$_Enabled -eq $false} | Export-Csv -path C:\temp\export1.csv
+
 Get-ADGroupMember "GBR-WS-DirectAccess" | Select-Object name | Export-Csv -path C:\temp\export.csv
 Rename-Item -Path c:\temp\export.csv -NewName "computers.txt"
 
