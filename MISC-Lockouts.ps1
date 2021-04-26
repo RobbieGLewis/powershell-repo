@@ -3,28 +3,34 @@ Clear-Host
 $computerName = Read-Host "Machine"
 $userName = Read-Host "Username"
 
+Write-Host ""
+
+Invoke-Command -Computername %computerName -Scriptblock {
 
 ###### Winrm start
 Write-Host "Starting Winrm...." -ForegroundColor Green 
 
-Get-Service -Name winrm -ComputerName $computername | Set-Service -Status Running
+Get-Service -Name winrm -ComputerName $computername | Set-Service -Status Running -Verbose
 
 ###### End processes
 
 Write-Host "Stopping programs...." -ForegroundColor Green 
 
-Stop-Process -Name Teams -Force
+Stop-Process -Name Teams -Force -EA SilentlyContinue -Verbose
 
-Stop-Process -Name Outlook -Force
+Stop-Process -Name Outlook -Force -EA SilentlyContinue -Verbose
 
-Stop-Process -Name Skype -Force
+Stop-Process -Name Skype -Force -EA SilentlyContinue -Verbose
+
+Stop-Process -Name Notepad -Force -EA SilentlyContinue -Verbose
 
 
 ###### Clear credmanager
 
 Write-Host "Clearing credman...." -ForegroundColor Green 
 
-or /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
+
+powershell.exe -command "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
 
 ###### Chrome
 
@@ -49,7 +55,7 @@ Remove-Item -path "C:\Users\$userName\AppData\Local\Microsoft\Windows\WER\*" -Re
 
 Write-Host "Clearing regkeys" -ForegroundColor Green 
 
-Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Internet Explorer" -Name "IntelliForms"
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Internet Explorer" -Name "IntelliForms" -EA SilentlyContinue
 
 
 ###### Windows Temp
@@ -71,3 +77,5 @@ Remove-Item -Path "%AppData%\Microsoft\teams\gpucache\*" -Recurse -Force -EA Sil
 Write-Host "Clearing Skype" -ForegroundColor Green 
 
 Remove-Item -Path "%LOCALAPPDATA%\Microsoft\Office\16.0\Lync\*" -Recurse -Force -EA SilentlyContinue -Verbose
+
+}
