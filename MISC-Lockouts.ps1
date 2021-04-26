@@ -35,6 +35,7 @@ $nL
 Write-Host "Clearing credman...." -ForegroundColor Green 
 
 
+#cmdkey /list | ForEach-Object{if($_ -like "*Target:*" -and $_ -like "*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} 
 cmd.exe /c "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
 
 $nL
