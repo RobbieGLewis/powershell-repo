@@ -3,16 +3,20 @@
 
 #----------------------------------------------------------------------------------------#
 #   Modules
+cls
 
-$Path = Get-ChildItem -Path C:\Windows\CCMCache -Recurse -Filter UKP_8x8_8x8VirtualOffice_x64_EN_7.1.5-1.msi
+$computerName = Read-Host "Machine"
+Invoke-Command -ComputerName $computerName -ScriptBlock {
+
+$Path = Get-ChildItem -Path C:\ -Recurse -Filter ccmsetup.exe
 
 ForEach ( $Search in $Path) {
 
-    Start-Process -Wait -FilePath $Search.FullName -ArgumentList " $($Search.FullName) /q -Wait -NoNewWindow" 
+    Start-Process -Wait -FilePath $Search.FullName -ArgumentList " $($Search.FullName) /q -NoNewWindow" 
 
 }
 
-
+}
 
 ####
 
