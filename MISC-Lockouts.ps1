@@ -1,95 +1,95 @@
-Clear-Host
+    Clear-Host
 
-$computerName = Read-Host "Machine"
-$userName = Read-Host "Username"
-
-
-
-Invoke-Command -ComputerName $computerName -Scriptblock {
-
-$nL = Write-Host "`r`n"
-
-###### Winrm start
-Write-Host "Starting Winrm...." -ForegroundColor Green 
-
-Get-Service -Name winrm -ComputerName $using:computername | Set-Service -Status Running
-
-$nL
-
-###### End processes
-
-Write-Host "Stopping programs...." -ForegroundColor Green 
-
-Stop-Process -Name Teams -Force -EA SilentlyContinue
-
-Stop-Process -Name Outlook -Force -EA SilentlyContinue
-
-Stop-Process -Name Skype -Force -EA SilentlyContinue
-
-Stop-Process -Name Notepad -Force -EA SilentlyContinue
-
-$nL
-
-###### Clear credmanager
-
-Write-Host "Clearing credman...." -ForegroundColor Green 
+    $computerName = Read-Host "Machine"
+    $userName = Read-Host "Username"
 
 
-#cmdkey /list | ForEach-Object{if($_ -like "*Target:*" -and $_ -like "*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} 
-cmd.exe /c "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
 
-$nL
+    Invoke-Command -ComputerName $computerName -Scriptblock {
 
-###### Chrome
+    $nL = Write-Host "`r`n"
 
-Write-Host "Clearing Chrome...." -ForegroundColor Green 
+    ###### Winrm start
+    Write-Host "Starting Winrm...." -ForegroundColor Green 
 
-Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cache\*" -Recurse -Force -EA SilentlyContinue -Verbose
-Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cache2\entries\*" -Recurse -Force -EA SilentlyContinue -Verbose
-Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cookies" -Force -EA SilentlyContinue -Verbose
-Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Media Cache" -Force -EA SilentlyContinue -Verbose
-Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cookies-Journal" -Force -EA SilentlyContinue -Verbose
+    Get-Service -Name winrm -ComputerName $using:computername | Set-Service -Status Running
 
-$nL
+    $nL
 
-###### IE
+    ###### End processes
 
-Write-Host "Clearing IE...." -ForegroundColor Green 
+    Write-Host "Stopping programs...." -ForegroundColor Green 
 
-Remove-Item -path "C:\Users\$using:userName\AppData\Local\Microsoft\Windows\Temporary Internet Files\*" -Recurse -Force -EA SilentlyContinue
-Remove-Item -path "C:\Users\$using:userName\AppData\Local\Microsoft\Windows\WER\*" -Recurse -Force -EA SilentlyContinue
+    Stop-Process -Name Teams -Force -EA SilentlyContinue
 
-$nL
+    Stop-Process -Name Outlook -Force -EA SilentlyContinue
 
-###### Regkeys
+    Stop-Process -Name "Skype for Business" -Force -EA SilentlyContinue
 
-Write-Host "Clearing Regkeys...." -ForegroundColor Green 
+    Stop-Process -Name Notepad -Force -EA SilentlyContinue
 
-Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Internet Explorer" -Name "IntelliForms" -EA SilentlyContinue
+    $nL
 
-$nL
+    ###### Clear credmanager
 
-###### Windows Temp
+    Write-Host "Clearing credman...." -ForegroundColor Green 
 
-Write-Host "Clearing Temp...." -ForegroundColor Green 
 
-Remove-Item -path "C:\Windows\Temp\*" -Recurse -Force -EA SilentlyContinue
+    #cmdkey /list | ForEach-Object{if($_ -like "*Target:*" -and $_ -like "*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} 
+    cmd.exe /c "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
 
-$nL
+    $nL
 
-###### Teams
+    ###### Chrome
 
-Write-Host "Clearing Teams...." -ForegroundColor Green 
+    Write-Host "Clearing Chrome...." -ForegroundColor Green 
 
-Remove-Item -Path "%AppData%\Microsoft\teams\cache\*" -Recurse -Force -EA SilentlyContinue -Verbose
-Remove-Item -Path "%AppData%\Microsoft\teams\gpucache\*" -Recurse -Force -EA SilentlyContinue -Verbose
+    Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cache\*" -Recurse -Force -EA SilentlyContinue -Verbose
+    Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cache2\entries\*" -Recurse -Force -EA SilentlyContinue -Verbose
+    Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cookies" -Force -EA SilentlyContinue -Verbose
+    Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Media Cache" -Force -EA SilentlyContinue -Verbose
+    Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cookies-Journal" -Force -EA SilentlyContinue -Verbose
 
-$nL
+    $nL
 
-###### Skype
+    ###### IE
 
-Write-Host "Clearing Skype...." -ForegroundColor Green 
+    Write-Host "Clearing IE...." -ForegroundColor Green 
 
-Remove-Item -Path "%LOCALAPPDATA%\Microsoft\Office\16.0\Lync\*" -Recurse -Force -EA SilentlyContinue -Verbose
+    Remove-Item -path "C:\Users\$using:userName\AppData\Local\Microsoft\Windows\Temporary Internet Files\*" -Recurse -Force -EA SilentlyContinue
+    Remove-Item -path "C:\Users\$using:userName\AppData\Local\Microsoft\Windows\WER\*" -Recurse -Force -EA SilentlyContinue
 
-}
+    $nL
+
+    ###### Regkeys
+
+    Write-Host "Clearing Regkeys...." -ForegroundColor Green 
+
+    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Internet Explorer" -Name "IntelliForms" -EA SilentlyContinue
+
+    $nL
+
+    ###### Windows Temp
+
+    Write-Host "Clearing Temp...." -ForegroundColor Green 
+
+    Remove-Item -path "C:\Windows\Temp\*" -Recurse -Force -EA SilentlyContinue
+
+    $nL
+
+    ###### Teams
+
+    Write-Host "Clearing Teams...." -ForegroundColor Green 
+
+    Remove-Item -Path "%AppData%\Microsoft\teams\cache\*" -Recurse -Force -EA SilentlyContinue -Verbose
+    Remove-Item -Path "%AppData%\Microsoft\teams\gpucache\*" -Recurse -Force -EA SilentlyContinue -Verbose
+
+    $nL
+
+    ###### Skype
+
+    Write-Host "Clearing Skype...." -ForegroundColor Green 
+
+    Remove-Item -Path "%LOCALAPPDATA%\Microsoft\Office\16.0\Lync\*" -Recurse -Force -EA SilentlyContinue -Verbose
+
+    }
