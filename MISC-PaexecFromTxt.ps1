@@ -69,3 +69,9 @@ foreach($computer in Get-Content -Path c:\temp\computers(sweep2).txt){
         }
 
 }
+
+
+#####
+
+
+systeminfo | findstr /B /C:"Host Name" /C:"OS Version"
