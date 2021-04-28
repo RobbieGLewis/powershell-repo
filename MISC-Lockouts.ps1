@@ -7,14 +7,16 @@
 
     Invoke-Command -ComputerName $computerName -Scriptblock {
 
-    $nL = Write-Host "`r`n"
+    $nL =  "`r`n"
 
     ###### Winrm start
     Write-Host "Starting Winrm...." -ForegroundColor Green 
 
-    Get-Service -Name winrm -ComputerName $using:computername | Set-Service -Status Running
+    psservice.exe \\$clientName -accepteula start winrm
 
-    $nL
+    msg = $nL
+
+    Start-Sleep -S 5
 
     ###### End processes
 
@@ -28,7 +30,7 @@
 
     Stop-Process -Name Notepad -Force -EA SilentlyContinue
 
-    $nL
+    msg = $nL
 
     ###### Clear credmanager
 
@@ -36,9 +38,9 @@
 
 
     #cmdkey /list | ForEach-Object{if($_ -like "*Target:*" -and $_ -like "*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} 
-    cmd.exe /c "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
+    paexec.exe \\$clientName cmd /C "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
 
-    $nL
+    msg = $nL
 
     ###### Chrome
 
@@ -50,7 +52,7 @@
     Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Media Cache" -Force -EA SilentlyContinue -Verbose
     Remove-Item -path "C:\Users\$using:userName\AppData\Local\Google\Chrome\User Data\Default\Cookies-Journal" -Force -EA SilentlyContinue -Verbose
 
-    $nL
+    msg = $nL
 
     ###### IE
 
@@ -59,7 +61,7 @@
     Remove-Item -path "C:\Users\$using:userName\AppData\Local\Microsoft\Windows\Temporary Internet Files\*" -Recurse -Force -EA SilentlyContinue
     Remove-Item -path "C:\Users\$using:userName\AppData\Local\Microsoft\Windows\WER\*" -Recurse -Force -EA SilentlyContinue
 
-    $nL
+    msg = $nL
 
     ###### Regkeys
 
@@ -67,7 +69,7 @@
 
     Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Internet Explorer" -Name "IntelliForms" -EA SilentlyContinue
 
-    $nL
+    msg = $nL
 
     ###### Windows Temp
 
@@ -75,7 +77,7 @@
 
     Remove-Item -path "C:\Windows\Temp\*" -Recurse -Force -EA SilentlyContinue
 
-    $nL
+    msg = $nL
 
     ###### Teams
 
@@ -84,7 +86,7 @@
     Remove-Item -Path "%AppData%\Microsoft\teams\cache\*" -Recurse -Force -EA SilentlyContinue -Verbose
     Remove-Item -Path "%AppData%\Microsoft\teams\gpucache\*" -Recurse -Force -EA SilentlyContinue -Verbose
 
-    $nL
+    msg = $nL
 
     ###### Skype
 
