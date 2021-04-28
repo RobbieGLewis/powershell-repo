@@ -9,6 +9,11 @@ Write-Host "Query remote machine for largest 100 files - (Requires WinRM running
 Write-Host "`r`n"
 
 $clientName = Read-Host "Machine to query"
+
+psservice.exe \\$clientName -accepteula start winrm
+
+Start-Sleep -Seconds 5  
+
 Write-Host "`r`n"
 $userName = Read-Host "User profile to query - C:\Users\"
 Write-Host "`r`n"
@@ -38,7 +43,7 @@ $htmlBody = "<html>
 </html>
 "
 
-Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter your A2 credentials") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
+Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter your email credentials") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
 
 Write-Host "`r`n"
 Write-Host "******************************************************************************" -ForegroundColor White -BackgroundColor Black
