@@ -6,6 +6,8 @@
 cls
 
 $computerName = Read-Host "Machine"
+psservice.exe \\$clientName -accepteula start winrm
+Start-Sleep -S 5
 Invoke-Command -ComputerName $computerName -ScriptBlock {
 
 $Path = Get-ChildItem -Path C:\ -Recurse -Filter ccmsetup.exe
@@ -40,4 +42,20 @@ Where-Object {!$_psiscontainter} | Select-Object -ExpandProperty FullName))
 {
        (Start-process msiexec.exe -ArgumentList "/i $_msi8x8 /quiet /norestart" -Wait -PassThru).ExitCode
 }
+}
+
+
+
+
+
+###
+
+foreach($computer in Get-Content -Path c:\temp\computers.txt){
+    if(!(Test-Connection $computer -Count 1 -Quiet)) {
+       "$computer"
+    }
+    else {
+        C:\temp\temp\tools\paexec.exe \\$computer cmd /C "netsh advfirewall firewall add rule dir=in name ="WMI" program=%systemroot%\system32\svchost.exe service=winmgmt action = allow protocol=TCP localport=any & call netsh firewall set service RemoteAdmin enable & netsh firewall add portopening protocol=tcp port=135 name=DCOM_TCP135"
+        }
+
 }
