@@ -1,6 +1,6 @@
     wmic product get name, version
 
-product where version="7.1.5.1" call uninstall /y
+product where version="7.5.1.2" call uninstall /y
 
 
 

@@ -6,8 +6,6 @@
 cls
 
 $computerName = Read-Host "Machine"
-psservice.exe \\$clientName -accepteula start winrm
-Start-Sleep -S 5
 Invoke-Command -ComputerName $computerName -ScriptBlock {
 
 $Path = Get-ChildItem -Path C:\ -Recurse -Filter ccmsetup.exe
@@ -58,4 +56,21 @@ foreach($computer in Get-Content -Path c:\temp\computers.txt){
         C:\temp\temp\tools\paexec.exe \\$computer cmd /C "netsh advfirewall firewall add rule dir=in name ="WMI" program=%systemroot%\system32\svchost.exe service=winmgmt action = allow protocol=TCP localport=any & call netsh firewall set service RemoteAdmin enable & netsh firewall add portopening protocol=tcp port=135 name=DCOM_TCP135"
         }
 
+}
+
+
+
+$computerName = Read-Host "Machine"
+
+Invoke-Command -ComputerName $computerName -ScriptBlock {
+
+$ErrorActionPreference = "SilentlyContinue"
+
+$path = Get-ChildItem -Path C:\ -Recurse -Filter ccmsetup.exe
+
+ForEach ( $search in $path) {
+
+    Start-Process -Wait -FilePath $search.FullName -ArgumentList " $($search.FullName) /q -NoNewWindow"
+
+}
 }
