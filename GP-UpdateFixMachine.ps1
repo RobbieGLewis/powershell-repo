@@ -1,0 +1,1 @@
+cd C:\Windows\System32\GroupPolicy\Machine\ && ren Registry.pol registry1.pol
