@@ -1,49 +1,52 @@
-
 cls
 
-$computername = Read-Host "Computer name"
-$supname = "All"
+#$clientName = Read-Host "Machine name"
+#$appName = Read-Host "Exact SCCM Package Name"
+#$installSwitch = Read-Host "Install or Uninstall"
 
-function trigger-AvailableSupInstall
+
+
+$computerName = Read-Host - "Machine"
+
+Invoke-Command -ComputerName $computerName -ScriptBlock {
+
+Function Trigger-AppInstallation
 {
- Param
+ 
+Param
 (
  [String][Parameter(Mandatory=$True, Position=1)] $Computername,
- [String][Parameter(Mandatory=$True, Position=2)] $SupName
- 
+ [String][Parameter(Mandatory=$True, Position=2)] $AppName,
+ [ValidateSet("Install","Uninstall")]
+ [String][Parameter(Mandatory=$True, Position=3)] $Method
 )
-Begin
-{
- $AppEvalState0 = "0"
- $AppEvalState1 = "1"
- $ApplicationClass = [WmiClass]"root\ccm\clientSDK:CCM_SoftwareUpdatesManager"
+ 
+Begin {
+$Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
+ 
+$Args = @{EnforcePreference = [UINT32] 0
+Id = "$($Application.id)"
+IsMachineTarget = $Application.IsMachineTarget
+IsRebootIfNeeded = $False
+Priority = 'High'
+Revision = "$($Application.Revision)" }
+ 
 }
  
 Process
+ 
 {
-If ($SupName -Like "All" -or $SupName -like "all")
-{
- Foreach ($Computer in $Computername)
-{
- $Application = (Get-WmiObject -Namespace "root\ccm\clientSDK" -Class CCM_SoftwareUpdate -ComputerName $Computer | Where-Object { $_.EvaluationState -like "*$($AppEvalState0)*" -or $_.EvaluationState -like "*$($AppEvalState1)*"})
- Invoke-WmiMethod -Class CCM_SoftwareUpdatesManager -Name InstallUpdates -ArgumentList (,$Application) -Namespace root\ccm\clientsdk -ComputerName $Computer
+ 
+Invoke-CimMethod -Namespace "root\ccm\clientSDK" -ClassName CCM_Application -ComputerName $Computername -MethodName $Method -Arguments $Args
  
 }
  
-}
- Else
- 
-{
- Foreach ($Computer in $Computername)
-{
- $Application = (Get-WmiObject -Namespace "root\ccm\clientSDK" -Class CCM_SoftwareUpdate -ComputerName $Computer | Where-Object { $_.EvaluationState -like "*$($AppEvalState)*" -and $_.Name -like "*$($SupName)*"})
- Invoke-WmiMethod -Class CCM_SoftwareUpdatesManager -Name InstallUpdates -ArgumentList (,$Application) -Namespace root\ccm\clientsdk -ComputerName $Computer
- 
-}
- 
-}
-}
 End {}
+ 
 }
 
-Trigger-AvailableSupInstall -Computername $computername -Supname All
+
+Trigger-AppInstallation -AppName "SAP Logon For Windows_x86_7.60_ML" -Method Install
+Trigger-AppInstallation -AppName "Analysis for Office x64 2.4.3.69599" -Method Install
+
+}
