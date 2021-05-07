@@ -57,13 +57,21 @@ Trigger-AppInstallation -ComputerName $clientName -AppName "Analysis for Office 
 #Trigger-AppInstallation -ComputerName PC01 -AppName "Acrobat Reader DC_x64_2021.001.20142_ML" -Method Uninstall
 #Trigger-AppInstallation -ComputerName UK-TAN1-L018385 -AppName "Analysis for Office x64 2.4.3.69599" -Method Install
 
-
+###########################################################################
 
 cls
 
 $clientName = Read-Host "Machine name"
 #$appName = Read-Host "Exact SCCM Package Name"
 #$installSwitch = Read-Host "Install or Uninstall"
+
+
+
+
+cls
+
+$clientName = Read-Host "Machine name"
+
 
 
 Function Trigger-AppInstallation
@@ -109,4 +117,5 @@ Trigger-AppInstallation -ComputerName $clientName -AppName "SAP Logon For Window
 Start-Sleep -S 5
 
 Trigger-AppInstallation -ComputerName $clientName -AppName "Analysis for Office x64 2.4.3.69599" -Method Install
+
 
