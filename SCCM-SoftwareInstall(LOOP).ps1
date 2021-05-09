@@ -1,12 +1,14 @@
 <#
 SYNOPSIS:
-   SCCM installer by imported list
+   SCCM application installer importing target machines from .txt
 AUTHOR:
    James Wylde
 VERSION:
    0.1
 FUNCTIONALITY:
-   Script uses Invoke-CIMMethod to invoke SCCM packages (OS/TaskSequencer in other script) after pinging and enabling WinRM
+   Script uses Invoke-CIMMethod (in favour of Invoke-WMIObject - can be shared if required) to invoke and install applied SCCM packagges (OS/TaskSequencer in other script) after pinging and enabling WinRM through PAEXEC. Created for installs only, for adapation change '-MethodName' to Uninstall. Args currently to 'High Priority' and reboot is being supressed (not required for this app). Hashtable is currently set to filter on a RESULT of 0(ZERO) as success - documentation advises of other Evaluation State Value for success and so any other values will result in failure when this may not be true. 
+   
+   Before changing, please read documentation https://docs.microsoft.com/en-us/mem/configmgr/develop/reference/core/clients/sdk/ccm_application-client-wmi-class for detailing of Arguments, Methods and Results.
 #>
 
 #----------------------------------------------------------------------------------------#
@@ -55,7 +57,7 @@ catch{}
 #----------------------------------------------------------------------------------------#
 
 # Formatting of Failure is temporary
-# PAExec crashes around 50 runs
+# PAExec crashes around 50 runs - resumes on 'X' rather than 'Close application'
 
 
 
