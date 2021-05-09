@@ -111,3 +111,23 @@ Invoke-WmiMethod -class CCM_ProgramsManager -Namespace "root\ccm\clientsdk" -Nam
     
 }
 
+#### WORKING CIM
+
+
+$appName = 'SAP Logon For Windows_x86_7.60_ML'
+
+$Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
+ 
+$Args = @{EnforcePreference = [UINT32] 0
+Id = "$($Application.id)"
+IsMachineTarget = $Application.IsMachineTarget
+IsRebootIfNeeded = $False
+Priority = 'High'
+Revision = "$($Application.Revision)" }
+
+
+
+$computerName = Read-Host "Machine"
+
+$Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
+Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computerNAME -MethodName Install -Arguments $Args
