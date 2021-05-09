@@ -89,7 +89,7 @@ Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -Compu
 
 Invoke-Command -ComputerName $computer -ScriptBlock {
    
-        echo "$script"
+        echo "$using:script"
     
 }
 
