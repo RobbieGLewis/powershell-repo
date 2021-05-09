@@ -9,4 +9,7 @@ Write-Host "`r`n"
 
 $clientName = Read-Host 'Machine'
 
-C:\temp\TeamsRDPfix\tools\paexec.exe \\$clientName cmd /C "reg.exe Add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NlaSvc" /v DelayedAutoStart /T REG_SZ /d 1 /F & reg.exe Add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NlaSvc" /v Start /T REG_SZ /d 2 /F"
+C:\temp\TeamsRDPfix\tools\paexec.exe \\$clientName cmd /C "reg.exe Add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NlaSvc" /v DelayedAutoStart /T REG_SZ /d 1 /F & 
+
+
+reg.exe Add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NlaSvc" /v Start /T REG_SZ /d 2 /F"
