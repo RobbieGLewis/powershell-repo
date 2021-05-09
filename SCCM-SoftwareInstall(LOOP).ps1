@@ -1,22 +1,6 @@
-cls
 
-#$clientName = Read-Host "Machine name"
-#$appName = Read-Host "Exact SCCM Package Name"
-#$installSwitch = Read-Host "Install or Uninstall"
+$appName = 'SAP Logon For Windows_x86_7.60_ML'
 
-
-Function Trigger-AppInstallation
-{
- 
-Param
-(
- [String][Parameter(Mandatory=$True, Position=1)] $Computername,
- [String][Parameter(Mandatory=$True, Position=2)] $AppName,
- [ValidateSet("Install","Uninstall")]
- [String][Parameter(Mandatory=$True, Position=3)] $Method
-)
- 
-Begin {
 $Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
  
 $Args = @{EnforcePreference = [UINT32] 0
@@ -25,20 +9,16 @@ IsMachineTarget = $Application.IsMachineTarget
 IsRebootIfNeeded = $False
 Priority = 'High'
 Revision = "$($Application.Revision)" }
- 
-}
- 
-Process
- 
-{
- 
-Invoke-CimMethod -Namespace "root\ccm\clientSDK" -ClassName CCM_Application -ComputerName $Computername -MethodName $Method -Arguments $Args
- 
-}
- 
-End {}
- 
-}
+
+
+$computerName = Read-Host "Machine"
+
+$Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
+Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computerNAME -MethodName Install -Arguments $Args
+
+
+#####
+
 
 $computer = Get-Content -Path c:\temp\sapcomputers.txt
 foreach ($computer in $computers) {
