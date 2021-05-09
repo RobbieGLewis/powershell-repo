@@ -1,121 +1,60 @@
-cls
+<#
+SYNOPSIS:
+   SCCM application installer importing target machines from .txt
+AUTHOR:
+   James Wylde
+VERSION:
+   0.1
+FUNCTIONALITY:
+   Script uses Invoke-CIMMethod (in favour of Invoke-WMIObject - can be shared if required) to invoke and install applied SCCM packagges (OS/TaskSequencer in other script) after pinging and enabling WinRM through PAEXEC. Created for installs only, for adapation change '-MethodName' to Uninstall. Args currently to 'High Priority' and reboot is being supressed (not required for this app). Hashtable is currently set to filter on a RESULT of 0(ZERO) as success - documentation advises of other Evaluation State Value for success and so any other values will result in failure when this may not be true. 
+   
+   Before changing, please read documentation https://docs.microsoft.com/en-us/mem/configmgr/develop/reference/core/clients/sdk/ccm_application-client-wmi-class for detailing of Arguments, Methods and Results.
+#>
 
-$clientName = Read-Host "Machine name"
-#$appName = Read-Host "Exact SCCM Package Name"
-#$installSwitch = Read-Host "Install or Uninstall"
+#----------------------------------------------------------------------------------------#
 
+$ErrorActionPreference = 'SilentlyContinue'
 
-Function Trigger-AppInstallation
-{
- 
-Param
-(
- [String][Parameter(Mandatory=$True, Position=1)] $Computername,
- [String][Parameter(Mandatory=$True, Position=2)] $AppName,
- [ValidateSet("Install","Uninstall")]
- [String][Parameter(Mandatory=$True, Position=3)] $Method
-)
- 
-Begin {
-$Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
- 
-$Args = @{EnforcePreference = [UINT32] 0
-Id = "$($Application.id)"
-IsMachineTarget = $Application.IsMachineTarget
-IsRebootIfNeeded = $False
-Priority = 'High'
-Revision = "$($Application.Revision)" }
- 
+#----------------------------------------------------------------------------------------#
+
+CLS
+
+Start-Transcript -Path c:\temp\SAP760progress.txt -Append
+
+$computers = Get-Content -Path c:\temp\sapcomputers.txt
+try{
+    foreach ($computer in $computers) {
+        if(!(Test-Connection $computer -Count 1 -Quiet)) {
+            "$computer                                                                                                           Failure"
+        }
+
+        else{
+
+            C:\windows\paexec.exe paexec.exe \\$computer  -s winrm.cmd quickconfig -q
+
+            $appName = 'SAP Logon For Windows_x86_7.60_ML'
+
+            $Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $computer | Where-Object {$_.Name -like $AppName})
+
+            $ccmArgs = @{EnforcePreference = [UINT32] 0
+            Id = "$($Application.id)"
+            IsMachineTarget = $Application.IsMachineTarget
+            IsRebootIfNeeded = $False
+            Priority = 'High'
+            Revision = "$($Application.Revision)" }
+
+            $Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computer | Where-Object {$_.Name -like $AppName})
+            Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computer -MethodName Install -Arguments $ccmArgs |
+            Select-Object @{Name = 'Computer Name'; Expression = {$_.PSComputerName}},@{Name = 'Result'; Expression = { if($_.ReturnValue -eq 0) {'Success'} else {'Error'}}} 
+
+        }
+    
 }
- 
-Process
- 
-{
- 
-Invoke-CimMethod -Namespace "root\ccm\clientSDK" -ClassName CCM_Application -ComputerName $Computername -MethodName $Method -Arguments $Args
- 
 }
- 
-End {}
- 
-}
+catch{}
 
 
-#Trigger-AppInstallation -ComputerName $clientName -AppName "$appName" -Method $installSwitch
+#----------------------------------------------------------------------------------------#
 
-Trigger-AppInstallation -ComputerName $clientName -AppName "SAP Logon For Windows_x86_7.60_ML" -Method Install
-
-Start-Sleep -S 5
-
-Trigger-AppInstallation -ComputerName $clientName -AppName "Analysis for Office x64 2.4.3.69599" -Method Install
-
-
-
-
-
-#Trigger-AppInstallation -ComputerName Uk-liv1-l27865 -AppName "NotepadPlusPlus_x64_7.9.3_ML" -Method Uninstall
-#Trigger-AppInstallation -ComputerName PC01 -AppName "Acrobat Reader DC_x64_2021.001.20142_ML" -Method Uninstall
-#Trigger-AppInstallation -ComputerName UK-TAN1-L018385 -AppName "Analysis for Office x64 2.4.3.69599" -Method Install
-
-###########################################################################
-
-cls
-
-$clientName = Read-Host "Machine name"
-#$appName = Read-Host "Exact SCCM Package Name"
-#$installSwitch = Read-Host "Install or Uninstall"
-
-
-
-
-cls
-
-$clientName = Read-Host "Machine name"
-
-
-
-Function Trigger-AppInstallation
-{
- 
-Param
-(
- [String][Parameter(Mandatory=$True, Position=1)] $Computername,
- [String][Parameter(Mandatory=$True, Position=2)] $AppName,
- [ValidateSet("Install","Uninstall")]
- [String][Parameter(Mandatory=$True, Position=3)] $Method
-)
- 
-Begin {
-$Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
- 
-$Args = @{EnforcePreference = [UINT32] 0
-Id = "$($Application.id)"
-IsMachineTarget = $Application.IsMachineTarget
-IsRebootIfNeeded = $False
-Priority = 'High'
-Revision = "$($Application.Revision)" }
- 
-}
- 
-Process
- 
-{
- 
-Invoke-CimMethod -Namespace "root\ccm\clientSDK" -ClassName CCM_Application -ComputerName $Computername -MethodName $Method -Arguments $Args
- 
-}
- 
-End {}
- 
-}
-
-
-#Trigger-AppInstallation -ComputerName $clientName -AppName "$appName" -Method $installSwitch
-
-Trigger-AppInstallation -ComputerName $clientName -AppName "SAP Logon For Windows_x86_7.60_ML" -Method Install
-
-Start-Sleep -S 5
-
-Trigger-AppInstallation -ComputerName $clientName -AppName "Analysis for Office x64 2.4.3.69599" -Method Install
-
-
+# Formatting of Failure is temporary
+# PAExec crashes around 50 runs - resumes on 'X' rather than 'Close application'
