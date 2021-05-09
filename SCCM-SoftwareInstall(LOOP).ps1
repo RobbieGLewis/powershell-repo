@@ -133,7 +133,7 @@ $Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\cl
 Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computerNAME -MethodName Install -Arguments $Args
 
 
-##### final working
+##### final working ## run with below winrm
 
 $computers = Get-Content -Path c:\temp\sapcomputers.txt
 
@@ -153,6 +153,8 @@ Revision = "$($Application.Revision)" }
 $Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computer | Where-Object {$_.Name -like $AppName})
 Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computer -MethodName Install -Arguments $ccmArgs | ft -AutoSize
 
-
-
 }
+
+##
+
+C:\windows\paexec.exe paexec.exe @c:\temp\sapcomputers.txt  -s winrm.cmd quickconfig -q
