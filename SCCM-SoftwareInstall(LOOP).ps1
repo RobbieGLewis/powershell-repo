@@ -226,7 +226,7 @@ try{
             $Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computer | Where-Object {$_.Name -like $AppName})
             Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computer -MethodName Install -Arguments $ccmArgs | ft -AutoSize
 
-            }
+        }
     
 }
 }
