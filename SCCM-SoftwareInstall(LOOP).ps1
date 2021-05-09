@@ -131,3 +131,28 @@ $computerName = Read-Host "Machine"
 
 $Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computername | Where-Object {$_.Name -like $AppName})
 Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computerNAME -MethodName Install -Arguments $Args
+
+
+##### final working
+
+$computers = Get-Content -Path c:\temp\sapcomputers.txt
+
+foreach ($computer in $computers) {
+
+$appName = 'SAP Logon For Windows_x86_7.60_ML'
+
+$Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $computer | Where-Object {$_.Name -like $AppName})
+
+$ccmArgs = @{EnforcePreference = [UINT32] 0
+Id = "$($Application.id)"
+IsMachineTarget = $Application.IsMachineTarget
+IsRebootIfNeeded = $False
+Priority = 'High'
+Revision = "$($Application.Revision)" }
+
+$Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computer | Where-Object {$_.Name -like $AppName})
+Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computer -MethodName Install -Arguments $ccmArgs | ft -AutoSize
+
+
+
+}
