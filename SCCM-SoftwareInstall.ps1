@@ -25,7 +25,7 @@ $computers = Get-Content -Path c:\temp\sapcomputers.txt
 try{
     foreach ($computer in $computers) {
         if(!(Test-Connection $computer -Count 1 -Quiet)) {
-            "$computer                                                                                                           Failure"
+            "$computer                                                                           Failure"
         }
 
         else{
