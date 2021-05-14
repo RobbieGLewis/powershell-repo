@@ -5,13 +5,13 @@
 #   Modules
 
 #Query
-Get-mailboxfolderpermission -Identity james.wylde@smurfitkappa.co.uk:\Calendar -User matt.davies@smurfitkappa.co.uk
+Get-mailboxfolderpermission -Identity person1@email.com:\Calendar -User person2@email.com
 
-Add-MailboxfolderPermission -Identity james.wylde@smurfitkappa.co.uk:\Calendar -User matt.davies@smurfitkappa.co.uk -AccessRights Reviewer -SendNotificationToUser $true
+Add-MailboxfolderPermission -Identity person1@email.comk:\Calendar -User person2@email.com -AccessRights Reviewer -SendNotificationToUser $true
 
-Remove-MailboxfolderPermission -Identity james.wylde@smurfitkappa.co.uk:\Calendar -User matt.davies@smurfitkappa.co.uk -AccessRights Reviewer
+Remove-MailboxfolderPermission -Identity person1@email.com:\Calendar -User person2@email.com -AccessRights Reviewer
 
 #Status only
-Add-MailboxfolderPermission -Identity james.wylde@smurfitkappa.co.uk:\Calendar -User matt.davies@smurfitkappa.co.uk -AccessRights AvailabilityOnly -SendNotificationToUser $true
+Add-MailboxfolderPermission -Identity person1@email.comk:\Calendar -User person2@email.com -AccessRights AvailabilityOnly -SendNotificationToUser $true
 
 

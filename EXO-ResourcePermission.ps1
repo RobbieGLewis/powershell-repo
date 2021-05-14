@@ -4,9 +4,9 @@
 #----------------------------------------------------------------------------------------#
 #   Modules
 
-Add-RecipientPermission "MeetingRoom.Corby@smurfitkappa.co.uk" -trustee "Mike.Devine@smurfitkappa.co.uk" -AccessRights sendAs -Confirm:$false
-Get-RecipientPermission "MeetingRoom.Corby@smurfitkappa.co.uk"
-Add-MailboxPermission "MeetingRoom.Corby@smurfitkappa.co.uk" -user "Mike.Devine@smurfitkappa.co.uk" -AccessRights fullaccess -Confirm:$false
+Add-RecipientPermission "MeetingRoom@email.com" -trustee "person1@email.com" -AccessRights sendAs -Confirm:$false
+Get-RecipientPermission "MeetingRoom@email.com"
+Add-MailboxPermission "MeetingRoom@email.com" -user "person1@email.com" -AccessRights fullaccess -Confirm:$false
 
 
-Get-RecipientPermission "UKCORALL@smurfitkappa.co.uk"
+Get-RecipientPermission "person1@email.com"
