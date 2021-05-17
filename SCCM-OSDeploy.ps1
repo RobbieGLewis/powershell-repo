@@ -1,3 +1,5 @@
+#   James Wylde
+
 cls
 
 $computerName = Read-Host "Machine"

@@ -1,3 +1,5 @@
+#   James Wylde
+
 Clear-Host
 
 $ErrorActionPreference = 'silentlycontinue'

@@ -1,3 +1,5 @@
+#   James Wylde
+
 $computers = get-content C:\Users\a1-wyldeja\Desktop\wsus.txt
 
 foreach ($computer in $computers){

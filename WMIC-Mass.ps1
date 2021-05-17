@@ -1,4 +1,6 @@
-    wmic product get name, version
+#   James Wylde
+
+wmic product get name, version
 
 product where version="7.5.1.2" call uninstall /y
 
