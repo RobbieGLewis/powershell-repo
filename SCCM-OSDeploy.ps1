@@ -11,10 +11,10 @@ CLS
 Start-Transcript -Path c:\temp\20h2progress.txt -Append
 
 $computers = Get-Content -Path c:\temp\computers.txt
-try{
+
     foreach ($computer in $computers) {
         if(!(Test-Connection $computer -Count 1 -Quiet)) {
-            "$computer                                                                                                                 Failure"
+            "$computer                                                                                                     Failure"
         }
 
         else{
@@ -42,5 +42,4 @@ try{
         }
     
 }
-}
-catch{}
+
