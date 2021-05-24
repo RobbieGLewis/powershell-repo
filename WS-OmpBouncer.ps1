@@ -256,7 +256,7 @@ do
             } '2' {
                 Clear-Host
                 function2    
-           } '3' {
+            } '3' {
                 Clear-Host
                 function4
             } '4' {
