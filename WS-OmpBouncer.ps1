@@ -247,7 +247,7 @@ mstsc /v:UK-HUB3-M1214
 do
 {
      Show-Menu
-     $keyPress = ($host.UI.RawUI.ReadKey('NoEcho,IncludeKeyUp')).character
+     $keyPress = $host.UI.RawUI.ReadKey().character
      switch ($keyPress)
      {
            '1' {
@@ -256,9 +256,6 @@ do
             } '2' {
                 Clear-Host
                 function2    
-           } '' {
-                Clear-Host
-                function3
            } '3' {
                 Clear-Host
                 function4
@@ -282,7 +279,7 @@ until ($keyPress -eq 'q')
 #   Scraps
 
 #     $wmi_uptime = Get-WmiObject Win32_OperatingSystem -computer UK-HUB3-M1222
-#     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) – $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
+#     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) â€“ $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
 
 #     Write-Host "CPU and MEM: UK-HUB3-M1222"
 #     Get-Process -ComputerName UK-HUB3-M1222 | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1
