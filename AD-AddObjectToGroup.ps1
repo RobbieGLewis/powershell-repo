@@ -17,10 +17,17 @@ foreach ($computer in $computers) {
 Import-Module ActiveDirectory
 
 $users = Get-ADuser c:\temp\visionusers.txt
-$destinationGroup = "GBR-UK-HUB-U-Vision_Users"
+$destinationGroup = Read-Host "Group Name"
 
 $startCount = (Get-ADGroupMember -Identity $destinationGroup).Count
 $newMembersCount = $users.Count
+
+Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+Write-Host - '* ENSURE RELEVANT PERMISSIONS HAVE BEEN SOUGHT BEFORE PROCEEDING *' -ForegroundColor White -BackgroundColor Red
+Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+Read-Host -Prompt "Press ENTER to continue..."
 
 foreach ($user in $users) { 
     $userAdd = Get-ADUser $user
@@ -35,4 +42,4 @@ $newCount = $endCount - $startCount
 Write-Host - "$newMembersCount users have been added to group $destinationGroup" -ForegroundColor White -BackgroundColor Green
 Write-Host - "$newCount NET TOTAL + $destinationGroup" -ForegroundColor White -BackgroundColor Green
 
-#Remove-ADGroupMember
+#GBR-UK-HUB-U-Vision_Users
