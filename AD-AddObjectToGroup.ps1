@@ -13,4 +13,15 @@ foreach ($computer in $computers) {
 }
 
 
+
+Import-Module ActiveDirectory
+
+$users = Get-ADuser c:\temp\visionusers.txt
+
+foreach ($user in $users) { 
+    $userAdd = Get-ADUser $user
+    Add-ADGroupMember -ID "GBR-UK-HUB-U-Vision_Users" -Members $userAdd -PassThru
+
+}
+
 #Remove-ADGroupMember
