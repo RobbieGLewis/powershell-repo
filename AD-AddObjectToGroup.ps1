@@ -41,6 +41,6 @@ $endCount = (Get-ADGroupMember -Identity $destinationGroup).Count
 $newCount = $endCount - $startCount
 
 Write-Host - "$newMembersCount users have been added to group $destinationGroup" -ForegroundColor White -BackgroundColor Green
-Write-Host - "$newCount NET TOTAL + $destinationGroup" -ForegroundColor White -BackgroundColor Green
+Write-Host - "$newCount Net total + $destinationGroup" -ForegroundColor White -BackgroundColor Green
 
 #GBR-UK-HUB-U-Vision_Users
