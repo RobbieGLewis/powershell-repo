@@ -14,9 +14,10 @@ foreach ($computer in $computers) {
 
 #----------------------------------------------------------------------------------------#
 
+
 Import-Module ActiveDirectory
 
-$users = Get-ADuser c:\temp\visionusers.txt
+$users = Get-Content c:\temp\visionusers.txt
 $destinationGroup = Read-Host "Group Name"
 
 $startCount = (Get-ADGroupMember -Identity $destinationGroup).Count
@@ -31,7 +32,7 @@ Read-Host -Prompt "Press ENTER to continue..."
 
 foreach ($user in $users) { 
     $userAdd = Get-ADUser $user
-    Add-ADGroupMember -ID $destinationGroup -Members $userAdd -PassThru
+    Add-ADGroupMember -ID $destinationGroup -Members $userAdd 
 
 }
 
