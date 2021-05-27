@@ -139,7 +139,7 @@ Function function4 {
           
                Invoke-Command -ComputerName UK-HUB3-M1214 -ScriptBlock {Get-Process  -ComputerName UK-HUB3-M1214 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
 
-               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock {Get-Process  -ComputerName UK-HUB3-M1214 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock {Get-Process  -ComputerName UK-HUB3-M1214 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
           
                Start-Sleep -Seconds 10
           
@@ -158,10 +158,10 @@ Function function4 {
                Invoke-Command -ComputerName UK-HUB3-M1214 -ScriptBlock { logoff 3 }
                Invoke-Command -ComputerName UK-HUB3-M1214 -ScriptBlock { logoff 4 }
 
-               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 1 }
-               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 2 }
-               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 3 }
-               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 4 }
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 1 }
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 2 }
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 3 }
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 4 }
           
                Write-Host "    Done."
                }
@@ -196,8 +196,8 @@ Function function5 {
                Write-Host "    Restarting UK-HUB3-M1214..."
                Restart-Computer -ComputerName UK-HUB3-M1214 -Force -Confirm:$false
 
-               Write-Host "    Restarting UK-HUB3-M1220..."
-               Restart-Computer -ComputerName UK-HUB3-M1214 -Force -Confirm:$false
+#               Write-Host "    Restarting UK-HUB3-M1220..."
+#               Restart-Computer -ComputerName UK-HUB3-M1214 -Force -Confirm:$false
 
                }
                n{return}
@@ -262,8 +262,8 @@ Start-Sleep -Seconds 1.5
 
 
 
-cmdkey /generic:"UK-HUB3-M1220" /user:"g2-uk-nor3-dispatch" /pass:"P@rtn3rP@rtn3r"
-mstsc /v:UK-HUB3-M1220
+#cmdkey /generic:"UK-HUB3-M1220" /user:"g2-uk-nor3-dispatch" /pass:"P@rtn3rP@rtn3r"
+#mstsc /v:UK-HUB3-M1220
 
 
 }
