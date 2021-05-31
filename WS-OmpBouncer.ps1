@@ -73,8 +73,12 @@ Function function1 {
 
      Write-Host "    Pinging: UK-HUB3-M1214"
      ping UK-HUB3-M1214
-
      Write-Host "`n `r "
+     Write-Host "`n `r "
+
+     Write-Host "    Pinging: UK-HUB3-M1220"
+     ping UK-HUB3-M1220
+
      
 }
 
@@ -102,6 +106,15 @@ Function function2 {
      query user /server:UK-HUB3-M1214 
 
      Write-Host "`n `r "
+     Write-Host "`n `r "
+
+     Write-Host "    Logged on users and uptime: UK-HUB3-M1220"
+     SystemInfo /s UK-HUB3-M1220 | find "Boot Time:"
+     Write-Host "`n `r "
+     query user /server:UK-HUB3-M1220
+
+
+     Write-Host "`n `r "
 }
 
 
@@ -125,6 +138,8 @@ Function function4 {
                Invoke-Command -ComputerName UK-HUB3-M1213 -ScriptBlock {Get-Process  -ComputerName UK-HUB3-M1213 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
           
                Invoke-Command -ComputerName UK-HUB3-M1214 -ScriptBlock {Get-Process  -ComputerName UK-HUB3-M1214 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock {Get-Process  -ComputerName UK-HUB3-M1214 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
           
                Start-Sleep -Seconds 10
           
@@ -142,6 +157,11 @@ Function function4 {
                Invoke-Command -ComputerName UK-HUB3-M1214 -ScriptBlock { logoff 2 }
                Invoke-Command -ComputerName UK-HUB3-M1214 -ScriptBlock { logoff 3 }
                Invoke-Command -ComputerName UK-HUB3-M1214 -ScriptBlock { logoff 4 }
+
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 1 }
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 2 }
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 3 }
+#               Invoke-Command -ComputerName UK-HUB3-M1220 -ScriptBlock { logoff 4 }
           
                Write-Host "    Done."
                }
@@ -164,7 +184,7 @@ Function function5 {
      Write-Host "`n `r "
 
 
-     $input = Read-Host "    Reboot OMP servers M1222, M1213, M1214? [y/n]" 
+     $input = Read-Host "    Reboot OMP servers M1222, M1213, M1214, M1220? [y/n]" 
      switch($input){
                y{
                Write-Host "    Restarting UK-HUB3-M1222..."
@@ -175,6 +195,10 @@ Function function5 {
 
                Write-Host "    Restarting UK-HUB3-M1214..."
                Restart-Computer -ComputerName UK-HUB3-M1214 -Force -Confirm:$false
+
+#               Write-Host "    Restarting UK-HUB3-M1220..."
+#               Restart-Computer -ComputerName UK-HUB3-M1214 -Force -Confirm:$false
+
                }
                n{return}
          default{write-warning "    Y or N only."}
@@ -188,34 +212,34 @@ function function6 {
 cmdkey /generic:"UK-HUB3-M1222" /user:"g2-uk-sta1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1222
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 cmdkey /generic:"UK-HUB3-M1222" /user:"g2-uk-dss1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1222
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 cmdkey /generic:"UK-HUB3-M1222" /user:"g2-uk-nor1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1222
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 
 
 cmdkey /generic:"UK-HUB3-M1213" /user:"g2-uk-wsm1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1213
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 cmdkey /generic:"UK-HUB3-M1213" /user:"g2-uk-mar1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1213
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 cmdkey /generic:"UK-HUB3-M1213" /user:"g2-uk-abe1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1213
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 
 
@@ -223,17 +247,23 @@ Start-Sleep -Seconds 1.5
 cmdkey /generic:"UK-HUB3-M1214" /user:"g2-uk-wau1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1214
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 cmdkey /generic:"UK-HUB3-M1214" /user:"g2-uk-yat1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1214
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 3
 
 cmdkey /generic:"UK-HUB3-M1214" /user:"g2-uk-mol1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1214
 
+Start-Sleep -Seconds 3
 
+
+
+
+#cmdkey /generic:"UK-HUB3-M1220" /user:"g2-uk-nor3-dispatch" /pass:"P@rtn3rP@rtn3r"
+#mstsc /v:UK-HUB3-M1220
 
 
 }
@@ -247,7 +277,8 @@ mstsc /v:UK-HUB3-M1214
 do
 {
      Show-Menu
-     $keyPress = $host.UI.RawUI.ReadKey().character
+     #$keyPress = $host.UI.RawUI.ReadKey().character        Does not work in ISE
+     $keyPress = Read-Host
      switch ($keyPress)
      {
            '1' {
@@ -281,8 +312,6 @@ until ($keyPress -eq 'q')
 #     $wmi_uptime = Get-WmiObject Win32_OperatingSystem -computer UK-HUB3-M1222
 #     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) â€“ $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
 
-#     Write-Host "CPU and MEM: UK-HUB3-M1222"
-#     Get-Process -ComputerName UK-HUB3-M1222 | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1
 
 
 #----------------------------------------------------------------------------------------##
@@ -319,9 +348,3 @@ cmdkey /generic:"UK-HUB3-M1214" /user:"g2-uk-sta1-dispatch" /pass:"P@rtn3rP@rtn3
 mstsc /v:UK-HUB3-M1214
 
 #>
-
-#----------------------------------------------------------------------------------------#
-#   TBD
-# Map functions to keys after testing.
-# Check SystemMath
-# Do we want to launch desktop bat without user interaction
