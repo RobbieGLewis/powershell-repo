@@ -9,7 +9,7 @@ Write-Host - '******************************************************************
 Write-Host - '**ENSURE RELEVANT PERMISSIONS HAVE BEEN SOUGHT BEFORE PROCEEDING**' -ForegroundColor White -BackgroundColor Red
 Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
 Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
-Read-Host -Prompt "Press ENTER to continue..."
+Read-Host -Prompt "Press ENTER to continue...."
 
 $SearchUser = Read-Host -Prompt 'Search user'
     $Users = Get-Aduser -Filter "anr -like '$SearchUser'"
