@@ -8,6 +8,4 @@ $properties = @(
 )
 Foreach ($D in $DC)
 {
-Get-WinEvent -ComputerName $D.DNSHostname -FilterHashTable @{LogName='Security'; ID=4740} | 
-Select $properties
-} | Export-csv C:\Users\$env:username\Desktop\LockedUsers.csv -NoTypeInformation -Encoding Unicode
+Get-WinEvent -ComputerName $D.DNSHostname -FilterHashTable @{LogName='Security'; ID=4740} | Select $properties} | Export-csv C:\Users\$env:username\Desktop\LockedUsers.csv -NoTypeInformation -Encoding Unicode

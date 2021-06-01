@@ -4,7 +4,9 @@ $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri ht
 
 Import-PSSession $Session
 
-New-MailboxExportRequest -Mailbox user@domain.co.uk -FilePath \\filepath\nameoffile.pst
+$email = Read-Host "Email"
+
+New-MailboxExportRequest -Mailbox $email -FilePath c:\temp\$email+backup.pst
 
 Get-MailboxExportRequest -Status InProgress
 Get-MailboxExportRequest | Get-MailboxExportRequestStatistics
