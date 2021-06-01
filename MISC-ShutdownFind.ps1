@@ -9,23 +9,38 @@ $compName = Read-Host "Client Name"
 
 cls
 
-Write-Host "Who killed" $compName"?" -ForegroundColor White -BackgroundColor Red
+TRY{
 
-$properties = @(
-    @{n='When';e={$_.timeCreated}},
-    @{n='Who';e={$_.properties[6].Value.ToUpper()}},
-    @{n='How';e={$_.properties[4].Value.ToUpper()}},
-    @{n='What/Why';e={$_.properties[0].Value}}
-)
 
-Get-WinEvent -ComputerName $compName -FilterHashTable @{LogName='System'; ID=1074} | 
-Select-Object $properties | Sort-Object "$_.timeCreated" -Descending | Format-Table -AutoSize
+    Write-Host "Who killed" $compName"?" -ForegroundColor White -BackgroundColor Red
 
-Start-Sleep -Seconds 1.5
+    $properties = @(
+        @{n='When';e={$_.timeCreated}},
+        @{n='Who';e={$_.properties[6].Value.ToUpper()}},
+        @{n='How';e={$_.properties[4].Value.ToUpper()}},
+        @{n='What/Why';e={$_.properties[0].Value}}
+    )
 
-$timeUp =  SystemInfo /s $compName /fo list | find /i "Boot Time:" 
+    Get-WinEvent -ComputerName $compName -FilterHashTable @{LogName='System'; ID=1074} | 
+    Select-Object $properties | Sort-Object "$_.timeCreated" -Descending | Format-Table -AutoSize
 
-Write-Host "" $timeUp -ForegroundColor White -BackgroundColor Red
+    Start-Sleep -Seconds 1.5
+
+    $timeUp =  SystemInfo /s $compName /fo list | find /i "Boot Time:" 
+
+    Write-Host "" $timeUp -ForegroundColor White -BackgroundColor Red
+}
+
+CATCH [Exception]
+{
+    if ($_.Exception.GetType().Name -ne "RPC")
+    {
+        Write-Host "`n"
+        Write-Host "We may never find who killed $compName as the machine isn't reachable (RPC is unavailable) - try locally or try 'net start winrm'" -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n"
+    }
+
+}
 
 #Get-WinEvent -ComputerName $compName -FilterHashTable @{LogName='System'; ID=1074} | 
 #Select-Object $properties | Sort-Object "$_.timeCreated" -Descending | Out-GridView
