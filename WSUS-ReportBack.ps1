@@ -98,7 +98,7 @@ regsvr32.exe muweb.dll
 regsvr32.exe wuwebv.dll
 
 #----------------------------------------------------------------------------------------#
-#   Winsock reset [last resort]
+#   Winsock reset 
 
 netsh winsock reset
 
@@ -107,3 +107,63 @@ netsh winsock reset
 #   BITS queue clear
 
 bitsadmin.exe /reset /allusers
+
+#----------------------------------------------------------------------------------------#
+#   Updater
+
+$updateSession = New-Object -ComObject 'Microsoft.Update.Session'
+$updateSearcher = $updateSession.CreateupdateSearcher()
+$searchResult = $updateSearcher.Search("IsInstalled=0 and IsHidden=0")
+$updatesToDownload = New-Object -ComObject "Microsoft.Update.UpdateColl"
+ForEach($update in $searchResult.Updates){
+    if($update.IsDownloaded -eq $false){
+        $updatesToDownload.Add($update) | Out-Null
+    }
+}
+if($updatesToDownload.Count -gt 0){
+    $downloader = $updateSession.CreateUpdateDownloader()
+    $downloader.Updates = $updatesToDownload
+    $downloadResult = $downloader.Download()
+
+    $numDownloaded = 0
+    0..($updatesToDownload.Count - 1) | % {
+        $result = $downloadResult.GetUpdateResult($_).ResultCode
+        if($result -eq 2 -or $result -eq 3){$numDownloaded++}
+    }
+    return $numDownloaded
+}
+else{return 0}
+
+
+#----------------------------------------------------------------------------------------#
+#   Reg WUS
+
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate]
+"DisableDualScan"=hex(b):01,00,00,00,00,00,00,00
+"DisableWindowsUpdateAccess"=hex(b):01,00,00,00,00,00,00,00
+"ElevateNonAdmins"=dword:00000001
+"WUServer"="http://uk-hub3-m1002.group.wan:8530"
+"WUStatusServer"="http://uk-hub3-m1002.group.wan:8530"
+"UpdateServiceUrlAlternate"=""
+"TargetGroupEnabled"=dword:00000001
+"TargetGroup"="Production"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU]
+"AutoInstallMinorUpdates"=dword:00000001
+"NoAUShutdownOption"=dword:00000001
+"NoAUAsDefaultShutdownOption"=dword:00000001
+"RescheduleWaitTimeEnabled"=dword:00000000
+"DetectionFrequencyEnabled"=dword:00000000
+"RebootWarningTimeoutEnabled"=dword:00000000
+"RebootRelaunchTimeoutEnabled"=dword:00000001
+"RebootRelaunchTimeout"=dword:0000003c
+"UseWUServer"=dword:00000001
+"NoAutoRebootWithLoggedOnUsers"=dword:00000001
+"NoAutoUpdate"=dword:00000000
+"AUOptions"=dword:00000004
+"ScheduledInstallDay"=dword:00000000
+"ScheduledInstallTime"=dword:0000000a
+"ScheduledInstallEveryWeek"=dword:00000001
+
