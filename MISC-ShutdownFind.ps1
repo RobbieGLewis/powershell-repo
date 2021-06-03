@@ -36,7 +36,7 @@ CATCH [Exception]
     if ($_.Exception.GetType().Name -ne "RPC")
     {
         Write-Host "`n"
-        Write-Host "We may never find who killed $compName as the machine isn't reachable (RPC is unavailable) - try locally or try 'net start winrm'" -ForegroundColor White -BackgroundColor Red
+        Write-Host " $compName isn't reachable (RPC is unavailable) - try locally instead." -ForegroundColor White -BackgroundColor Red
         Write-Host "`n"
     }
 
