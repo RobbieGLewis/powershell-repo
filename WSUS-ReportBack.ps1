@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------------------------#
 #   Standard
 
-net stop wuauserv & net stop bits & net stop cryptsvc & cd %systemroot% & ren SoftwareDistribution SoftwareDistribution[OLD]
+net stop wuauserv & net stop bits & net stop cryptsvc & cd %systemroot% & ren SoftwareDistribution SoftwareDistribution[OLD] & cd %systemroot%\system32 & ren catroot2 catroot2[OLD]
 
 net start wuauserv & net start bits & net start cryptsvc & wuauclt.exe
 
