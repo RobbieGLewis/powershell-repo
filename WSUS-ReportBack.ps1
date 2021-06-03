@@ -1,5 +1,14 @@
 #   James Wylde
 
+
+#----------------------------------------------------------------------------------------#
+#   Standard
+
+net stop wuauserv & net stop bits & net stop cryptsvc & cd %systemroot% & ren SoftwareDistribution SoftwareDistribution[OLD]
+
+net start wuauserv & net start bits & net start cryptsvc & wuauclt.exe
+
+
 #----------------------------------------------------------------------------------------#
 #   Get if back in WSUS
 
