@@ -22,7 +22,7 @@ TRY{
     )
 
     Get-WinEvent -ComputerName $compName -FilterHashTable @{LogName='System'; ID=1074} | 
-    Select-Object $properties | Sort-Object "$_.timeCreated" -Descending | Format-Table -AutoSize #Out-GridView
+    Select-Object $properties | Sort-Object "$_.timeCreated" -Descending | Format-Table -AutoSize # | Out-GridView
     Start-Sleep -Seconds 1.5
 
     $timeUp =  SystemInfo /s $compName /fo list | find /i "Boot Time:" 
