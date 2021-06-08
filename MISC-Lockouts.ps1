@@ -14,7 +14,7 @@ $nL =  "`r`n"
 Write-Host "Starting Winrm...." -ForegroundColor Green 
 
 cd C:\windows
-psservice.exe \\$computerName -accepteula start winrm
+psservice.exe \\$using:computerName -accepteula start winrm
 
 
 
