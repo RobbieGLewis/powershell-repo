@@ -1,5 +1,4 @@
 #   James Wylde
-
 Clear-Host
 
 $computerName = Read-Host "Machine"
@@ -14,7 +13,8 @@ $nL =  "`r`n"
 ###### Winrm start
 Write-Host "Starting Winrm...." -ForegroundColor Green 
 
-psservice.exe \\$clientName -accepteula start winrm
+cd C:\windows
+psservice.exe \\$computerName -accepteula start winrm
 
 
 
@@ -40,7 +40,7 @@ Write-Host "Clearing credman...." -ForegroundColor Green
 
 
 #cmdkey /list | ForEach-Object{if($_ -like "*Target:*" -and $_ -like "*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} 
-paexec.exe \\$computerName cmd /C "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
+C:\windows\paexec.exe paexec.exe \\$computerName cmd /C "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
 
 
 
@@ -96,7 +96,6 @@ Write-Host "Clearing Skype...." -ForegroundColor Green
 Remove-Item -Path "%LOCALAPPDATA%\Microsoft\Office\16.0\Lync\*" -Recurse -Force -EA SilentlyContinue -Verbose
 
 }
-
 
 
 
