@@ -39,8 +39,8 @@ Stop-Process -Name "Skype for Business" -Force -EA SilentlyContinue
 Write-Host "Clearing credman...." -ForegroundColor Green 
 
 
-cmdkey /list | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}}
-#Cpaexec.exe \\$computerName cmd /C "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
+cmdkey /list:$using:userName | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} -Verbose
+#paexec.exe \\$computerName cmd /C "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
 
 
 
