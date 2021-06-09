@@ -96,3 +96,8 @@ Write-Host "Clearing Skype...." -ForegroundColor Green
 Remove-Item -Path "%LOCALAPPDATA%\Microsoft\Office\16.0\Lync\*" -Recurse -Force -EA SilentlyContinue -Verbose
 
 }
+
+
+# rundll32.exe keymgr.dll,KRShowKeyMgr
+# Control userpasswords2
+
