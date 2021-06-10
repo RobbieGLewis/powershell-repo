@@ -6,3 +6,7 @@ setx ps "C:\Users\wyldeja\OneDrive - Smurfit Kappa\Documents\admin\github\powers
 # System
 
 setx ps "C:\Users\wyldeja\OneDrive - Smurfit Kappa\Documents\admin\github\powershell-repo" /M
+
+# Pwsh global variable
+
+$global:github='C:\Users\wyldeja\OneDrive - Smurfit Kappa\Documents\admin\github'
