@@ -1,4 +1,14 @@
-#   James Wylde 2020
+<#
+SYNOPSIS:
+   Scheduled OMP bouncer tool - diagnostics and automated logins
+AUTHOR:
+   James Wylde - james.wylde@smurfitkappa.co.uk
+VERSION:
+   0.1
+FUNCTIONALITY:
+   Check if up, uptime and logged on users, server performance, kick all titled applications and kick all logged on users, reboot all, log in three users per three servers.
+#>
+
 
 #----------------------------------------------------------------------------------------#
 #   Modules
@@ -9,12 +19,15 @@ Clear-Host
 #----------------------------------------------------------------------------------------#
 #   Vars
 
+#$ompM1222 = Server1
+#$ompM1213 = Server2
+#$ompM1214 = Server3
 
 
 #----------------------------------------------------------------------------------------#
 #   Landing
 
-Start-Transcript -Path "C:\temp\transcript0.txt" -NoClobber
+
 Write-Host "`n `r "
 Read-Host -Prompt "    Connect to Servers... "
 
@@ -34,7 +47,7 @@ function Show-Menu
      Write-Host "    1 - Ping."
      Write-Host "    2 - Uptime and current users."
 #     Write-Host " 3 - CPU and MEMORY"
-     Write-Host "    3 - Kill all applications and kick all users." 
+     Write-Host "    3 - Kill all apps and kick all users." 
      Write-Host "    4 - Reboot." 
      Write-Host "    5 - Log in."
      Write-Host "`n `r "
@@ -48,45 +61,58 @@ function Show-Menu
 
 Function function1 {
 
-     Write-Host "    Pinging: DC01"
-     ping DC01
+     Write-Host "    Pinging: Server1"
+     ping Server1
      Write-Host "`n `r "
      Write-Host "`n `r "
 
-     Write-Host "    Pinging: DC01"
-     ping DC01
+     Write-Host "    Pinging: Server2"
+     ping Server2
      Write-Host "`n `r "
      Write-Host "`n `r "
 
-     Write-Host "    Pinging: DC01"
-     ping DC01
-
+     Write-Host "    Pinging: Server3"
+     ping Server3
      Write-Host "`n `r "
+     Write-Host "`n `r "
+
+     Write-Host "    Pinging: Server4"
+     ping Server4
+
      
 }
 
 Function function2 {
 
-     Write-Host "    Logged on users and uptime: DC01"
-     SystemInfo /s DC01 | find "Boot Time:"
+     Write-Host "    Logged on users and uptime: Server1"
+     SystemInfo /s Server1 | find "Boot Time:"
      Write-Host "`n `r "
-     query user /server:DC01
+     query user /server:Server1
 
      Write-Host "`n `r "
      Write-Host "`n `r "
 
-     Write-Host "    Logged on users and uptime: DC01"
-     SystemInfo /s DC01 | find "Boot Time:"
+     Write-Host "    Logged on users and uptime: Server2"
+     SystemInfo /s Server2 | find "Boot Time:"
      Write-Host "`n `r "
-     query user /server:DC01 
+     query user /server:Server2 
 
      Write-Host "`n `r "
      Write-Host "`n `r "
 
-     Write-Host "    Logged on users and uptime: DC01"
-     SystemInfo /s DC01 | find "Boot Time:"
+     Write-Host "    Logged on users and uptime: Server3"
+     SystemInfo /s Server3 | find "Boot Time:"
      Write-Host "`n `r "
-     query user /server:DC01 
+     query user /server:Server3 
+
+     Write-Host "`n `r "
+     Write-Host "`n `r "
+
+     Write-Host "    Logged on users and uptime: Server4"
+     SystemInfo /s Server4 | find "Boot Time:"
+     Write-Host "`n `r "
+     query user /server:Server4
+
 
      Write-Host "`n `r "
 }
@@ -103,23 +129,39 @@ Function function4 {
      Write-Host "`n `r "
 
 
-     $input2 = Read-Host "    Close all applications and kick all users from, DC01, DC01, DC01? [y/n]" 
+     $input2 = Read-Host "    Close all applications and kick all users from, M1222, M1213, M1214? [y/n]" 
      switch($input2){
                y{     Write-Host "    Ending applications and kicking all users..."
 
-               Invoke-Command -ComputerName DC01 -ScriptBlock {Get-Process  -ComputerName DC01 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+               Invoke-Command -ComputerName Server1 -ScriptBlock {Get-Process  -ComputerName Server1 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
           
-               Invoke-Command -ComputerName DC01 -ScriptBlock {Get-Process  -ComputerName DC01 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+               Invoke-Command -ComputerName Server2 -ScriptBlock {Get-Process  -ComputerName Server2 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
           
-               Invoke-Command -ComputerName DC01 -ScriptBlock {Get-Process  -ComputerName DC01 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+               Invoke-Command -ComputerName Server3 -ScriptBlock {Get-Process  -ComputerName Server3 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
+
+#               Invoke-Command -ComputerName Server4 -ScriptBlock {Get-Process  -ComputerName Server3 | Where-Object {$_.MainWindowTitle -ne ""} | Stop-Process}
           
                Start-Sleep -Seconds 10
           
-               Invoke-Command -ComputerName DC01 -ScriptBlock { logoff 1, 2, 3, 4, 5 }
+               Invoke-Command -ComputerName Server1 -ScriptBlock { logoff 1 }
+               Invoke-Command -ComputerName Server1 -ScriptBlock { logoff 2 }
+               Invoke-Command -ComputerName Server1 -ScriptBlock { logoff 3 }
+               Invoke-Command -ComputerName Server1 -ScriptBlock { logoff 4 }
           
-               Invoke-Command -ComputerName DC01 -ScriptBlock { logoff 1, 2, 3, 4, 5 }
+               Invoke-Command -ComputerName Server2 -ScriptBlock { logoff 1 }
+               Invoke-Command -ComputerName Server2 -ScriptBlock { logoff 2 }
+               Invoke-Command -ComputerName Server2 -ScriptBlock { logoff 3 }
+               Invoke-Command -ComputerName Server2 -ScriptBlock { logoff 4 }
           
-               Invoke-Command -ComputerName DC01 -ScriptBlock { logoff 1, 2, 3, 4, 5 }
+               Invoke-Command -ComputerName Server3 -ScriptBlock { logoff 1 }
+               Invoke-Command -ComputerName Server3 -ScriptBlock { logoff 2 }
+               Invoke-Command -ComputerName Server3 -ScriptBlock { logoff 3 }
+               Invoke-Command -ComputerName Server3 -ScriptBlock { logoff 4 }
+
+#               Invoke-Command -ComputerName Server4 -ScriptBlock { logoff 1 }
+#               Invoke-Command -ComputerName Server4 -ScriptBlock { logoff 2 }
+#               Invoke-Command -ComputerName Server4 -ScriptBlock { logoff 3 }
+#               Invoke-Command -ComputerName Server4 -ScriptBlock { logoff 4 }
           
                Write-Host "    Done."
                }
@@ -142,17 +184,21 @@ Function function5 {
      Write-Host "`n `r "
 
 
-     $input = Read-Host "    Reboot servers DC01, DC01, DC01? [y/n]" 
+     $input = Read-Host "    Reboot OMP servers Server1, Server2, Server3, Server4? [y/n]" 
      switch($input){
                y{
-               Write-Host "    Restarting DC01..."
-               Restart-Computer -ComputerName DC01 -Force -Confirm:$false
+               Write-Host "    Restarting Server1..."
+               Restart-Computer -ComputerName Server1 -Force -Confirm:$false
 
-               Write-Host "    Restarting DC01..."
-               Restart-Computer -ComputerName DC01 -Force -Confirm:$false
+               Write-Host "    Restarting Server2..."
+               Restart-Computer -ComputerName Server2 -Force -Confirm:$false
 
-               Write-Host "    Restarting DC01..."
-               Restart-Computer -ComputerName DC01 -Force -Confirm:$false
+               Write-Host "    Restarting Server3..."
+               Restart-Computer -ComputerName Server3 -Force -Confirm:$false
+
+#               Write-Host "    Restarting Server4..."
+#               Restart-Computer -ComputerName Server3 -Force -Confirm:$false
+
                }
                n{return}
          default{write-warning "    Y or N only."}
@@ -163,55 +209,61 @@ Function function5 {
 function function6 {
 
 
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
+cmdkey /generic:"Server1" /user:"user" /pass:"pass"
+mstsc /v:Server1
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 5
 
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
+cmdkey /generic:"Server1" /user:"user" /pass:"pass"
+mstsc /v:Server1
 
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 5
 
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
+cmdkey /generic:"Server1" /user:"user" /pass:"pass"
+mstsc /v:Server1
 
-Start-Sleep -Seconds 1.5
-
-
-
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
-
-Start-Sleep -Seconds 1.5
-
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
-
-Start-Sleep -Seconds 1.5
-
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
-
-Start-Sleep -Seconds 1.5
+Start-Sleep -Seconds 5
 
 
 
+cmdkey /generic:"Server2" /user:"user" /pass:"pass"
+mstsc /v:Server2
 
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
+Start-Sleep -Seconds 5
 
-Start-Sleep -Seconds 1.5
+cmdkey /generic:"Server2" /user:"user" /pass:"pass"
+mstsc /v:Server2
 
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
+Start-Sleep -Seconds 5
 
-Start-Sleep -Seconds 1.5
+cmdkey /generic:"Server2" /user:"user" /pass:"pass"
+mstsc /v:Server2
 
-cmdkey /generic:"DC01" /user:"NAME" /pass:"PASS"
-mstsc /v:DC01
+Start-Sleep -Seconds 5
 
 
+
+
+cmdkey /generic:"Server3" /user:"user" /pass:"pass"
+mstsc /v:Server3
+
+Start-Sleep -Seconds 5
+
+cmdkey /generic:"Server3" /user:"user" /pass:"pass"
+mstsc /v:Server3
+
+Start-Sleep -Seconds 5
+
+cmdkey /generic:"Server3" /user:"user" /pass:"pass"
+mstsc /v:Server3
+
+Start-Sleep -Seconds 3
+
+
+
+
+#cmdkey /generic:"Server4" /user:"g2-uk-nor3-dispatch" /pass:"pass"
+#mstsc /v:Server4
 
 
 }
@@ -225,7 +277,8 @@ mstsc /v:DC01
 do
 {
      Show-Menu
-     $keyPress = ($host.UI.RawUI.ReadKey('NoEcho,IncludeKeyUp')).character
+     #$keyPress = $host.UI.RawUI.ReadKey().character        Does not work in ISE
+     $keyPress = Read-Host
      switch ($keyPress)
      {
            '1' {
@@ -234,10 +287,7 @@ do
             } '2' {
                 Clear-Host
                 function2    
-           } '' {
-                Clear-Host
-                function3
-           } '3' {
+            } '3' {
                 Clear-Host
                 function4
             } '4' {
@@ -259,20 +309,10 @@ until ($keyPress -eq 'q')
 #----------------------------------------------------------------------------------------#
 #   Scraps
 
-#     $wmi_uptime = Get-WmiObject Win32_OperatingSystem -computer DC01
-#     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) – $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
+#     $wmi_uptime = Get-WmiObject Win32_OperatingSystem -computer Server1
+#     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) â€“ $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
 
-#     Write-Host "CPU and MEM: DC01"
-#     Get-Process -ComputerName UK-LIV1-L023572 | Sort-Object -des cpu | Select-Object -f 15 | Format-Table -Autosize; Start-Sleep 1
-# Get-Process | Sort-Object -des cpu | Select-Object -f 15 | where {($_.Name -notlike "Teams")} | Format-Table -Autosize; Start-Sleep 1
 
 
 #----------------------------------------------------------------------------------------##
 #   CMDkeys
-
-<#
-
-#>
-
-#----------------------------------------------------------------------------------------#
-#   TBD
