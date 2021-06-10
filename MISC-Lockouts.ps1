@@ -100,4 +100,5 @@ Remove-Item -Path "%LOCALAPPDATA%\Microsoft\Office\16.0\Lync\*" -Recurse -Force 
 
 # rundll32.exe keymgr.dll,KRShowKeyMgr
 # Control userpasswords2
+# net user Administrator Kappa21
 
