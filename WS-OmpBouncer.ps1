@@ -212,34 +212,34 @@ function function6 {
 cmdkey /generic:"UK-HUB3-M1222" /user:"g2-uk-sta1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1222
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 cmdkey /generic:"UK-HUB3-M1222" /user:"g2-uk-dss1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1222
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 cmdkey /generic:"UK-HUB3-M1222" /user:"g2-uk-nor1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1222
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 
 
 cmdkey /generic:"UK-HUB3-M1213" /user:"g2-uk-wsm1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1213
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 cmdkey /generic:"UK-HUB3-M1213" /user:"g2-uk-mar1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1213
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 cmdkey /generic:"UK-HUB3-M1213" /user:"g2-uk-abe1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1213
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 
 
@@ -247,12 +247,12 @@ Start-Sleep -Seconds 3
 cmdkey /generic:"UK-HUB3-M1214" /user:"g2-uk-wau1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1214
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 cmdkey /generic:"UK-HUB3-M1214" /user:"g2-uk-yat1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1214
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 
 cmdkey /generic:"UK-HUB3-M1214" /user:"g2-uk-mol1-dispatch" /pass:"P@rtn3rP@rtn3r"
 mstsc /v:UK-HUB3-M1214
