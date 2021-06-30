@@ -27,7 +27,8 @@ Invoke-Command -ComputerName $clientName -ScriptBlock {Get-ChildItem c:\users\$u
 $htmlBody = "<html>
 <p>Hello, </p>
 <p>Please find attached a report detailing the largest files on your <em>C:\</em> drive.</p>
-<p>Consider the largest files that are no longer required for deletion, or by right-clicking and de-selecting <i>'Always keep on device'</i> so that it is stored in the cloud instead. </p>
+<p>Consider the largest files that are no longer required for deletion, or by right-clicking the file and de-selecting <i>'Always keep on device'</i> so that it is stored in the OneDrive cloud instead. </p>
+<p>Should you have any personal files, these should not be stored on a corporate device, please move any (if any) to a personal device to ensure your device's security as well avoiding the risk of personal data loss.</p>
 <p>UK IT</p>
 <p><em>Note - this email was performed by a script and the results may not be without error.</em></p>
 <p><strong>_______________________________________________________________</strong></p>
@@ -43,7 +44,7 @@ $htmlBody = "<html>
 </html>
 "
 
-Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter your email credentials") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
+Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter the SENDER'S credentials") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
 
 Write-Host "`r`n"
 Write-Host "******************************************************************************" -ForegroundColor White -BackgroundColor Black
