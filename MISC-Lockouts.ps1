@@ -39,9 +39,11 @@ taskkill /f /im ucmapi.exe
 Write-Host "Clearing credman...." -ForegroundColor Green 
 
 
-cmdkey /list | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} -Verbose
+cmdkey.exe /list | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} -Verbose
 #cmdkey /list:$using:userName | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} -Verbose
+# for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 #paexec.exe \\$computerName cmd /C "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
+
 
 
 
