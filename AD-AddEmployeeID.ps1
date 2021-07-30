@@ -36,3 +36,4 @@ $EID = Read-Host -Prompt 'New employee number:'
     }
 
 Set-ADUser $ResultUser -EmployeeID $EID
+
