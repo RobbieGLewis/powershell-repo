@@ -26,9 +26,9 @@ Write-Host "Stopping programs...." -ForegroundColor Green
 
 Stop-Process -Name Teams -Force -EA SilentlyContinue
 
-Stop-Process -Name Outlook -Force -EA SilentlyContinue
-
-Stop-Process -Name "Skype for Business" -Force -EA SilentlyContinue
+Get-Process Lync* | Stop-Process -f
+Stop-Process -Name Outlook -Force
+taskkill /f /im ucmapi.exe
 
 #Stop-Process -Name Notepad -Force -EA SilentlyContinue
 
@@ -39,8 +39,11 @@ Stop-Process -Name "Skype for Business" -Force -EA SilentlyContinue
 Write-Host "Clearing credman...." -ForegroundColor Green 
 
 
-cmdkey /list:$using:userName | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} -Verbose
+cmdkey.exe /list | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} -Verbose
+#cmdkey /list:$using:userName | ForEach-Object{if($_ -like "*Target:*"){cmdkey /del:($_ -replace " ","" -replace "Target:","")}} -Verbose
+# for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 #paexec.exe \\$computerName cmd /C "for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H"
+
 
 
 
