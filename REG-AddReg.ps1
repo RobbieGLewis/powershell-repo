@@ -20,3 +20,6 @@ Stop-Process -Name Teams -Force
 reg.exe Add "HKLM\Software\Microsoft\Windows NT\Current Version\AppCompatFlags\Layers" /v "C:\ProgramData\TayloCl\Microsoft\Teams\Update.exe" /T REG_SZ /d "WIN7RTM" /F
       
 }
+
+
+reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Terminal Server Client\Servers\dinner"
