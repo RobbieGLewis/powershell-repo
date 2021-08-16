@@ -13,4 +13,3 @@ Remove-MailboxfolderPermission -Identity person1@email.com:\Calendar -User perso
 #Status only
 Add-MailboxfolderPermission -Identity person1@email.comk:\Calendar -User person2@email.com -AccessRights AvailabilityOnly -SendNotificationToUser $true
 
-
