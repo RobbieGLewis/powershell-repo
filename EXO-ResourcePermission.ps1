@@ -9,3 +9,5 @@ Add-MailboxPermission "MeetingRoom@email.com" -user "person1@email.com" -AccessR
 
 
 Get-RecipientPermission "person1@email.com"
+
+#
