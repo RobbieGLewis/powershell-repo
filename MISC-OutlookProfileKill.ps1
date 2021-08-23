@@ -44,5 +44,5 @@ Start-Sleep -S 5
 
 Move-Item -Path "C:\Users\$using:userName\AppData\Local\Microsoft\Outlook\*" -Destination 'C:\temp\' -Force
 
-Remove-Item -Path "C:\Users\$using:serName\AppData\Local\Microsoft\Outlook\*" 
+Remove-Item -Path "C:\Users\$using:userName\AppData\Local\Microsoft\Outlook\*" 
 }
