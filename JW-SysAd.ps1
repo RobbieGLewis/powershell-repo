@@ -65,7 +65,7 @@ function Show-Menu
 
 function function1 {
 
-     Write-Host "    Pinging: " $machineName
+     Write-Host "Pinging" $machineName"?" -ForegroundColor White -BackgroundColor Red
      ping $machinename
      Write-Host "`n `r "
      Write-Host "`n `r "
@@ -74,17 +74,20 @@ function function1 {
 }
 
 function function2 {
+
+    Write-Host "PaExec opening for" $machineName"?" -ForegroundColor White -BackgroundColor Red
     $argumentList = "/k c:\temp\paexec.exe \\$machineName -s cmd.exe"
     Start-Process cmd.exe $argumentList
 }
 
 function function3 {
-     New-PSSession -ComputerName $machineName
+     Write-Host "Starting PS-Session with" $machineName"?" -ForegroundColor White -BackgroundColor Red
+     Enter-PSSession -ComputerName $machineName
 }
 
 function function4 {
 
-     Write-Host "    Uptime and users:" $machineName
+    Write-Host "Uptime and users on" $machineName"?" -ForegroundColor White -BackgroundColor Red
      SystemInfo /s $machineName | find "Boot Time:"
      Write-Host "`n `r "
      query user /server:$machineName
@@ -96,11 +99,13 @@ function function4 {
 
 function function5 {
 
-     Write-Host "    Tracing route:" $machineName
+    Write-Host "Tracing route to" $machineName"?" -ForegroundColor White -BackgroundColor Red
      tracert $machineName 
 }
 
 function function6 {
+
+    Write-Host "Telnet check on" $machineName"?" -ForegroundColor White -BackgroundColor Red
 
      $portNo = Read-Host = "Port"
 
@@ -110,10 +115,14 @@ function function6 {
 
 function function7 {
 
+    Write-Host "Explorer opening on" $machineName"?" -ForegroundColor White -BackgroundColor Red
+
      explorer.exe \\$machineName\c$
 }
 
 function function8 {
+
+    Write-Host "Installed programs on" $machineName"?" -ForegroundColor White -BackgroundColor Red
 
      Invoke-Command -ComputerName $machineName -ScriptBlock {Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object Displayname, publisher, installdate} | Format-table -AutoSize
 }
@@ -122,7 +131,7 @@ function function9 {
 
      TRY{
      
-          Write-Host "Who killed" $machineName"?" -ForegroundColor White -BackgroundColor Red
+          Write-Host "Who shutdown" $machineName"?" -ForegroundColor White -BackgroundColor Red
       
           $properties = @(
               @{n='When?';e={$_.timeCreated}},
@@ -154,12 +163,9 @@ function function9 {
       
 function functionZ {
 
-     Clear-Host
+    Write-Host "Largest files on" $machineName"?" -ForegroundColor White -BackgroundColor Red
 
-     Write-Host "Query remote machine for largest 100 files - (Requires WinRM running on target machine)"
-     Write-Host "`r`n"
-
-     psservice.exe \\$machineName -accepteula start winrm
+    c:\temp\psservice.exe \\$machineName -accepteula start winrm
 
      Start-Sleep -Seconds 5  
 
@@ -207,6 +213,8 @@ function functionZ {
 
 function functionX {
 
+    Write-Host "Kill Outlook profile on" $machineName"?" -ForegroundColor White -BackgroundColor Red
+    
      $userName = Read-Host "Username"
 
      Invoke-Command -ComputerName $machineName -ScriptBlock {
