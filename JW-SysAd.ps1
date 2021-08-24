@@ -1,6 +1,6 @@
 <#
 SYNOPSIS:
-   Tools for SysAdmin and Support work
+   Tool for common tasks in SysAdmin and Support 
 AUTHOR:
    James Wylde - MIT Licence
 VERSION:
@@ -11,21 +11,33 @@ VERSION:
 #----------------------------------------------------------------------------------------#
 #   Modules
 
+Import-Module ActiveDirectory
+
 Clear-Host
 
 #uk-mar1-w022862
 
 
 #----------------------------------------------------------------------------------------#
-#   Vars
+#   Misc Vars
+
+$dayGet = (get-date).DayOfWeek
+$dateGet = Get-Date -f "dddd - dd/MM/yyyy - hh:MM"
 
 
 #----------------------------------------------------------------------------------------#
 #   Landing
-
-
 Write-Host "`n `r "
-$machineName = Read-Host -Prompt "Machine"
+Write-Host "`n `r "
+Write-Host " _____________________________" -ForegroundColor White -BackgroundColor Black
+
+Write-Host "" $dateGet -ForegroundColor White -BackgroundColor Black
+Write-Host " Hello, $env:UserName   "  -ForegroundColor White -BackgroundColor Black
+
+
+$machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
+$machineName = $machineNamefull.Trim()
+
 
 
 #----------------------------------------------------------------------------------------#
@@ -38,7 +50,7 @@ function Show-Menu
      )
      Clear-Host
      Write-Host "`n `r "
-     Write-Host "    $Title"
+     Write-Host "    $Title    " -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
      Write-Host "    1 - Ping"
      Write-Host "    2 - PaExec"
@@ -52,6 +64,8 @@ function Show-Menu
      Write-Host "    Z - Email size report"
      Write-Host "    X - Outlook profile kill"
      Write-Host "    M - McAffee & Snow"
+     Write-Host "    L - LSpush"
+     Write-Host "    Y - Active Directory Tools Menu"
      Write-Host "`n `r "
      Write-Host "    Q - Quit"
      Write-Host "`n `r "
@@ -64,7 +78,7 @@ function Show-Menu
 function function1 {
 
      Write-Host "`n `r "
-     Write-Host "Pinging" $machineName -ForegroundColor White -BackgroundColor Red
+     Write-Host "  Pinging" $machineName -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
      ping $machinename
      Write-Host "`n `r "
@@ -74,7 +88,7 @@ function function1 {
 function function2 {
 
 Write-Host "`n `r "
-    Write-Host "PaExec opening for" $machineName -ForegroundColor White -BackgroundColor Red
+    Write-Host "  PaExec opening for" $machineName -ForegroundColor White -BackgroundColor Red
     Write-Host "`n `r "
 
     $argumentList = "/k c:\temp\paexec.exe \\$machineName -s cmd.exe"
@@ -85,7 +99,7 @@ Write-Host "`n `r "
 function function3 {
 
      Write-Host "`n `r "
-     Write-Host "Starting PS-Session with" $machineName -ForegroundColor White -BackgroundColor Red
+     Write-Host "  Starting PS-Session with" $machineName -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
 
      c:\temp\psservice.exe \\$machineName -accepteula start winrm
@@ -103,7 +117,7 @@ function function3 {
 function function4 {
 
      Write-Host "`n `r "
-     Write-Host "Uptime and users on" $machineName -ForegroundColor White -BackgroundColor Red
+     Write-Host "  Uptime and users on" $machineName -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
      SystemInfo /s $machineName | find "Boot Time:"
      Write-Host "`n `r "
@@ -115,7 +129,7 @@ function function4 {
 function function5 {
 
      Write-Host "`n `r "
-     Write-Host "Tracing route to" $machineName -ForegroundColor White -BackgroundColor Red
+     Write-Host "  Tracing route to" $machineName -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
      tracert $machineName 
      Write-Host "`n `r "
@@ -124,7 +138,7 @@ function function5 {
 function function6 {
 
      Write-Host "`n `r "
-     Write-Host "Telnet check on" $machineName -ForegroundColor White -BackgroundColor Red
+     Write-Host "  Telnet check on" $machineName -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
 
      $ip = Read-Host = "IP"
@@ -140,7 +154,7 @@ function function6 {
 function function7 {
 
      Write-Host "`n `r "
-     Write-Host "Explorer opening on" $machineName -ForegroundColor White -BackgroundColor Red
+     Write-Host "  Explorer opening on" $machineName -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
 
      explorer.exe \\$machineName\c$
@@ -150,7 +164,7 @@ function function7 {
 function function8 {
 
      Write-Host "`n `r "
-     Write-Host "Installed programs on" $machineName -ForegroundColor White -BackgroundColor Red
+     Write-Host "  Installed programs on" $machineName -ForegroundColor White -BackgroundColor Red
      Write-Host "`n `r "
 
      Invoke-Command -ComputerName $machineName -ScriptBlock {Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object Displayname, publisher, installdate} | Format-table -AutoSize
@@ -162,7 +176,7 @@ function function9 {
 
      TRY{
      
-          Write-Host "Who shutdown" $machineName -ForegroundColor White -BackgroundColor Red
+          Write-Host "  Who shutdown" $machineName -ForegroundColor White -BackgroundColor Red
       
           $properties = @(
               @{n='When?';e={$_.timeCreated}},
@@ -175,9 +189,6 @@ function function9 {
           Select-Object $properties | Sort-Object "$_.timeCreated" -Descending | Format-Table -AutoSize # | Out-GridView
           Start-Sleep -Seconds 1.5
       
-          $timeUp =  SystemInfo /s $machineName /fo list | find /i "Boot Time:" 
-      
-          Write-Host "" $timeUp -ForegroundColor White -BackgroundColor Red
       }
       
       CATCH [Exception]
@@ -194,7 +205,7 @@ function function9 {
       
 function functionZ {
 
-    Write-Host "Largest files on" $machineName -ForegroundColor White -BackgroundColor Red
+    Write-Host "  Largest files on" $machineName -ForegroundColor White -BackgroundColor Red
 
     c:\temp\psservice.exe \\$machineName -accepteula start winrm
 
@@ -230,7 +241,7 @@ function functionZ {
      </html>
      "
 
-     Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnSuccess, OnFailure -Credential (Get-Credential -Message "Enter the credentials for SENDER") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
+     Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnFailure -Credential (Get-Credential -Message "Enter the credentials for SENDER") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
 
      Write-Host "`r`n"
      Write-Host "******************************************************************************" -ForegroundColor White -BackgroundColor Black
@@ -244,7 +255,7 @@ function functionZ {
 
 function functionX {
 
-    Write-Host "Kill Outlook profile on" $machineName -ForegroundColor White -BackgroundColor Red
+    Write-Host "  Kill Outlook profile on" $machineName -ForegroundColor White -BackgroundColor Red
     Write-Host "`n `r "
     
      $userName = Read-Host "Username"
@@ -265,10 +276,10 @@ function functionX {
 
 function functionM {
 
-    Write-Host "Updating McAffee and Snow inventory on" $machineName -ForegroundColor White -BackgroundColor Red
+    Write-Host "  Updating McAffee and Snow inventory on" $machineName -ForegroundColor White -BackgroundColor Red
     Write-Host "`n `r "
 
-    $argumentList2 =  "\\$machineName cmd /C ping -n 10 127.0.0.1 >NUL & echo Running McAffee Update & cd C:\Program Files (x86)\McAfee\Endpoint Security\Threat Prevention & amcfg.exe /update & echo Running SnowAgent Invetory Scan & cd C:\Program Files\Snow Software\Inventory\Agent & snowagent.exe scan & ping -n 10 127.0.0.1 >NUL & echo Running SnowAgent Inventory Send & snowagent.exe send & ping -n 10 127.0.0.1 >NUL & echo Commands completed. & ping -n 5 127.0.0.1 >NUL"
+    $argumentList2 =  "\\$machineName cmd /C ping -n 2 127.0.0.1 >NUL & echo Running McAffee Update & echo ------------------------ & cd C:\Program Files (x86)\McAfee\Endpoint Security\Threat Prevention & amcfg.exe /update & echo -- & echo Running SnowAgent Inventory Scan & echo ------------------------ & cd C:\Program Files\Snow Software\Inventory\Agent & snowagent.exe scan & ping -n 10 127.0.0.1 >NUL & echo Running SnowAgent Inventory Send & echo ------------------------ & echo Sent & snowagent.exe send & ping -n 10 127.0.0.1 >NUL & echo ------------------------ & echo Commands completed. & ping -n 10 127.0.0.1 >NUL"
 
     Start-Process C:\temp\paexec.exe -ArgumentList $argumentList2
     
@@ -276,7 +287,278 @@ function functionM {
 
 }
 
+function functionL {
 
+    Write-Host "  LanSweeper push on" $machineName -ForegroundColor White -BackgroundColor Red
+
+    $argumentList3 = "\\$machineName -c lspush.exe"
+    Start-Process C:\temp\paexec.exe -ArgumentList $argumentList3
+
+    Write-Host "`n `r "
+
+}
+
+function functionY{
+
+    
+#----------------------------------------------------------------------------------------#
+#   Modules
+
+Clear-Host
+
+#----------------------------------------------------------------------------------------#
+#   Menu bulk
+
+function Show-ADMenu
+{
+     param (
+           [string]$Title = "Active Directory Tools"
+     )
+     Clear-Host
+     Write-Host "`n `r "
+     Write-Host "    $Title"
+     Write-Host "`n `r "
+     Write-Host "    1 - AD Group Members Export"
+     Write-Host "    2 - AD Change Employeed ID"
+     Write-Host "    3 - AD Copy Group Members to another Group" 
+     Write-Host "    4 - AD Add all Members to a group from .txt" 
+     Write-Host "    5 - "
+     Write-Host "`n `r "
+     Write-Host "    Q - Quit."
+     Write-Host "`n `r "
+}
+
+#----------------------------------------------------------------------------------------#
+#   Functions
+
+
+Function functionAD1 {
+
+    Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+    Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+    Write-Host - '**ENSURE RELEVANT PERMISSIONS HAVE BEEN SOUGHT BEFORE PROCEEDING**' -ForegroundColor White -BackgroundColor Red
+    Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+    Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+    Write-Host "`n `r "
+    Read-Host -Prompt "Press ENTER if confident your actions won't land you a P45"
+    Write-Host "`n `r "
+
+    Write-Host "  AD Group Member Export" -ForegroundColor White -BackgroundColor Red
+
+    $adGroupname = Read-Host "Group name"
+
+    try {
+
+        Get-ADGroupMember "$adGroupname" | ForEach-Object  {Get-ADUser $_ -properties emailaddress} | Select-Object Name, SamAccountName, EmailAddress | Export-Csv -path C:\temp\ADGroupExport.csv
+
+        Write-Host "`n `r "
+    
+        Write-Host "  Export will be located in c:\temp\ADGroupExport.csv" -ForegroundColor White -BackgroundColor Red
+
+        Write-Host "`n `r "
+        
+    }
+    catch [EXCEPTION]
+    {
+        Write-Host "`n `r "
+        Write-Host "  Failed - either the name is wrong or some random error I couldn't catch." -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n `r "
+    }
+    
+    Write-Host "`n `r "
+
+}
+
+Function functionAD2 {
+
+
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '**ENSURE RELEVANT PERMISSIONS HAVE BEEN SOUGHT BEFORE PROCEEDING**' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n `r "
+        Read-Host -Prompt "Press ENTER if confident your actions won't land you a P45"
+        Write-Host "`n `r "
+
+        Write-Host "  AD Change Employeed ID" -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n `r "
+
+            $SearchUser = Read-Host -Prompt 'Search user'
+            try {
+                $Users = Get-Aduser -Filter "anr -like '$SearchUser'"
+                if ($Users.count -gt 1){
+                    Write-Host 'Multiple users were found.' -ForegroundColor Red -BackgroundColor Yellow
+                    Write-Host 'Please select a user:' -ForegroundColor Red -BackgroundColor Yellow
+                    for($i = 0; $i -lt $Users.count; $i++){
+                        Write-Host "$($i): $($Users[$i].SamAccountName) | $($Users[$i].Name) | $($Users[$i].EmployeeID)"
+                    }
+                    Write-Host "`n `r "
+                    $selection = Read-Host -Prompt 'Select user (0, 1, 2 etc.)'
+                    Write-Host - ' '
+                    $ResultUser = $Users[$selection]
+
+                    Write-Host - ' '
+                    $CurrentEmployeeNo = Get-ADUser $ResultUser -Properties employeeid | Select-Object employeeID
+                    Write-Host - 'Current employee number:' $CurrentEmployeeNo
+            
+                    $EID = Read-Host -Prompt 'New employee number'
+                        if ($EID) { 
+                            Write-Host = "Employee ID change successful." -ForegroundColor White -BackgroundColor Green
+                        } 
+                        else { 
+                            Write-Host = "Employee ID change unsuccessful." -ForegroundColor White -BackgroundColor Red
+                        }
+            
+                    Set-ADUser $ResultUser -EmployeeID $EID
+            
+                    Write-Host "`n `r "
+                
+                }
+                else {
+                    Write-Host "`n `r "
+                    Write-Host = "Is this a standard user account? Doubt it."
+                }
+            }
+            catch [EXCEPTION] {
+                Write-Host "`n `r "
+                Write-Host "Did you even enter anything?"
+                Write-Host "`n `r "
+                
+            }
+
+
+
+
+}
+
+
+Function functionAD3 {
+
+
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '**ENSURE RELEVANT PERMISSIONS HAVE BEEN SOUGHT BEFORE PROCEEDING**' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n `r "
+        Read-Host -Prompt "Press ENTER if confident your actions won't land you a P45"
+        Write-Host "`n `r "
+
+        Write-Host "  AD Copy Group Members to another Group" -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n `r "
+
+        $credentials = Get-Credential -Message 'Enter a2/a1 credentials.'
+
+        $sourceGroup = Read-Host -Prompt 'Enter name of group to copy members from'
+        $destinationGroup = Read-Host -Prompt 'Enter name of group to copy members to'
+
+        $users = Get-ADGroupMember -Identity $sourceGroup -Credential $credentials
+
+        $startCount = (Get-ADGroupMember -Identity $destinationGroup).Count
+        $newMembersCount = $users.Count
+
+        foreach ($user in $users) {
+            Add-ADGroupMember -Identity $destinationGroup -Members $user.distinguishedname -Credential $credentials
+        }
+
+        $endCount = (Get-ADGroupMember -Identity $destinationGroup).Count
+
+        $newCount = $endCount - $startCount
+
+        Write-Host "`n `r "
+
+        Write-Host - "$newMembersCount users have been added to group $destinationGroup" -ForegroundColor White -BackgroundColor Green
+        Write-Host - "$newCount NET TOTAL + $destinationGroup" -ForegroundColor White -BackgroundColor Green
+
+        Write-Host "`n `r "
+            
+}
+
+
+Function functionAD4 {
+
+
+
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '**ENSURE RELEVANT PERMISSIONS HAVE BEEN SOUGHT BEFORE PROCEEDING**' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host - '******************************************************************' -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n `r "
+        Read-Host -Prompt "Press ENTER if confident your actions won't land you a P45"
+        Write-Host "`n `r "
+
+        Write-Host "  AD Add all Members to a group from .txt" -ForegroundColor White -BackgroundColor Red
+        Write-Host "`n `r "
+        Write-Host "  Create a .txt file in c:\temp named 'users.txt' with usernames in a column" -ForegroundColor White -BackgroundColor Blue
+
+        try {
+            $users = Get-Content c:\temp\users.txt
+            $destinationGroup = Read-Host "Group Name"
+    
+            $startCount = (Get-ADGroupMember -Identity $destinationGroup).Count
+            $newMembersCount = $users.Count
+    
+            foreach ($user in $users) { 
+                $userAdd = Get-ADUser $user
+                Add-ADGroupMember -ID $destinationGroup -Members $userAdd 
+    
+            }
+    
+            $endCount = (Get-ADGroupMember -Identity $destinationGroup).Count
+    
+            $newCount = $endCount - $startCount
+    
+            Write-Host "$newMembersCount users have been added to group $destinationGroup" -ForegroundColor White -BackgroundColor Green
+            Write-Host "$newCount Net total + $destinationGroup" -ForegroundColor White -BackgroundColor Green
+        }
+        catch [EXCEPTION]{
+            Write-Host "Cannot find 'c:\temp\users.txt'"
+        }
+
+}
+
+function functionAD5 {
+
+
+
+}
+
+
+#----------------------------------------------------------------------------------------#
+#    Menu key bindings
+
+do
+{
+     Show-ADMenu
+     #$keyPress = $host.UI.RawUI.ReadKey().character        Does not work in ISE
+     $keyPress = Read-Host
+     switch ($keyPress)
+     {
+           '1' {
+                Clear-Host
+                functionAD1
+            } '2' {
+                Clear-Host
+                functionAD2   
+            } '3' {
+                Clear-Host
+                functionAD3
+            } '4' {
+                Clear-Host 
+                functionAD4
+            } '5' {
+                Clear-Host 
+                functionAD5
+           } 'q' {
+                return
+           }
+     }
+     pause
+}
+until ($keyPress -eq 'q')
+}
 
 
 #----------------------------------------------------------------------------------------#
@@ -327,6 +609,12 @@ do
             } 'M' {
                 Clear-Host 
                 functionM
+            } 'L' {
+                Clear-Host 
+                functionL
+            } 'Y' {
+                Clear-Host 
+                functionY
             } 'q' {
                 return
            }
