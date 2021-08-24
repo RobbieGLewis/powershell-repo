@@ -19,8 +19,6 @@ Clear-Host
 #----------------------------------------------------------------------------------------#
 #   Vars
 
-$quoteList = 'Its always DNS','Users are liars'
-$getQuote = Get-Random -InputObject $quoteList
 
 #----------------------------------------------------------------------------------------#
 #   Landing
@@ -53,8 +51,9 @@ function Show-Menu
      Write-Host "    9 - Shutdown finder" 
      Write-Host "    Z - Email size report"
      Write-Host "    X - Outlook profile kill"
+     Write-Host "    M - McAffee & Snow"
      Write-Host "`n `r "
-     Write-Host "    Q - Quit."
+     Write-Host "    Q - Quit"
      Write-Host "`n `r "
 }
 
@@ -264,6 +263,20 @@ function functionX {
 }
 
 
+function functionM {
+
+    Write-Host "Updating McAffee and Snow inventory on" $machineName -ForegroundColor White -BackgroundColor Red
+    Write-Host "`n `r "
+
+    $argumentList2 =  "\\$machineName cmd /C ping -n 10 127.0.0.1 >NUL & echo Running McAffee Update & cd C:\Program Files (x86)\McAfee\Endpoint Security\Threat Prevention & amcfg.exe /update & echo Running SnowAgent Invetory Scan & cd C:\Program Files\Snow Software\Inventory\Agent & snowagent.exe scan & ping -n 10 127.0.0.1 >NUL & echo Running SnowAgent Inventory Send & snowagent.exe send & ping -n 10 127.0.0.1 >NUL & echo Commands completed. & ping -n 5 127.0.0.1 >NUL"
+
+    Start-Process C:\temp\paexec.exe -ArgumentList $argumentList2
+    
+    Write-Host "`n `r "
+
+}
+
+
 
 
 #----------------------------------------------------------------------------------------#
@@ -309,8 +322,11 @@ do
                 Clear-Host 
                 functionZ
             } 'X' {
-               C lear-Host 
+                Clear-Host 
                 functionX
+            } 'M' {
+                Clear-Host 
+                functionM
             } 'q' {
                 return
            }
