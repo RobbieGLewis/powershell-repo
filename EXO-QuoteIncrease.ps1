@@ -1,0 +1,1 @@
+Set-Mailbox -Identity "user@email.com" -IssueWarningQuota 900mb -ProhibitSendQuota 950mb -ProhibitSendReceiveQuota 1gb -UseDatabaseQuotaDefaults $false
