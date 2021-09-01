@@ -12,7 +12,7 @@ foreach ($computer in $computers){
     {Write-Host $computer}
 
 }
-
+#
 
 ### Get AD Computers
 
