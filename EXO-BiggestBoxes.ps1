@@ -1,0 +1,1 @@
+Get-Mailbox | Where-Object { $_.EmailAddresses -like "*.co.uk*" } | Get-MailboxStatistics | Select-Object displayname,totalitemsize -First 30 | Sort-Object totalitemsize -Descending | Export-Csv -Path C:\temp\Big_Boxes.csv
