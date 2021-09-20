@@ -1,0 +1,1 @@
+for %i in (%windir%\system32\*.dll) do regsvr32.exe /s %i
