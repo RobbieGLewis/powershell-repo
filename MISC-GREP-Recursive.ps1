@@ -3,5 +3,5 @@
 #----------------------------------------------------------------------------------------#
 #   Modules
 
-Get-ChildItem c:\temp\*.txt -Recurse | Select-String -Pattern WHATYOULOOKINGFOR | Export-csv -Path c:\Temp\ExportSearch.csv
+Get-ChildItem c:\ -Recurse | Select-String -Pattern hstbar.xla | Export-csv -Path c:\Temp\ExportSearch.csv
  
