@@ -1,4 +1,4 @@
-
+Search-ADAccount -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" –LockedOut | Select -Property Name,DistinguishedName
 
 $DC = Get-ADComputer -Filter * -SearchBase "OU=Domain Controllers,DC=domain,DC=com" | Select DNSHostname
 $properties = @(
