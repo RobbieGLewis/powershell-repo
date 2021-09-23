@@ -1,0 +1,1 @@
+cmd /c "wmic computersystem where name='%computername%' call rename name='NEW NAME'"
