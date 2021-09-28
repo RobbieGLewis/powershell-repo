@@ -58,3 +58,25 @@ catch{}
 
 # Formatting of Failure is temporary
 # PAExec crashes around 50 runs - resumes on 'X' rather than 'Close application'
+
+
+
+
+Invoke-Command -ComputerName uk-liv1-l29545 -ScriptBlock {
+
+   $appName = 'ANALYSISFOROFFICE_xMA_2.8SP03Patch1_ML'
+   
+   $Application = (Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $computer | Where-Object {$_.Name -like $AppName})
+   
+   $ccmArgs = @{EnforcePreference = [UINT32] 0
+   Id = "$($Application.id)"
+   IsMachineTarget = $Application.IsMachineTarget
+   IsRebootIfNeeded = $False
+   Priority = 'High'
+   Revision = "$($Application.Revision)" }
+   
+   $Instance = @(Get-CimInstance -ClassName CCM_Application -Namespace "root\ccm\clientSDK" -ComputerName $Computer | Where-Object {$_.Name -like $AppName})
+   Invoke-CimMethod -Namespace ROOT\ccm\ClientSDK -ClassName CCM_Application -ComputerName $computer -MethodName Install -Arguments $ccmArgs |
+   Select-Object @{Name = 'Computer Name'; Expression = {$_.PSComputerName}},@{Name = 'Result'; Expression = { if($_.ReturnValue -eq 0) {'Success'} else {'Error'}}} 
+   
+   }
