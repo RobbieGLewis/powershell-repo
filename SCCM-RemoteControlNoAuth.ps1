@@ -1,0 +1,1 @@
+reg.exe Add "HKLM\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" /v "Permission Required" /t REG_DWORD /d 0 /f
