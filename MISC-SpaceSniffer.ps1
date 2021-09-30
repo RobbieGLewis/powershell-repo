@@ -1,0 +1,1 @@
+./SpaceSniffer.exe scan "c:\temp\" export "grouped by folder" "c:\export.txt" autoclose
