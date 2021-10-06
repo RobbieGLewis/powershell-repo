@@ -11,7 +11,7 @@ PREREQUISITES:
     Script works on assumption Pa/PsExec does not exist in $PATH - add PStools contents to C:\Temp
     See #Modules
 PURPOSE:
-    Gotta go fast.
+    One button fix.
 
 #>
 
@@ -30,6 +30,20 @@ Clear-Host
 
 $dayGet = (get-date).DayOfWeek
 $dateGet = Get-Date -f "dddd - dd/MM/yyyy - hh:MM"
+
+function Start-RevertTimer {
+
+    # 30 mins to revert
+
+    [int]$time = 1800
+    $length = $time / 100
+    for ($time; $time -gt 0; $time--) {
+         $min = [int](([string]($time/60)).split('.')[0])
+         $text = " " + $min + " minutes " + ($time % 60) + " seconds left."
+         Write-Progress -Activity "Reverting SCCM registry key in" -Status $text -PercentComplete ($time / $length)
+         Start-Sleep 1
+    }
+}
 
 
 function Show-ActiveDirectoryMenu {
@@ -362,6 +376,9 @@ Write-Host " Hello, $env:UserName   "  -ForegroundColor White -BackgroundColor B
 $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
 $machineName = $machineNamefull.Trim()
 
+
+
+
 #----------------------------------------------------------------------------------------#
 #   Menu bulk landing
 
@@ -384,9 +401,11 @@ function Show-Home
      Write-Host "    8 - Program list"
      Write-Host "    9 - Shutdown finder" 
      Write-Host "    Z - Email size report"
+     Write-Host "    W - SpaceSniffer"
      Write-Host "    X - Outlook profile kill"
      Write-Host "    M - McAffee & Snow"
      Write-Host "    L - LSpush"
+     Write-Host "    S - SCCM Remote Control - No Approval"
      Write-Host "`n `r "
      Write-Host "    Y - Active Directory Tools Menu"
      Write-Host "`n `r "
@@ -440,8 +459,6 @@ function Get-Users {
 
      Write-Host "`n `r "
      Write-Host "  Uptime and users on" $machineName -ForegroundColor Black -BackgroundColor Green
-     Write-Host "`n `r "
-     SystemInfo /s $machineName | find "Boot Time:"
      Write-Host "`n `r "
      query user /server:$machineName
      Write-Host "`n `r "
@@ -575,6 +592,18 @@ function Get-LargestFiles {
 
 }
 
+function Start-SpaceSniffer {
+
+    Write-Host "  SpaceSniffer on" $machineName -ForegroundColor Black -BackgroundColor Green
+
+    $argumentList9 = "\\$machineName -c C:\Temp\SpaceSniffer.exe scan ""C:\Users"" export ""grouped by folder"" 'c:\Temp\space_export.txt' autoclose"
+    Start-Process C:\temp\paexec.exe -ArgumentList $argumentList9
+
+    Write-Host "`n `r "
+
+
+}
+
 function Start-OSTkill {
 
     Write-Host "  Kill Outlook profile on" $machineName -ForegroundColor Black -BackgroundColor Green
@@ -617,6 +646,51 @@ function Invoke-Lspush {
     Start-Process C:\temp\paexec.exe -ArgumentList $argumentList3
 
     Write-Host "`n `r "
+
+}
+
+function Add-SCCMRedKey {
+
+    Write-Host "  Changing SCCM no approval for 30 minutes" $machineName -ForegroundColor Black -BackgroundColor Green
+
+    c:\temp\psservice.exe \\$machineName -accepteula start winrm
+
+    Invoke-Command -ComputerName $machineName -ScriptBlock {
+
+        function Start-RevertTimer {
+
+            # 30 mins to revert
+        
+            [int]$time = 1800
+            $length = $time / 100
+            for ($time; $time -gt 0; $time--) {
+                 $min = [int](([string]($time/60)).split('.')[0])
+                 $text = " " + $min + " minutes " + ($time % 60) + " seconds left."
+                 Write-Progress -Activity "Reverting SCCM registry key in" -Status $text -PercentComplete ($time / $length)
+                 Start-Sleep 1
+            }
+        }
+
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" -Name "Permission Required" -Value 0
+
+    Start-RevertTimer
+
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" -Name "Permission Required" -Value 1
+    Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" -Name "Permission Required" | Select-Object -Property "Permission required"
+
+    }
+
+    <#
+    $argumentList4 = "\\$machineName cmd /c reg.exe Add ""HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control"" /v ""Permission Required"" /t REG_DWORD /d 0 /f"
+    
+    Start-Process C:\temp\paexec.exe -ArgumentList $argumentList4
+
+    Start-RevertTimer
+    Write-Host "`n `r "
+
+    $argumentList5 = "\\$machineName cmd /c reg.exe Add ""HKLM\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control"" /v ""Permission Required"" /t REG_DWORD /d 1 /f"
+    Start-Process C:\temp\paexec.exe -ArgumentList $argumentList5
+    #>
 
 }
 
@@ -663,6 +737,9 @@ do
             } 'Z' {
                 Clear-Host 
                 Get-LargestFiles
+            } 'W' {
+                Clear-Host 
+                Start-SpaceSniffer
             } 'X' {
                 Clear-Host 
                 Start-OSTkill
@@ -672,6 +749,9 @@ do
             } 'L' {
                 Clear-Host 
                 Invoke-Lspush
+            } 'S' {
+                Clear-Host 
+                Add-SCCMRedKey
             } 'Y' {
                 Clear-Host 
                 Show-ActiveDirectoryMenu
@@ -682,7 +762,6 @@ do
      pause
 }
 until ($keyPress -eq 'q')
-
 
 
 #----------------------------------------------------------------------------------------#
