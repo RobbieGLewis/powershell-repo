@@ -63,6 +63,7 @@ function Show-ActiveDirectoryMenu {
          Write-Host "    $Title    " -ForegroundColor Black -BackgroundColor Green
          Write-Host "`n `r "
          Write-Host "    1 - AD Get User info - Unlock - Password reset"
+         Write-Host "    2 - AD Find all UK locked out users"
          Write-Host "    2 - AD Change Employeed ID"
          Write-Host "    3 - AD Copy Group Members to another Group" 
          Write-Host "    4 - AD Add all Members to a group from .txt" 
@@ -321,6 +322,14 @@ function Show-ActiveDirectoryMenu {
             }
     
     }
+
+
+    function functionAD6 {
+
+        Search-ADAccount -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" –LockedOut | Get-ADUser -Properties lockoutTime,mail | Select-Object @{Name="Username";Expression={$_.sAMAccountName.ToUpper()}},@{Name="Name";Expression={$_.Name}},@{Name="Lockout Time";Expression={([datetime]::FromFileTime($_.lockoutTime).ToLocalTime())}},@{Name="Email";Expression={$_.mail}} | Sort-Object LockoutTime -Descending | Format-Table -AutoSize | Out-Host
+
+
+    }
     
     
     #----------------------------------------------------------------------------------------#
@@ -339,14 +348,17 @@ function Show-ActiveDirectoryMenu {
                     functionAD1
                 } '2' {
                     Clear-Host
-                    functionAD2   
+                    functionAD6
                 } '3' {
                     Clear-Host
-                    functionAD3
+                    functionAD2   
                 } '4' {
+                    Clear-Host
+                    functionAD3
+                } '5' {
                     Clear-Host 
                     functionAD4
-                } '5' {
+                } '6' {
                     Clear-Host 
                     # 1 and 5 swap
                     functionAD5
@@ -387,6 +399,7 @@ function Show-Home
      param (
            [string]$Title = $machineName
      )
+     cls
      Clear-Host
      Write-Host "`n `r "
      Write-Host "    $Title    " -ForegroundColor Black -BackgroundColor Green
@@ -400,12 +413,14 @@ function Show-Home
      Write-Host "    7 - C$"
      Write-Host "    8 - Program list"
      Write-Host "    9 - Shutdown finder" 
+     Write-Host "    D - DHCP Search" 
      Write-Host "    Z - Email size report"
-     Write-Host "    W - SpaceSniffer"
+     #Write-Host "    W - SpaceSniffer"
      Write-Host "    X - Outlook profile kill"
      Write-Host "    M - McAffee & Snow"
      Write-Host "    L - LSpush"
-     Write-Host "    S - SCCM Remote Control - No Approval"
+     Write-Host "    S - SCCM RC Tweak"
+     Write-Host "    P - Remove Print UAC"
      Write-Host "`n `r "
      Write-Host "    Y - Active Directory Tools Menu"
      Write-Host "`n `r "
@@ -483,8 +498,10 @@ function Start-Telnet {
      $ip = Read-Host = "IP"
      $portNo = Read-Host = "Port"
 
+     ###### replace with Test-NetConnection
 
-     Start-Process -FilePath 'telnet' -ArgumentList $ip,$portNo
+     Test-NetConnection -ComputerName $ip -Port $portNo 
+     #Start-Process -FilePath 'telnet' -ArgumentList $ip,$portNo
 
      Write-Host "`n `r "
           
@@ -540,6 +557,26 @@ function Get-ShutdownLogs {
           }
       
       }
+}
+
+function Get-DHCPHostname {
+
+    ## Add reservation search
+    ## Add new DHCP reservation
+
+    Write-Host "  Searching DHCP by hostname on UK-HUB3-M1011" -ForegroundColor Black -BackgroundColor Green
+
+    Write-Host "`r`n"
+
+    $dhcpHN = Read-Host "Hostname"
+
+    Write-Host "`r`n"
+
+    Get-DhcpServerv4Lease -ComputerName uk-hub3-m1011 -ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
+
+    Write-Host "`r`n"
+
+
 }
       
 function Get-LargestFiles {
@@ -678,7 +715,42 @@ function Add-SCCMRedKey {
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" -Name "Permission Required" -Value 1
     Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" -Name "Permission Required" | Select-Object -Property "Permission required"
 
+        <#reg.exe Add "HKLM\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" /v "Permission Required" /t REG_DWORD /d 0 /f#>
+        <#reg.exe Add "HKLM\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control" /v "Permission Required" /t REG_DWORD /d 1 /f#>
+
+
     }
+}
+    function Add-PrintKey {
+
+        Write-Host "  Removing print UAC for 30 minutes" $machineName -ForegroundColor Black -BackgroundColor Green
+    
+        c:\temp\psservice.exe \\$machineName -accepteula start winrm
+    
+        Invoke-Command -ComputerName $machineName -ScriptBlock {
+    
+            function Start-RevertTimer {
+    
+                # 30 mins to revert
+            
+                [int]$time = 1800
+                $length = $time / 100
+                for ($time; $time -gt 0; $time--) {
+                     $min = [int](([string]($time/60)).split('.')[0])
+                     $text = " " + $min + " minutes " + ($time % 60) + " seconds left."
+                     Write-Progress -Activity "Reverting SCCM registry key in" -Status $text -PercentComplete ($time / $length)
+                     Start-Sleep 1
+                }
+            }
+    
+        New-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\Printers\PointAndPrint" -Name "RestrictDriverInstallationToAdministrators" -Value 0
+    
+        Start-RevertTimer
+    
+        Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\Printers\PointAndPrint" -Name "RestrictDriverInstallationToAdministrators" -Value 1
+        Get-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\Printers\PointAndPrint" -Name "RestrictDriverInstallationToAdministrators"
+    
+        }
 
     <#
     $argumentList4 = "\\$machineName cmd /c reg.exe Add ""HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SMS\Client\Client Components\Remote Control"" /v ""Permission Required"" /t REG_DWORD /d 0 /f"
@@ -734,12 +806,12 @@ do
             } '9' {
                 Clear-Host 
                 Get-ShutdownLogs
+            } 'D' {
+                Clear-Host 
+                Get-DHCPHostname
             } 'Z' {
                 Clear-Host 
                 Get-LargestFiles
-            } 'W' {
-                Clear-Host 
-                Start-SpaceSniffer
             } 'X' {
                 Clear-Host 
                 Start-OSTkill
@@ -752,6 +824,9 @@ do
             } 'S' {
                 Clear-Host 
                 Add-SCCMRedKey
+            } 'P' {
+                Clear-Host 
+                Add-PrintKey
             } 'Y' {
                 Clear-Host 
                 Show-ActiveDirectoryMenu
