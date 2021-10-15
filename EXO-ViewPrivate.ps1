@@ -1,1 +1,1 @@
-Add-MailboxFolderPermission -Identity mailboxowner@email.com:\Inbox -User requestor@email.com -AccessRights Editor -SharingPermissionFlags CanViewPrivateItems,Delegate
+Add-MailboxFolderPermission -Identity mailboxowner@email.com:\Calendar -User requestor@email.com -AccessRights Editor -SharingPermissionFlags CanViewPrivateItems,Delegate
