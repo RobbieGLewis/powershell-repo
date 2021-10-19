@@ -472,7 +472,6 @@ function Show-Home
      )
      cls
      Clear-Host
-     Write-Host "`n `r "
      Write-Host "    $Title    " -ForegroundColor Black -BackgroundColor Green
      Write-Host "`n `r "
      Write-Host "    1 - Ping"
@@ -907,6 +906,7 @@ do
            '1' {
                 Clear-Host
                 Start-Ping
+                pause
             } '2' {
                 Clear-Host
                 Start-PaExec   
@@ -916,30 +916,38 @@ do
             } '4' {
                 Clear-Host 
                 Get-Users
+                pause
             } '5' {
                 Clear-Host 
                 Start-RouteTrace
+                pause
             } '6' {
                 Clear-Host 
                 Start-Telnet
+                pause
             } '7' {
                 Clear-Host 
                 Start-RemoteExplorer
             } '8' {
                 Clear-Host 
                 Get-InstalledApps
+                pause
             } '9' {
                 Clear-Host 
                 Get-ShutdownLogs
+                pause
             } 'D' {
                 Clear-Host 
                 Get-DHCPHostname
+                pause
             } 'F' {
                 Clear-Host 
                 Get-FileSize
+                pause
             } 'X' {
                 Clear-Host 
                 Start-OSTkill
+                pause
             } 'M' {
                 Clear-Host 
                 Invoke-MVandSnow
