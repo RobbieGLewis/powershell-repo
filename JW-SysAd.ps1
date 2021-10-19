@@ -8,10 +8,10 @@ VERSION:
 LICENCE:
     MIT Licence
 PREREQUISITES:
-    Script works on assumption Pa/PsExec does not exist in $PATH - add PStools contents to C:\Temp
+    Script works on assumption Pa/PsExec does not exist in $env:path - add PStools contents to C:\Temp
     See #Modules
 PURPOSE:
-    One button fix.
+    One button fixes.
 
 #>
 
@@ -101,10 +101,16 @@ function Show-ActiveDirectoryMenu {
             $ResultUser = $Users[$selection]
         }
     
-        Get-ADUser $ResultUser -Properties Name,Title,EmailAddress,MobilePhone,Enabled,LockedOut,BadLogonCount,Manager,MemberOf | Select-Object Name,Title,EmailAddress,MobilePhone,Enabled,LockedOut,BadLogonCount,Manager,Memberof | Format-List
+        Get-ADUser $ResultUser -Properties Name,Title,EmailAddress,MobilePhone,Enabled,LockedOut,BadLogonCount,Manager | Select-Object Name,Title,EmailAddress,MobilePhone,Enabled,LockedOut,BadLogonCount,Manager | Format-List
+        
     
+                $Resultuser = Get-ADUser wyldeja -Properties msDS-UserPasswordExpiryTimeComputed
+                $userCredExpiryDate = [DateTime]::FromFileTime( $Resultuser.'msDS-UserPasswordExpiryTimeComputed' )
+                Write-Output "Password Expires: $userCredExpiryDate"
+
+                Write-Host "`n `r "
     
-        $input5 = Read-Host " Unlock user [y/n]" 
+        $input5 = Read-Host "Unlock user [y/n]" 
         switch($input5){
                   y{ Unlock-ADAccount -Identity $ResultUser
                   }
@@ -114,10 +120,10 @@ function Show-ActiveDirectoryMenu {
     
     Write-Host "`n `r "
     
-        $input6 = Read-Host " Change password [y/n]" 
+        $input6 = Read-Host "Change password [y/n]" 
         switch($input6){
                     y{ 
-                        $passWord = Read-Host " New password"
+                        $passWord = Read-Host "New password"
                         Set-ADAccountPassword -Identity $ResultUser -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "$passWord" -Force) | Unlock-ADAccount –Identity $ResultUser
                     }
                     n{
@@ -130,8 +136,9 @@ function Show-ActiveDirectoryMenu {
     
         #Expiry
         #[DateTime]::FromFileTime( $user.'msDS-UserPasswordExpiryTimeComputed' )
-        #$user = Get-ADUser wyldeja -Properties msDS-UserPasswordExpiryTimeComputed
-        #$userCredExpiryDate = [DateTime]::FromFileTime( $user.'msDS-UserPasswordExpiryTimeComputed' )
+        $user = Get-ADUser wyldeja -Properties msDS-UserPasswordExpiryTimeComputed
+        $userCredExpiryDate = [DateTime]::FromFileTime( $user.'msDS-UserPasswordExpiryTimeComputed' )
+        Write-Output "Password Expires:"$userCredExpiryDate
     
     
     }
@@ -376,6 +383,8 @@ function Show-ActiveDirectoryMenu {
 #   Landing
 
 #   To-do - add some useful info to landing 
+function Show-Landing {
+cls
 
 Write-Host "`n `r "
 Write-Host "`n `r "
@@ -386,7 +395,14 @@ Write-Host " Hello, $env:UserName   "  -ForegroundColor White -BackgroundColor B
 
 
 $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
-$machineName = $machineNamefull.Trim()
+$script:machineName = $machineNamefull.Trim()
+
+
+
+
+}
+
+Show-Landing
 
 
 
@@ -396,6 +412,7 @@ $machineName = $machineNamefull.Trim()
 
 function Show-Home
 {
+    
      param (
            [string]$Title = $machineName
      )
@@ -414,7 +431,7 @@ function Show-Home
      Write-Host "    8 - Program list"
      Write-Host "    9 - Shutdown finder" 
      Write-Host "    D - DHCP Search" 
-     Write-Host "    Z - Email size report"
+     Write-Host "    F - File sizes"
      #Write-Host "    W - SpaceSniffer"
      Write-Host "    X - Outlook profile kill"
      Write-Host "    M - McAffee & Snow"
@@ -424,6 +441,7 @@ function Show-Home
      Write-Host "`n `r "
      Write-Host "    Y - Active Directory Tools Menu"
      Write-Host "`n `r "
+     Write-Host "    Z - Choose new target"
      Write-Host "    Q - Quit"
      Write-Host "`n `r "
 }
@@ -576,6 +594,59 @@ function Get-DHCPHostname {
 
     Write-Host "`r`n"
 
+
+}
+
+
+function Get-FileSize {
+
+    Write-Host "  File size report on " $machineName -ForegroundColor Black -BackgroundColor Green
+
+    Write-Host "`r`n"
+
+    $location = Read-Host "Path to search down from"
+
+    Invoke-Command -ComputerName $machineName -ScriptBlock {
+
+                    
+                $folders = Get-ChildItem -Path $using:location -Recurse -Directory
+                
+                $array = @()
+                
+                foreach ($folder in $folders)
+                {
+                $foldername = $folder.FullName
+                
+                $files = Get-ChildItem $foldername -Attributes !Directory
+                
+                
+                $size = $Null
+                $files | ForEach-Object -Process {
+                $size += $_.Length
+                }
+                
+                $sizeinmb = [math]::Round(($size / 1mb), 1)
+                
+                $array += [pscustomobject]@{
+                Folder = $foldername
+                Count = $files.count
+                'Size(MB)' = $sizeinmb
+                }
+                }
+                
+                Write-Output $array | Sort-Object -Descending 'Size(MB)' | Format-Table -AutoSize
+
+                Write-Output "Export has been saved in \\$using:machineName\c$\temp\file_report.csv"
+                $array | Export-Csv -Path C:\Temp\file_report.csv -NoTypeInformation
+
+
+            }
+
+        #$outputCSV | Export-Csv -Path C:\Temp\file_report.csv -NoTypeInformation
+
+
+
+    Write-Host "`r`n"
 
 }
       
@@ -809,9 +880,9 @@ do
             } 'D' {
                 Clear-Host 
                 Get-DHCPHostname
-            } 'Z' {
+            } 'F' {
                 Clear-Host 
-                Get-LargestFiles
+                Get-FileSize
             } 'X' {
                 Clear-Host 
                 Start-OSTkill
@@ -830,9 +901,12 @@ do
             } 'Y' {
                 Clear-Host 
                 Show-ActiveDirectoryMenu
-            } 'q' {
+            } 'Z' {
+                Show-Landing
+            }
+              'Q' {
                 return
-           }
+            }
      }
      pause
 }
