@@ -384,28 +384,24 @@ function Show-ActiveDirectoryMenu {
 
 #   To-do - add some useful info to landing 
 function Show-Landing {
-cls
 
-Write-Host "`n `r "
-Write-Host "`n `r "
-Write-Host " _____________________________" -ForegroundColor White -BackgroundColor Black
+        cls
 
-Write-Host "" $dateGet -ForegroundColor White -BackgroundColor Black
-Write-Host " Hello, $env:UserName   "  -ForegroundColor White -BackgroundColor Black
+        Write-Host "`n `r "
+        Write-Host "`n `r "
+        Write-Host " _____________________________" -ForegroundColor White -BackgroundColor Black
 
-
-$machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
-$script:machineName = $machineNamefull.Trim()
+        Write-Host "" $dateGet -ForegroundColor White -BackgroundColor Black
+        Write-Host " Hello, $env:UserName   "  -ForegroundColor White -BackgroundColor Black
 
 
+        $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
+        $script:machineName = $machineNamefull.Trim()
 
 
 }
 
 Show-Landing
-
-
-
 
 #----------------------------------------------------------------------------------------#
 #   Menu bulk landing
@@ -902,13 +898,13 @@ do
                 Clear-Host 
                 Show-ActiveDirectoryMenu
             } 'Z' {
-                Show-Landing
+                Show-Landing 
             }
               'Q' {
                 return
             }
      }
-     pause
+     #pause
 }
 until ($keyPress -eq 'q')
 
@@ -916,13 +912,9 @@ until ($keyPress -eq 'q')
 #----------------------------------------------------------------------------------------#
 #   Scraps
 
-#     $wmi_uptime = Get-WmiObject Win32_OperatingSystem -computer UK-HUB3-M1222
-#     [System.Math]::Round(($wmi_uptime.ConvertToDateTime($wmi_uptime.LocalDateTime) Ã¢â‚¬â€œ $wmi_uptime.ConvertToDateTime($wmi_uptime.LastBootUpTime)).Minutes,0)
-
 
 #----------------------------------------------------------------------------------------##
 
 # Functions to add
 
 # WMIC tools
-# Mcaffee removal tool
