@@ -64,10 +64,11 @@ function Show-ActiveDirectoryMenu {
          Write-Host "`n `r "
          Write-Host "    1 - AD Get User info - Unlock - Password reset"
          Write-Host "    2 - AD Find all UK locked out users"
-         Write-Host "    2 - AD Change Employeed ID"
-         Write-Host "    3 - AD Copy Group Members to another Group" 
-         Write-Host "    4 - AD Add all Members to a group from .txt" 
-         Write-Host "    5 - AD Group Members Export to .csv"
+         Write-Host "    3 - AD Change Employeed ID"
+         Write-Host "    4 - AD Copy Group Members to another Group" 
+         Write-Host "    5 - AD Add all Members to a group from .txt" 
+         Write-Host "    6 - AD Group Members Export to .csv"
+         Write-Host "    7 - AD Search for machine"
          Write-Host "`n `r "
          Write-Host "    Q - Quit."
          Write-Host "`n `r "
@@ -333,7 +334,61 @@ function Show-ActiveDirectoryMenu {
 
     function functionAD6 {
 
+        Write-Host "`n `r "
+        Write-Host "  All locked out users UK" -ForegroundColor Black -BackgroundColor Green
+        Write-Host "`n `r "
+
         Search-ADAccount -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" –LockedOut | Get-ADUser -Properties lockoutTime,mail | Select-Object @{Name="Username";Expression={$_.sAMAccountName.ToUpper()}},@{Name="Name";Expression={$_.Name}},@{Name="Lockout Time";Expression={([datetime]::FromFileTime($_.lockoutTime).ToLocalTime())}},@{Name="Email";Expression={$_.mail}} | Sort-Object LockoutTime -Descending | Format-Table -AutoSize | Out-Host
+
+
+    }
+
+    function functionAD7 {
+
+        Write-Host "`n `r "
+        Write-Host "  Search for machine in Active Directory  " -ForegroundColor Black -BackgroundColor Green
+        Write-Host "`n `r "
+
+
+        $machineNumber = Read-Host "Machine"
+
+        $result = Get-ADComputer -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" -Properties Name,Enabled,Description,OperatingSystemVersion,CanonicalName -Filter *|  Where-Object {$_.Name -like "*$machineNumber*"} | Select-Object Name,Description,Enabled,OperatingSystemVersion,CanonicalName | Format-List
+
+        Write-Output $result
+
+
+
+        $input9 = Read-Host "Enable machine [y/n]" 
+        switch($input9){
+                  y{ Enable-ADAccount -Identity $result
+                  }
+                  n{continue}
+                  default{write-warning "Y or N only."}
+                }
+        
+        Write-Host "`n `r "
+
+
+
+        <#
+                $search = Read-Host "Machine"
+
+        (Get-ADComputer -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" -Properties Name -Filter *|  Where-Object {$_.Name -like "*$search*"} | Select-Object -ExpandProperty Name -OutVariable $P).Name
+
+        Get-ADComputer -Identity $p.Name | Select-Object Name,Description,Enabled,OperatingSystemVersion,CanonicalName | Format-List
+   
+
+
+        $input9 = Read-Host "Enable machine [y/n]" 
+        switch($input9){
+                  y{ Enable-ADAccount -Identity $result
+                  }
+                  n{continue}
+                  default{write-warning "Y or N only."}
+                }
+        
+        Write-Host "`n `r "
+#>
 
 
     }
@@ -369,6 +424,9 @@ function Show-ActiveDirectoryMenu {
                     Clear-Host 
                     # 1 and 5 swap
                     functionAD5
+                } '7' {
+                    Clear-Host 
+                    functionAD7
                } 'q' {
                     return
                }
