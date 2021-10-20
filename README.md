@@ -1,3 +1,3 @@
 # Powershell-Repo
 
-Powershell scripts for day-to-day sysadmin and support tasks.
+Host my PowerShell snippets here - rarely complete and very messy.
