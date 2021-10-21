@@ -39,7 +39,7 @@ Invoke-Command -ComputerName $pcName -ScriptBlock {
 Get-Process Lync* | Stop-Process -f
 Stop-Process -Name Outlook -Force
 taskkill /f /im ucmapi.exe
-Remove-Item -Path "C:\Users\haggast\AppData\Local\Microsoft\Office\16.0\Lync*" 
+Remove-Item -Path "C:\Users\$using:userName\AppData\Local\Microsoft\Office\16.0\Lync*" 
 
 Start-Sleep -S 5
 
